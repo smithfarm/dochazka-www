@@ -1,0 +1,12 @@
+NAME
+    App::Dochazka::WWW - Dochazka Attendance & Time Tracking system web
+    client
+
+VERSION
+    Version 0.124
+
+DESCRIPTION
+    This is the web client of the Dochazka Attendance & Time Tracking
+    system. For more information see App::Dochazka::REST and
+    App::MFILE::WWW.
+

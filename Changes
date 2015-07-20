@@ -1,0 +1,110 @@
+Revision history for App-Dochazka-WWW
+
+0.101  2014-09-11
+- deleted pre-App::MFILE::WWW code
+
+0.102  2014-09-11 16:23 CEST
+- project restart from clean slate
+
+0.103  2014-09-19 20:27 CEST
+- get it working with demo JS code
+
+0.104  2014-09-22 09:58 CEST
+- dmenu-init.js, dform-init.js: start bringing back in the Dochazka-specific
+  targets
+
+0.105  2014-09-22 16:09 CEST
+- bring in more 'dochazka-www' JS code, adapting it to new targets setup
+
+0.106  2014-09-22 21:36 CEST
+- dform-init.js: get forms working again (without actions for now)
+
+0.107  2014-09-22 21:50 CEST
+- dform-init.js: restore 'empProfileEdit' target; fix punctuation errors
+  that were ignored by Firefox
+
+0.108  2014-09-22 22:08 CEST
+- bring in 000boilerplate.js
+- start emp-profile-update.js (to be a dependency of daction-init.js or maybe
+  we'll make it a separate file and call it daction-start.js)
+
+0.109  2014-09-23 09:29 CEST
+- bring in empProfileUpdate action (adapt from pre-split version)
+
+0.110  2014-09-23 18:10 CEST
+- prototypes.js: bring in Dochazka-specific prototype
+- emp-profile-update.js: create empProfile object and merge into it the object
+  we get from form submit - this endows our object with the "santize" method
+- status: 'empProfileUpdate' target working now
+
+0.111  2014-09-24 08:03 CEST
+- restore basic change password functionality
+
+0.112  2014-09-24 10:21 CEST
+- redesign changePassword dialog - it now asks for confirmation, but the
+  password is still displayed on-screen (ick!)
+
+0.113  2014-09-24 11:55 CEST
+- emp-lib.js: when password change is saved successfully, display "Password
+  changed" message instead of "Employee profile updated"
+
+0.114  2014-09-24 16:41 CEST
+- js/: migrate lots of employee profile code from previous incarnation
+- status: new employee functionality works as long as non-ASCII characters
+  are not entered; when non-ASCII characters are entered, the REST server
+  inserts the employee properly but 500 Internal Server Error is returned
+  because Plack::MiddleWare::Lint detects wide characters in the entity
+  body (unknown ATM whether request or response)
+
+0.115  2014-09-25 09:27 CEST
+- js/: start work on renewing "employee search" functionality; cleanup
+
+0.116  2014-09-27 10:56 CEST
+- js/: bring in "simple employee browser" code
+
+0.117  2014-10-03 12:48 CEST
+- js/: 'hookGetObj' has been renamed to just plain 'hook'
+
+0.118  2014-10-11 22:11 CEST
+- daction-init.js: get rid of extraneous demo actions, keeping just one;
+  get rid of deprecated 'browseEmpMultPrev' and 'browseEmpMultNext'
+  actions; bring in 'returnToBrowser' action from App::MFILE::WWW
+- daction-start.js: get rid of extraneous demo actions, keeping just one;
+  fix name of internal library function implementing the
+  'passChangePending' action; activate 'masqEmployee' action; bring in
+  'returnToBrowser' action
+- dform-init.js: cleanup
+- emp-lib.js: get rid of deprecated 'simpleEmployeeBrowser' custom action;
+  use the new dbrowser feature to implement searchEmp; bring in
+  masqEmployee code from before the split
+- target-init.js: bring in new code from App::MFILE::WWW for the dbrowser
+  feature
+- dbrowser-init.js: new file brought in from App::MFILE::WWW and adapted to
+  provide "Employee search" functionality
+- lib.js: bring in new application-specific library module from
+  App::MFILE::WWW containing the new 'fillUserBox' method
+- STATUS: employee search and masquerade working once again; all features
+  that were working before the code split have been restored/reimplemented
+
+0.119  2014-10-11 22:44 CEST
+- lib.js: add 'fillNoticesLine' method with copyright notice, link for
+  opening a bug, etc.
+
+0.120  2014-10-11 23:16 CEST
+- daction-start.js: when masquerading, 'logout' becomes a synonym for 'end
+  the masquerade'
+- emp-lib.js: move masquerade-ending code into a separate function
+
+0.121  2014-10-13 16:47 CEST
+- js/: CSS tweaks
+
+0.122  2014-10-14 09:36 CEST
+- js/: enable new dnotice feature and use it to implement privhistory listing
+
+0.123  2014-10-14 11:21 CEST
+- js/: refine privHistory dnotice
+
+0.124  2014-10-16 15:42 CEST
+- js/emp-lib.js: fix "Edit employee profile" functionality (was using PUT
+  on 'employee/eid' resource, which is no longer supported by the server)
+
