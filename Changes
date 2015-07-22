@@ -108,3 +108,9 @@ Revision history for App-Dochazka-WWW
 - js/emp-lib.js: fix "Edit employee profile" functionality (was using PUT
   on 'employee/eid' resource, which is no longer supported by the server)
 
+0.125  2015-07-22 09:59 CEST
+- update copyright statement to 2015
+- migrate repo to Github
+- new release script
+- drop t/boilerplate.t
+
