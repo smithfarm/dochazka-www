@@ -71,3 +71,4 @@
 
 # Avoid archives of this distribution
 \bApp-Dochazka-[\d\.\_]+
+\bCPAN_NAME$
