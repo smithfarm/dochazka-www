@@ -8,8 +8,7 @@ Makefile.PL
 MANIFEST			This list of files
 META.json
 META.yml
-README
-README.md
+README.rst
 release.sh
 share/config/WWW_SiteConfig.pm
 share/js/000boilerplate.js
