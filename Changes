@@ -114,3 +114,7 @@ Revision history for App-Dochazka-WWW
 - new release script
 - drop t/boilerplate.t
 
+0.126 2016-09-04 20:40 CEST
+- packaging tweaks
+- Travis CI
+
