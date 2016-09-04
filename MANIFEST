@@ -1,7 +1,6 @@
 bin/dochazka-www
 Build.PL
 Changes
-ignore.txt
 lib/App/Dochazka/WWW.pm
 LICENSE
 Makefile.PL
@@ -9,7 +8,6 @@ MANIFEST			This list of files
 META.json
 META.yml
 README.rst
-release.sh
 share/config/WWW_SiteConfig.pm
 share/js/000boilerplate.js
 share/js/dochazka-www/daction-init.js
@@ -27,4 +25,3 @@ t/00-load.t
 t/manifest.t
 t/pod-coverage.t
 t/pod.t
-README
