@@ -11,7 +11,7 @@ my $build = Module::Build->new(
     dist_version_from  => 'lib/App/Dochazka/WWW.pm',
     license            => 'bsd',
     create_license     => 0,
-    create_readme      => 1,
+    create_readme      => 0,
     share_dir          => {
         dist => [ 'share' ],
     },
@@ -30,12 +30,12 @@ my $build = Module::Build->new(
         'perl'               => 5.012,
         'App::CELL'          => 0.196,
         'App::MFILE::WWW'    => 0.134,
-        'App::Dochazka::REST' => 0.185,
+        'App::Dochazka::REST' => 0.531,
     },
     meta_merge => {
         resources => {
-            homepage => 'https://sourceforge.net/projects/dochazka/',
-            repository => 'https://sourceforge.net/p/dochazka/code/',
+            homepage => 'https://metacpan.org/pod/App::Dochazka::WWW',
+            repository => 'https://github.com/smithfarm/dochazka-www',
         }
     },
     add_to_cleanup     => [ 'App-Dochazka-WWW-*' ],
