@@ -36,6 +36,7 @@ my $build = Module::Build->new(
         resources => {
             homepage => 'https://metacpan.org/pod/App::Dochazka::WWW',
             repository => 'https://github.com/smithfarm/dochazka-www',
+            bugtracker => 'https://github.com/smithfarm/dochazka-www/issues',
         }
     },
     add_to_cleanup     => [ 'App-Dochazka-WWW-*' ],
