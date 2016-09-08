@@ -34,7 +34,7 @@ Revision history for App-Dochazka-WWW
 0.110  2014-09-23 18:10 CEST
 - prototypes.js: bring in Dochazka-specific prototype
 - emp-profile-update.js: create empProfile object and merge into it the object
-  we get from form submit - this endows our object with the "santize" method
+  we get from form submit - this endows our object with the "sanitize" method
 - status: 'empProfileUpdate' target working now
 
 0.111  2014-09-24 08:03 CEST
