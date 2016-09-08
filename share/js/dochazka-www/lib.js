@@ -95,10 +95,10 @@ define ([
         //
         fillNoticesLine: function () {
             var r = '';
-            r += 'Copyright \u00A9 SUSE LLC, 2014.  All rights reserved.  ';
+            r += 'Copyright \u00A9 SUSE LLC, 2014-2016. All rights reserved. ';
             r += 'Report bugs at ';
-            r += '<a href="http://sourceforge.net/p/mfile/tickets/new/">';
-            r += 'http://sourceforge.net/p/dochazka/tickets/new/</a>';
+            r += '<a href="https://github.com/smithfarm/dochazka/issues">';
+            r += 'https://github.com/smithfarm/dochazka/issues</a>';
             return r;
         }
    
