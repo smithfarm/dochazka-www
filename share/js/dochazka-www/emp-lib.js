@@ -67,7 +67,7 @@ define ([
             console.log("Entering target 'searchEmployee' start method with argument", obj);
             var rest = {
                     "method": 'GET',
-                    "path": 'employee/nick/' + obj.searchKeyNick
+                    "path": 'employee/search/nick/' + obj.searchKeyNick
                 },
                 // success callback
                 sc = function (st) {
@@ -75,7 +75,7 @@ define ([
         
                         // if only one record is returned, it might be in a result_set
                         // or it might be alone in the payload
-                        var rs = st.payload.result_set || [ st.payload ],
+                        var rs = st.payload.result_set || st.payload,
                             count = rs.length;
         
                         console.log("Search found " + count + " employees");
