@@ -138,3 +138,9 @@ Revision history for App-Dochazka-WWW
 0.130 2016-09-12 11:58 CEST
 - add systemd unit file (Theo Chatzimichos)
 
+0.131 2016-09-12 20:43 CEST
+- js: fix "Change my password" functionality
+- config: add new file WWW_Message_en.conf
+- js: fix "New employee" functionality
+- js: fix "Search employee" functionality
+
