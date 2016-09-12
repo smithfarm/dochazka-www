@@ -10,6 +10,7 @@ META.json
 META.yml
 README.rst
 ext/systemd/dochazka-www.service
+share/config/WWW_Message_en.conf
 share/config/WWW_SiteConfig.pm
 share/js/000boilerplate.js
 share/js/dochazka-www/daction-init.js
