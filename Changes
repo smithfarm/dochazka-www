@@ -118,3 +118,11 @@ Revision history for App-Dochazka-WWW
 - packaging tweaks
 - Travis CI
 
+0.127 2016-09-12 09:10 CEST
+- build/ops: MANIFEST update, Build.PL update
+- lib.js: update copyright notice and bug report link
+- bin/dochazka-www: show how to pass sitedir to mfile-www
+- build/ops: require App::MFILE::WWW 0.140
+- Dispatch.pm: new file
+- config: introduce DOCHAZKA_WWW_BACKEND_URI param and tweak defaults
+
