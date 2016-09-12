@@ -101,7 +101,8 @@ sub is_authorized {
     my $ce;
 
     # UNCOMMENT TO DEBUG
-    $log->debug( "currentEmployee is " . Dumper $session->get('currentEmployee') );
+    $log->debug( "currentUser is " . Dumper $session->get('currentUser') );
+    $log->debug( "currentUserPriv is " . Dumper $session->get('currentUserPriv') );
     $log->debug( "remote IP address is " . Dumper $session->get('ip_addr') );
     $log->debug( "remote IP address is supposed to be $remote_addr" );
     my $yesno = _is_fresh( $session );
@@ -110,7 +111,7 @@ sub is_authorized {
     #
     # authorized session
     #
-    if ( $ce = $session->get('currentEmployee') and
+    if ( $ce = $session->get('currentUser') and
          $session->get('ip_addr') and 
          $session->get('ip_addr') eq $remote_addr and
          _is_fresh( $session ) )
@@ -152,14 +153,15 @@ sub is_authorized {
     #
     # expired session - pass it on only if method is GET, in which # case _render_response_html() will display the login dialog
     #
-    if ( $session->get('currentEmployee') and
+    if ( $session->get('currentUser') and
          $session->get('ip_addr') and 
          $session->get('ip_addr') eq $remote_addr and
          ! _is_fresh( $session ) ) 
     {
         $log->debug( "is_authorized: Expired session " . $session->id );
         $session->expire;
-        $session->set('currentEmployee', undef );
+        $session->set('currentUser', undef );
+        $session->set('currentUserPriv', undef );
         $session->set('last_seen', undef );
         return 0 if $r->method ne 'GET';
         return 1;
@@ -168,7 +170,8 @@ sub is_authorized {
     #
     # unauthorized session
     #
-    $session->set('currentEmployee', undef);
+    $session->set('currentUser', undef);
+    $session->set('currentUserPriv', undef);
 
     if ( $r->method ne 'GET' ) {
         $log->notice("is_authorized: Rejecting unauthorized session!");
@@ -286,31 +289,31 @@ sub _login_dialog {
     }
 
     my ( $code, $message, $body_json );
-    if ( $standalone ) {
-        $code = 200;
-        $message = 'OK';
-        $body_json = { payload => { nick => "root", priv => "admin" } };
-    } else {
-        my $rr = rest_req( $session->get('ua'), {
-            server => $site->DOCHAZKA_WWW_BACKEND_URI,
-            nick => $nick,
-            password => $password,
-            path => 'employee/current',
-        } );
-        $code = $rr->{'hr'}->code;
-        $message = $rr->{'hr'}->message;
-        $body_json = $rr->{'body'};
-    }
+    my $rr = rest_req( $session->get('ua'), {
+        server => $site->DOCHAZKA_WWW_BACKEND_URI,
+        nick => $nick,
+        password => $password,
+        path => 'employee/current/priv',
+    } );
+    $code = $rr->{'hr'}->code;
+    $message = $rr->{'hr'}->message;
+    $body_json = $rr->{'body'};
 
     my $status;
     if ( $code == 200 ) {
-        $session->set( 'currentEmployee', $body_json->{'payload'} );
-        $log->debug( "Login successful, currentEmployee is now " . Dumper $body_json->{'payload'} );
+        $session->set( 'currentUser', $body_json->{'payload'}->{'current_emp'} );
+        $session->set( 'currentUserPriv', $body_json->{'payload'}->{'priv'} );
+        $log->debug( 
+            "Login successful, currentUser is now " . 
+            Dumper( $body_json->{'payload'}->{'current_emp'} ) .
+            " and privilege level is " . $body_json->{'payload'}->{'priv'}
+        );
         return 1 if $site->MFILE_WWW_BYPASS_LOGIN_DIALOG and ! $meta->META_LOGIN_BYPASS_STATE;
         $status = $CELL->status_ok( 'MFILE_WWW_LOGIN_OK', payload => $body_json->{'payload'} );
     } else {
-        $session->set( 'currentEmployee', undef );
-        $log->debug( "Login unsuccessful, reset currentEmployee to undef" );
+        $session->set( 'currentUser', undef );
+        $session->set( 'currentUserPriv', undef );
+        $log->debug( "Login unsuccessful, reset currentUser to undef" );
         return 0 if $site->MFILE_WWW_BYPASS_LOGIN_DIALOG and ! $meta->META_LOGIN_BYPASS_STATE;
         $status = $CELL->status_not_ok( 
             'MFILE_WWW_LOGIN_FAIL: %s', 
