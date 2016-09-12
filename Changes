@@ -126,3 +126,8 @@ Revision history for App-Dochazka-WWW
 - Dispatch.pm: new file
 - config: introduce DOCHAZKA_WWW_BACKEND_URI param and tweak defaults
 
+0.128 2016-09-12 10:23 CEST
+- Dispatch.pm: uncomment some debug messages
+- Dispatch.pm: properly set currentUserPriv
+- build/ops: require App::MFILE::WWW 0.141
+
