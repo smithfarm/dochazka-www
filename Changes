@@ -135,3 +135,6 @@ Revision history for App-Dochazka-WWW
 - build/ops: change OBS project to Application:Dochazka:staging
 - build/ops: add Dispatch.pm to MANIFEST
 
+0.130 2016-09-12 11:58 CEST
+- add systemd unit file (Theo Chatzimichos)
+
