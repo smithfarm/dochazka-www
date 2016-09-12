@@ -131,3 +131,7 @@ Revision history for App-Dochazka-WWW
 - Dispatch.pm: properly set currentUserPriv
 - build/ops: require App::MFILE::WWW 0.141
 
+0.129 2016-09-12 10:27 CEST
+- build/ops: change OBS project to Application:Dochazka:staging
+- build/ops: add Dispatch.pm to MANIFEST
+
