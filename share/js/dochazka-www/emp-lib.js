@@ -67,7 +67,7 @@ define ([
             console.log("Entering target 'searchEmployee' start method with argument", obj);
             var rest = {
                     "method": 'GET',
-                    "path": 'employee/search/nick/' + obj.searchKeyNick
+                    "path": 'employee/search/nick/' + encodeURIComponent(obj.searchKeyNick)
                 },
                 // success callback
                 sc = function (st) {
