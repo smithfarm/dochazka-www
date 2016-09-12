@@ -252,17 +252,17 @@ sub process_post {
         }
     }
 
-    ## - normal AJAX call (shown for didactic purposes only; App::MFILE::WWW
-    ##   itself doesn't generate any AJAX calls)
-    #$log->debug( "Calling rest_req $method $path" );
-    #my $rr = rest_req( $session->get('ua'), {
-    #    server => $site->MFILE_REST_SERVER_URI || 'http://localhost:5000',
-    #    method => $method,
-    #    path => $path,
-    #    req_body => $body,
-    #} );
-    #my $hr = $rr->{'hr'};
-    #return $self->_prep_ajax_response( $hr, $rr->{'body'} );
+    # - normal AJAX call (shown for didactic purposes only; App::MFILE::WWW
+    #   itself doesn't generate any AJAX calls)
+    $log->debug( "Calling rest_req $method $path" );
+    my $rr = rest_req( $session->get('ua'), {
+        server => $site->DOCHAZKA_WWW_BACKEND_URI,
+        method => $method,
+        path => $path,
+        req_body => $body,
+    } );
+    my $hr = $rr->{'hr'};
+    return $self->_prep_ajax_response( $hr, $rr->{'body'} );
 }
 
 
@@ -273,6 +273,8 @@ sub _login_dialog {
     my $standalone = $meta->META_WWW_STANDALONE_MODE;
 
     $log->debug( "Entering " . __PACKAGE__ . "::_login_dialog()" );
+
+    $log->debug( "DOCHAZKA_WWW_BACKEND_URI is " .  $site->DOCHAZKA_WWW_BACKEND_URI );
 
     if ( ref($session->get('ua')) eq 'LWP::UserAgent' ) {
         $log->debug("_login_dialog: there is already a LWP::UserAgent");
@@ -290,7 +292,7 @@ sub _login_dialog {
         $body_json = { payload => { nick => "root", priv => "admin" } };
     } else {
         my $rr = rest_req( $session->get('ua'), {
-            server => $site->MFILE_REST_SERVER_URI,
+            server => $site->DOCHAZKA_WWW_BACKEND_URI,
             nick => $nick,
             password => $password,
             path => 'employee/current',
