@@ -104,14 +104,14 @@ define ([
             name: 'newPass',
             aclProfileWrite: 'passerby',
             text: 'Password',
-            prop: 'passhash',
+            prop: 'password',
             maxlen: 32
         },
         'confirmPass': {
             name: 'confirmPass',
             aclProfileRead: 'passerby',
             text: 'Password',
-            prop: 'passhash',
+            prop: 'password',
             maxlen: 32
         },
         
