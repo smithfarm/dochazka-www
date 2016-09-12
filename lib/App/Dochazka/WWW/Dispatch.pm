@@ -101,11 +101,11 @@ sub is_authorized {
     my $ce;
 
     # UNCOMMENT TO DEBUG
-    #$log->debug( "currentEmployee is " . Dumper $session->get('currentEmployee') );
-    #$log->debug( "remote IP address is " . Dumper $session->get('ip_addr') );
-    #$log->debug( "remote IP address is supposed to be $remote_addr" );
-    #my $yesno = _is_fresh( $session );
-    #$log->debug( "the session is " . ( $yesno ? '' : 'not ' ) . "fresh" );
+    $log->debug( "currentEmployee is " . Dumper $session->get('currentEmployee') );
+    $log->debug( "remote IP address is " . Dumper $session->get('ip_addr') );
+    $log->debug( "remote IP address is supposed to be $remote_addr" );
+    my $yesno = _is_fresh( $session );
+    $log->debug( "the session is " . ( $yesno ? '' : 'not ' ) . "fresh" );
 
     #
     # authorized session
