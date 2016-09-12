@@ -96,7 +96,7 @@ define ([
         insertEmp = function (emp) {
             var rest = {
                     "method": 'PUT',
-                    "path": 'employee/nick',
+                    "path": 'employee/nick/' + emp.nick,
                     "body": emp.sanitize()
                 },
                 // success callback
@@ -168,17 +168,20 @@ define ([
                 },
                 // success callback -- employee already exists
                 sc = function (st) {
-                    if (st.code === 'DISPATCH_NO_RECORDS_FOUND') {
-                        target.pull('insertEmployee').start(emp);
-                    } else if (st.code === 'DISPATCH_RECORDS_FOUND') {
-                        console.log("Nick conflict with existing employee EID " + st.payload.eid);
-                        $('#result').html('Nick already taken by employee EID ' + st.payload.eid);
-                    } else {
-                        console.log("CRITICAL ERROR: Happy debugging!");
-                    }
+                    var message = 'Employee ' + emp.nick + ' already exists'
+                    console.log(message);
+                    $('#result').html(message);
+                    $('input[name="sel"]').focus();
+                    $('input[name="sel"]').val('');
                 },
                 // failure callback -- employee doesn't exist
-                fc = null;
+                fc = function (st) {
+                    var err = st.payload.code;
+                    if (err === '404') {
+                        console.log('Employee ' + emp.nick + ' not found');
+                        insertEmp(emp);
+                    }
+                }
             ajax(rest, sc, fc);        
         },
 

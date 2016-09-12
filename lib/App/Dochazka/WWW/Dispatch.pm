@@ -342,7 +342,7 @@ sub _prep_ajax_response {
         $expurgated_status = $body_json;
     } else {
         $expurgated_status = $CELL->status_err( 
-            "MFILE_WWW_REST_FAIL: %s", 
+            'DOCHAZKA_WWW_BACKEND_ERROR',
             args => [ $hr->code ],
             payload => { code => $hr->code, message => $hr->message },
         )->expurgate;
