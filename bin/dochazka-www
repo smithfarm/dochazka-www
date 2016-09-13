@@ -35,4 +35,4 @@
 #
 # -------------------------------------------------------------------------
 
-mfile-www --ddist=App-Dochazka-WWW  #--sitedir=/etc/dochazka-www
+mfile-www --ddist=App-Dochazka-WWW --sitedir=/etc/dochazka-www
