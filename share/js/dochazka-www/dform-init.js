@@ -175,7 +175,8 @@ define ([
             'title': 'My profile',
             'preamble': null,
             'aclProfile': 'passerby',
-            'entriesRead': [entries.ePnick, entries.ePsec_id, entries.ePfullname, entries.ePemail, entries.ePremark],
+            'entriesRead': [entries.ePfullname, entries.ePnick,
+                 entries.ePsec_id, entries.ePemail, entries.ePremark],
             'entriesWrite': [],
             'hook': function () { return currentUser('obj'); },
             'miniMenu': {
@@ -188,11 +189,12 @@ define ([
             'name': 'empProfileEdit',
             'type': 'dform',
             'menuText': 'Edit',
-            'title': 'Edit employee profile',
+            'title': 'Edit remark',
             'preamble': null,
-            'aclProfile': 'active',
-            'entriesRead': [entries.ePnick, entries.ePsec_id, entries.ePfullname, entries.ePemail, entries.ePremark],
-            'entriesWrite': [],
+            'aclProfile': 'admin',
+            'entriesRead': [entries.ePfullname, entries.ePnick,
+                entries.ePsec_id, entries.ePemail],
+            'entriesWrite': [entries.ePremark],
             'hook': function () { return currentUser('obj'); },
             'miniMenu': {
                 entries: ['empProfileUpdate'],
@@ -200,35 +202,35 @@ define ([
             }
         });
 
-        target.push('changePassword', {
-            'name': 'changePassword',
-            'type': 'dform',
-            'menuText': 'Change my password',
-            'title': 'Change my password',
-            'preamble': 'Enter new password in the field below',
-            'aclProfile': 'passerby',
-            'entriesRead': [],
-            'entriesWrite': [entries.newPass],
-            'hook': function () { return currentUser('obj'); },
-            'miniMenu': {
-                entries: ['passChangePending'],
-                back: ['Back', 'mainEmpl']
-            }
-        });
+        // target.push('changePassword', {
+        //     'name': 'changePassword',
+        //     'type': 'dform',
+        //     'menuText': 'Change my password',
+        //     'title': 'Change my password',
+        //     'preamble': 'Enter new password in the field below',
+        //     'aclProfile': 'passerby',
+        //     'entriesRead': [],
+        //     'entriesWrite': [entries.newPass],
+        //     'hook': function () { return currentUser('obj'); },
+        //     'miniMenu': {
+        //         entries: ['passChangePending'],
+        //         back: ['Back', 'mainEmpl']
+        //     }
+        // });
 
-        target.push('confirmPassword', {
-            'name': 'confirmPassword',
-            'type': 'dform',
-            'title': 'NEW PASSWORD PENDING!',
-            'preamble': 'Check password and confirm that you really want it',
-            'aclProfile': 'passerby',
-            'entriesRead': [entries.confirmPass],
-            'hook': empLib.getEmployeeObject,
-            'miniMenu': {
-                entries: ['saveChangedPassword'],
-                back: ['Back', 'mainEmpl']
-            }
-        });
+        // target.push('confirmPassword', {
+        //     'name': 'confirmPassword',
+        //     'type': 'dform',
+        //     'title': 'NEW PASSWORD PENDING!',
+        //     'preamble': 'Check password and confirm that you really want it',
+        //     'aclProfile': 'passerby',
+        //     'entriesRead': [entries.confirmPass],
+        //     'hook': empLib.getEmployeeObject,
+        //     'miniMenu': {
+        //         entries: ['saveChangedPassword'],
+        //         back: ['Back', 'mainEmpl']
+        //     }
+        // });
 
         target.push('newEmployee', {
             'name': 'newEmployee',
@@ -238,7 +240,7 @@ define ([
             'preamble': 'Fields marked (*) are required, others are optional.',
             'aclProfile': 'admin',
             'entriesRead': null,
-            'entriesWrite': [entries.nEnick, entries.nEfullname, entries.nEemail, entries.nEremark],
+            'entriesWrite': [entries.nEfullname, entries.nEnick, entries.nEemail, entries.nEremark],
             'hook': function () { return Object.create(prototypes.empProfile); },
             'miniMenu': {
                 entries: ['newEmplSubmit'],
@@ -253,7 +255,8 @@ define ([
             'title': 'Employee profile',
             'preamble': null,
             'aclProfile': 'admin',
-            'entriesRead': [entries.ePnick, entries.ePsec_id, entries.ePfullname, entries.ePemail, entries.ePremark],
+            'entriesRead': [entries.ePfullname, entries.ePnick,
+                entries.ePsec_id, entries.ePemail, entries.ePremark],
             'entriesWrite': [],
             'hook': empLib.getEmployeeObject,
             'miniMenu': {
