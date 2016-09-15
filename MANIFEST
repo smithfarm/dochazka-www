@@ -12,7 +12,6 @@ README.rst
 ext/systemd/dochazka-www.service
 ext/WWW_SiteConfig.pm.example
 share/config/WWW_Message_en.conf
-share/config/WWW_SiteConfig.pm
 share/js/000boilerplate.js
 share/js/dochazka-www/daction-init.js
 share/js/dochazka-www/daction-start.js
