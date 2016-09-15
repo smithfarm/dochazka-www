@@ -9,21 +9,39 @@
 #
 # To keep the default value, do nothing.
 #
-# To override a default, uncomment the "set" call and change the value. 
+# To override a default, comment out the existing "set" call and make a new one
+# with the desired value. See MFILE_APPNAME for an example of how this is done.
 #
 
 # DOCHAZKA_WWW_BACKEND_URI
 #     URI where App::Dochazka::REST server is listening. AJAX calls will be
 #     forwarded to this URI.
-#set( 'DOCHAZKA_WWW_BACKEND_URI', 'http://localhost:5000' );
+set( 'DOCHAZKA_WWW_BACKEND_URI', 'http://localhost:5000' );
+
+# MFILE_APPNAME
+#     the name of this web front-end
+#set( 'MFILE_APPNAME', 'mfile-www' );
+set( 'MFILE_APPNAME', 'dochazka-www' );
+
+# MFILE_WWW_DEBUG_MODE
+#     turn debug-level log messages on and off
+set( 'MFILE_WWW_DEBUG_MODE', 1 );
+
+# MFILE_WWW_HOST
+#     hostname/IP address where WWW server will listen
+set( 'MFILE_WWW_HOST', 'localhost' );
+
+# MFILE_WWW_PORT
+#     port number where WWW server will listen
+set( 'MFILE_WWW_PORT', 5001 );
 
 # MFILE_WWW_LOG_FILE
-#     The log file.
-set( 'MFILE_WWW_LOG_FILE', "$ENV{'HOME'}/dochazka-www.log" );
+#     full path of log file
+#set( 'MFILE_WWW_LOG_FILE', $ENV{'HOME'} . "/.mfile-www.log" );
+set( 'MFILE_WWW_LOG_FILE', "$ENV{HOME}/dochazka-www.log" );
 
 # MFILE_WWW_LOG_FILE_RESET
-#     Boolean value (1 or 0) controlling whether the log file is zeroed when
-#     the server starts.
+#     should the logfile be deleted/wiped/unlinked/reset before each use
 set( 'MFILE_WWW_LOG_FILE_RESET', 1 );
 
 # MFILE_WWW_BYPASS_LOGIN_DIALOG
