@@ -62,13 +62,13 @@ define ([
             prop: 'nick',
             maxlen: 20
         },
-        // Employee profile - EID
-        'ePeid': {
-            name: 'ePeid',
+        // Employee profile - sec_id
+        'ePsec_id': {
+            name: 'ePsec_id',
             aclProfileRead: 'passerby',
             aclProfileWrite: null,
-            text: 'EID',
-            prop: 'eid',
+            text: 'Workforce ID',
+            prop: 'sec_id',
             maxlen: 8
         },
         // Employee profile - full name
@@ -175,7 +175,7 @@ define ([
             'title': 'My profile',
             'preamble': null,
             'aclProfile': 'passerby',
-            'entriesRead': [entries.ePnick, entries.ePeid, entries.ePfullname, entries.ePemail, entries.ePremark],
+            'entriesRead': [entries.ePnick, entries.ePsec_id, entries.ePfullname, entries.ePemail, entries.ePremark],
             'entriesWrite': [],
             'hook': function () { return currentUser('obj'); },
             'miniMenu': {
@@ -191,8 +191,8 @@ define ([
             'title': 'Edit employee profile',
             'preamble': null,
             'aclProfile': 'active',
-            'entriesRead': [entries.ePnick, entries.ePeid],
-            'entriesWrite': [entries.ePfullname, entries.ePemail, entries.ePremark],
+            'entriesRead': [entries.ePnick, entries.ePsec_id, entries.ePfullname, entries.ePemail, entries.ePremark],
+            'entriesWrite': [],
             'hook': function () { return currentUser('obj'); },
             'miniMenu': {
                 entries: ['empProfileUpdate'],
@@ -253,7 +253,7 @@ define ([
             'title': 'Employee profile',
             'preamble': null,
             'aclProfile': 'admin',
-            'entriesRead': [entries.ePnick, entries.ePeid, entries.ePfullname, entries.ePemail, entries.ePremark],
+            'entriesRead': [entries.ePnick, entries.ePsec_id, entries.ePfullname, entries.ePemail, entries.ePremark],
             'entriesWrite': [],
             'hook': empLib.getEmployeeObject,
             'miniMenu': {
