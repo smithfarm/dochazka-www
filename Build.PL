@@ -29,7 +29,7 @@ my $build = Module::Build->new(
     requires           => {
         'perl'               => 5.012,
         'App::CELL'          => 0.196,
-        'App::MFILE::WWW'    => 0.141,
+        'App::MFILE::WWW'    => 0.142,
         'App::Dochazka::REST' => 0.531,
     },
     meta_merge => {
