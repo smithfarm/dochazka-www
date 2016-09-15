@@ -149,3 +149,10 @@ Revision history for App-Dochazka-WWW
 - bin/dochazka-www: uncomment --sitedir /etc/dochazka-www
 - build/ops: new file WWW_SiteConfig.pm.example
 
+0.133 2016-09-16 00:24 CEST
+- config: drop derived distro site config file
+- MANIFEST: drop share/config/WWW_SiteConfig.pm
+- js: replace EID with sec_id in Employee profile
+- build/ops: require most recent App::MFILE::WWW
+- js: drop password change option from Employee profile menu
+
