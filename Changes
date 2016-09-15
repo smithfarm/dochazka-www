@@ -144,3 +144,8 @@ Revision history for App-Dochazka-WWW
 - js: fix "New employee" functionality
 - js: fix "Search employee" functionality
 
+0.132 2016-09-15 13:41 CEST
+- js: percent-encode employee search keys
+- bin/dochazka-www: uncomment --sitedir /etc/dochazka-www
+- build/ops: new file WWW_SiteConfig.pm.example
+
