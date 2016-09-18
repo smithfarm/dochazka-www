@@ -255,8 +255,8 @@ define ([
             'title': 'Employee profile',
             'preamble': null,
             'aclProfile': 'admin',
-            'entriesRead': [entries.ePfullname, entries.ePnick,
-                entries.ePsec_id, entries.ePemail, entries.ePremark],
+            'entriesRead': [entries.ePfullname, entries.ePnick, entries.ePsec_id,
+                entries.ePemail, entries.ePremark],
             'entriesWrite': [],
             'hook': empLib.getEmployeeObject,
             'miniMenu': {
