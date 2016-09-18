@@ -301,11 +301,11 @@ sub _login_dialog {
 
     my $status;
     if ( $code == 200 ) {
-        $session->set( 'currentUser', $body_json->{'payload'}->{'current_emp'} );
+        $session->set( 'currentUser', $body_json->{'payload'}->{'emp'} );
         $session->set( 'currentUserPriv', $body_json->{'payload'}->{'priv'} );
         $log->debug( 
             "Login successful, currentUser is now " . 
-            Dumper( $body_json->{'payload'}->{'current_emp'} ) .
+            Dumper( $body_json->{'payload'}->{'emp'} ) .
             " and privilege level is " . $body_json->{'payload'}->{'priv'}
         );
         return 1 if $site->MFILE_WWW_BYPASS_LOGIN_DIALOG and ! $meta->META_LOGIN_BYPASS_STATE;
