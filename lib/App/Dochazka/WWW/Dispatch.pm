@@ -293,7 +293,7 @@ sub _login_dialog {
         server => $site->DOCHAZKA_WWW_BACKEND_URI,
         nick => $nick,
         password => $password,
-        path => 'employee/current/priv',
+        path => 'employee/self/full',
     } );
     $code = $rr->{'hr'}->code;
     $message = $rr->{'hr'}->message;

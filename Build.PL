@@ -30,7 +30,7 @@ my $build = Module::Build->new(
         'perl'               => 5.012,
         'App::CELL'          => 0.196,
         'App::MFILE::WWW'    => 0.143,
-        'App::Dochazka::REST' => 0.531,
+        'App::Dochazka::REST' => 0.544,
     },
     meta_merge => {
         resources => {
