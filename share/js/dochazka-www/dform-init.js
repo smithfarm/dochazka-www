@@ -98,6 +98,24 @@ define ([
             prop: 'remark',
             maxlen: 55
         },
+        // Employee profile - status
+        'ePstatus': {
+            name: 'ePstatus',
+            aclProfileRead: 'inactive',
+            aclProfileWrite: 'admin',
+            text: 'Status',
+            prop: 'priv',
+            maxlen: 10
+        },
+        // Employee profile - statusSince
+        'ePstatusSince': {
+            name: 'ePstatusSince',
+            aclProfileRead: 'inactive',
+            aclProfileWrite: 'admin',
+            text: 'Since',
+            prop: 'effective',
+            maxlen: 30
+        },
 
         // change password
         'newPass': {
@@ -176,7 +194,8 @@ define ([
             'preamble': null,
             'aclProfile': 'passerby',
             'entriesRead': [entries.ePfullname, entries.ePnick,
-                 entries.ePsec_id, entries.ePemail, entries.ePremark],
+                entries.ePsec_id, entries.ePemail, entries.ePremark,
+                entries.ePstatus, entries.ePstatusSince],
             'entriesWrite': [],
             'hook': function () { return currentUser('obj'); },
             'miniMenu': {
