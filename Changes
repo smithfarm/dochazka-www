@@ -156,3 +156,9 @@ Revision history for App-Dochazka-WWW
 - build/ops: require most recent App::MFILE::WWW
 - js: drop password change option from Employee profile menu
 
+0.134 2016-09-19 12:48 CEST
+- build/ops: require App::MFILE::WWW 0.143
+- js: minor reformatting in dochazka-www/dform-init.js
+- Use employee/self/full resource instead of employee/current/priv
+- In employee/self/full resource, current_emp prop renamed to "emp"
+
