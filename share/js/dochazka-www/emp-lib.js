@@ -105,7 +105,7 @@ define ([
                     $('#result').html("Created new employee " + st.payload.nick);
                     employeeObject = st.payload;
                     setEmployeeObject(employeeObject);
-                    target.pull('dispEmployee').start();
+                    target.pull('empProfile').start();
                 },
                 // failure callback
                 fc = null;

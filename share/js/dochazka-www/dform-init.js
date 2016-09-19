@@ -197,7 +197,7 @@ define ([
                 entries.ePsec_id, entries.ePemail, entries.ePremark,
                 entries.ePstatus, entries.ePstatusSince],
             'entriesWrite': [],
-            'hook': function () { return currentUser('obj'); },
+            'hook': empLib.getEmployeeObject,
             'miniMenu': {
                 entries: ['empProfileEdit'],
                 back: ['Back', 'mainEmpl']
@@ -267,23 +267,6 @@ define ([
             }
         });
 
-        target.push('dispEmployee', {
-            'name': 'dispEmployee',
-            'type': 'dform',
-            'menuText': 'Employee profile',
-            'title': 'Employee profile',
-            'preamble': null,
-            'aclProfile': 'admin',
-            'entriesRead': [entries.ePfullname, entries.ePnick, entries.ePsec_id,
-                entries.ePemail, entries.ePremark],
-            'entriesWrite': [],
-            'hook': empLib.getEmployeeObject,
-            'miniMenu': {
-                entries: [],
-                back: ['To leave this page, press ENTER or click the Submit button', 'mainEmpl']
-            }
-        });
-  
         target.push('searchEmployee', {
             'name': 'searchEmployee',
             'type': 'dform',
