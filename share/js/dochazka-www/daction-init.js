@@ -62,6 +62,15 @@ define ([
         // Employee actions
         //
 
+        // My profile
+        target.push('myProfile', {
+            'name': 'myProfile',
+            'type': 'daction',
+            'menuText': 'My profile',
+            'aclProfile': 'passerby',
+            'start': dactionStart('myProfile')
+        });
+
         // Employee profile Update
         target.push('empProfileUpdate', {
             'name': 'empProfileUpdate',

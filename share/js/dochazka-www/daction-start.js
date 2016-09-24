@@ -70,7 +70,8 @@ define ([
             },
 
             // actions triggered from employee menu
-            "empProfileUpdate": empLib.empProfile,
+            "myProfile": function () { empLib.loadEmpProfile(currentUser('obj').eid) },
+            "empProfileUpdate": empLib.empProfileUpdate,
             "passChangePending": empLib.passChangePending,
             "saveChangedPassword": empLib.mainEmpl,
             "newEmplSubmit": empLib.newEmplSubmit,

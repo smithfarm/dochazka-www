@@ -60,7 +60,7 @@ define ([
             'menuText': 'Employee profile',
             'title': 'Employee profile',
             'aclProfile': 'passerby',
-            'entries': ['empProfile', 'newEmployee', 'masqEmployee', 'searchEmployee'],
+            'entries': ['myProfile', 'newEmployee', 'masqEmployee', 'searchEmployee'],
             'back': 'mainMenu'
         });
 

@@ -56,10 +56,41 @@ define ([
 
     var 
         // employee object storage
-        employeeObject,
+        employeeObject = Object.create(prototypes.empProfile),
+
+        // method for accessing the stored employee object
+        getEmployeeObject = function () { return employeeObject; },
 
         // method for setting the stored employee object
-        setEmployeeObject = function (emp) { $.extend(Object.create(prototypes.empProfile), emp); },
+        loadEmpProfile = function (eid) {
+            var rest = {
+                    "method": 'GET',
+                    "path": 'employee/eid/' + eid + '/full'
+                },
+                // success callback
+                sc = function (st) {
+                    if (st.code === 'DISPATCH_EMPLOYEE_PROFILE_FULL') {
+                        console.log("Payload is", st.payload);
+                        var effective = st.payload.privhistory.effective;
+                        effective = effective.substr(0, effective.indexOf(" "));
+                        employeeObject = $.extend(
+                            Object.create(prototypes.empProfile), {
+                                'eid': st.payload.emp.eid,
+                                'nick': st.payload.emp.nick,
+                                'fullname': st.payload.emp.fullname,
+                                'email': st.payload.emp.email,
+                                'remark': st.payload.emp.remark,
+                                'sec_id': st.payload.emp.sec_id,
+                                'priv': st.payload.privhistory.priv,
+                                'effective': effective
+                            }
+                        );
+                        target.pull('empProfile').start();
+                    }
+                },
+                fc = null;
+            ajax(rest, sc, fc);
+        },
 
         // "search employee" method
         searchEmp = function (obj) {
@@ -194,8 +225,7 @@ define ([
 	// that differs between the two targets
         //
         epuGen = function (afterTarget, emp) {
-            var protoEmp = Object.create(prototypes.empProfile),
-                t = target.pull(afterTarget);
+            var protoEmp = Object.create(prototypes.empProfile);
             console.log("Entering epuGen with target " + afterTarget + " and object", emp);
             $.extend(protoEmp, emp);
             var rest = {
@@ -227,10 +257,10 @@ define ([
     // here is where we define methods implementing the various
     // employee-related actions (see daction-start.js)
     return {
-        getEmployeeObject: function () { return employeeObject; },
-        setEmployeeObject: setEmployeeObject,
+        getEmployeeObject: getEmployeeObject,
         mainEmpl: function (emp) { epuGen('mainEmpl', emp); },
-        empProfile: function (emp) { epuGen('empProfile', emp); },
+        loadEmpProfile: loadEmpProfile,
+        empProfileUpdate: function (emp) { epuGen('empProfile', emp); },
         passChangePending: function (emp) {
             employeeObject = emp;
             target.pull('confirmPassword').start();
