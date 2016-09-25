@@ -173,3 +173,13 @@ Revision history for App-Dochazka-WWW
 - emp-lib.js: separate myProfile function
 - Make "Edit remark" display updated employee profile
 
+0.137 2016-09-25 21:47 CEST
+- Fix hook in empProfileEditRemark
+- Rip out password change feature
+- Fix "My profile" + Masquerade mode
+- Replace "newEmployee" target with "ldapLookup"
+- Replace "newEmplSubmit" with "ldapLookupSubmit"
+- Rip out "insertEmployee" target
+- Implement "LDAP lookup" feature
+- Provide masquerade option if LDAP lookup succeeds
+
