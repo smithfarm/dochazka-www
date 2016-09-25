@@ -264,6 +264,7 @@ sub process_post {
         path => $path,
         req_body => $body,
     } );
+    # $log->debug( "rest_req returned: " . Dumper( $rr ) );
     my $hr = $rr->{'hr'};
     return $self->_prep_ajax_response( $hr, $rr->{'body'} );
 }
@@ -336,15 +337,15 @@ sub _logout {
 }
 
 sub _prep_ajax_response {
-    my ( $self, $hr, $body_json ) = @_;
+    my ( $self, $hr, $body ) = @_;
     my $expurgated_status;
     if ( $hr->is_success ) {
-        $expurgated_status = $body_json;
+        $expurgated_status = $body;
     } else {
+        $log->debug( "AJAX response body: " . Dumper( $body ) );
         $expurgated_status = $CELL->status_err( 
-            'DOCHAZKA_WWW_BACKEND_ERROR',
-            args => [ $hr->code ],
-            payload => { code => $hr->code, message => $hr->message },
+            $body->{'code'},
+            payload => { code => $hr->code, message => $body->{'text'} },
         )->expurgate;
     }
     $self->response->header('Content-Type' => 'application/json; charset=UTF-8' );
