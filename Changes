@@ -165,3 +165,11 @@ Revision history for App-Dochazka-WWW
 0.135 2016-09-25 10:01 CEST
 - build/ops: require REST 0.546 and MFILE::WWW 0.144
 
+0.136 2016-09-25 12:03 CEST
+- dform-init.js: add status, statusSince empProfile entries
+- js: drop dispEmployee target
+- Make "My profile" display "Status" and "Status since"
+- Rename empProfileEdit target to empProfileEditRemark
+- emp-lib.js: separate myProfile function
+- Make "Edit remark" display updated employee profile
+
