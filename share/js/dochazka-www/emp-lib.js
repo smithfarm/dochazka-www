@@ -62,7 +62,8 @@ define ([
         getEmployeeObject = function () { return employeeObject; },
 
         myProfile = function () {
-            if (employeeObject.effective !== null) {
+            var cu = currentUser('obj');
+            if (employeeObject.effective !== null && employeeObject.nick === cu.nick) {
                 target.pull('empProfile').start();
             } else {
                 loadEmpProfile(currentUser('obj').eid);
