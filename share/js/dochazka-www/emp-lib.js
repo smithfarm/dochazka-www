@@ -178,31 +178,35 @@ define ([
             target.pull('searchEmployee').start();
         },
 
-        // "new employee" method - checks database if employee doesn't already exist
-        // and then calls insertEmp
         ldapLookupSubmit = function (emp) {
             console.log("Entering function ldapLookupSubmit");
             var rest = {
-                    method: 'GET',
-                    path: 'employee/nick/' + emp.nick || ''
+                    method: 'PUT',
+                    // path: 'employee/nick/' + emp.nick || ''
                 },
                 // success callback -- employee already exists
                 sc = function (st) {
-                    var message = 'Employee ' + emp.nick + ' already exists'
-                    console.log(message);
-                    $('#result').html(message);
-                    $('input[name="sel"]').focus();
-                    $('input[name="sel"]').val('');
+                    if (st.code === 'DOCHAZKA_CUD_OK') {
+                        console.log("Payload is", st.payload);
+                        employeeObject = $.extend(employeeObject, st.payload);
+                        target.pull('empProfile').start();
+                    }
                 },
                 // failure callback -- employee doesn't exist
                 fc = function (st) {
                     var err = st.payload.code;
                     if (err === '404') {
-                        console.log('Employee ' + emp.nick + ' not found');
-                        insertEmp(emp);
+                        var msg = 'Employee ' + emp.nick + ' not found in LDAP';
+                        console.log(msg);
+                        $("#result").html(msg);
+                        $('input[name="sel"]').val('');
+                        $('input[name="entry0"]').focus();
                     }
                 }
-            ajax(rest, sc, fc);        
+            if (emp.hasOwnProperty('nick')) {
+                rest.path = 'employee/nick/' + emp.nick + '/ldap';
+                ajax(rest, sc, fc);
+            }
         },
 
 	// epuGen ("generate employee profile update function") is called to
@@ -247,7 +251,6 @@ define ([
         loadEmpProfile: loadEmpProfile,
         empProfileUpdate: function (emp) { epuGen('empProfile', emp); },
         ldapLookupSubmit: ldapLookupSubmit,
-        insertEmployee: insertEmp,
         actionEmplSearch: searchEmp,
         endTheMasquerade: endTheMasquerade,
         masqEmployee: masqEmp

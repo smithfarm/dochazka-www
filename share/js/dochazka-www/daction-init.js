@@ -84,7 +84,7 @@ define ([
         target.push('ldapLookupSubmit', {
             'name': 'ldapLookupSubmit',
             'type': 'daction',
-            'menuText': 'Save',
+            'menuText': 'Lookup',
             'aclProfile': 'admin',
             'start': dactionStart('ldapLookupSubmit')
         }),
