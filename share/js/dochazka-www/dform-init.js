@@ -117,22 +117,6 @@ define ([
             maxlen: 30
         },
 
-        // change password
-        'newPass': {
-            name: 'newPass',
-            aclProfileWrite: 'passerby',
-            text: 'Password',
-            prop: 'password',
-            maxlen: 32
-        },
-        'confirmPass': {
-            name: 'confirmPass',
-            aclProfileRead: 'passerby',
-            text: 'Password',
-            prop: 'password',
-            maxlen: 32
-        },
-        
         // new employee - nick
         'nEnick': {
             name: 'nEnick',
@@ -219,36 +203,6 @@ define ([
                 back: ['Back', 'empProfile']
             }
         });
-
-        // target.push('changePassword', {
-        //     'name': 'changePassword',
-        //     'type': 'dform',
-        //     'menuText': 'Change my password',
-        //     'title': 'Change my password',
-        //     'preamble': 'Enter new password in the field below',
-        //     'aclProfile': 'passerby',
-        //     'entriesRead': [],
-        //     'entriesWrite': [entries.newPass],
-        //     'hook': function () { return currentUser('obj'); },
-        //     'miniMenu': {
-        //         entries: ['passChangePending'],
-        //         back: ['Back', 'mainEmpl']
-        //     }
-        // });
-
-        // target.push('confirmPassword', {
-        //     'name': 'confirmPassword',
-        //     'type': 'dform',
-        //     'title': 'NEW PASSWORD PENDING!',
-        //     'preamble': 'Check password and confirm that you really want it',
-        //     'aclProfile': 'passerby',
-        //     'entriesRead': [entries.confirmPass],
-        //     'hook': empLib.getEmployeeObject,
-        //     'miniMenu': {
-        //         entries: ['saveChangedPassword'],
-        //         back: ['Back', 'mainEmpl']
-        //     }
-        // });
 
         target.push('newEmployee', {
             'name': 'newEmployee',

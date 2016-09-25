@@ -72,8 +72,6 @@ define ([
             // actions triggered from employee menu
             "myProfile": empLib.myProfile,
             "empProfileUpdate": empLib.empProfileUpdate,
-            "passChangePending": empLib.passChangePending,
-            "saveChangedPassword": empLib.mainEmpl,
             "newEmplSubmit": empLib.newEmplSubmit,
             "insertEmployee": empLib.insertEmployee,
             "actionEmplSearch": empLib.actionEmplSearch,

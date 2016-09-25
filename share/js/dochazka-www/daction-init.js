@@ -80,24 +80,6 @@ define ([
             'start': dactionStart('empProfileUpdate')
         }),
         
-        // Password change pending
-        target.push('passChangePending', {
-            'name': 'passChangePending',
-            'type': 'daction',
-            'menuText': 'Confirm new password',
-            'aclProfile': 'passerby',
-            'start': dactionStart('passChangePending')
-        }),
-
-        // Save changed password
-        target.push('saveChangedPassword', {
-            'name': 'saveChangedPassword',
-            'type': 'daction',
-            'menuText': 'Save new password',
-            'aclProfile': 'passerby',
-            'start': dactionStart('saveChangedPassword')
-        }),
-    
         // New employee
         target.push('newEmplSubmit', {
             'name': 'newEmplSubmit',

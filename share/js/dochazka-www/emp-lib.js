@@ -225,12 +225,10 @@ define ([
         },
 
 	// epuGen ("generate employee profile update function") is called to
-	// save changes to the database, both for the 'empProfileEdit' form and
-	// the 'changePassword' form
+	// save changes to the database
         //
 	// the argument afterTarget is the name of the target to go to
-	// when the database update is finished -- this is the only parameter
-	// that differs between the two targets
+	// when the database update is finished
         //
         epuGen = function (afterTarget, emp) {
             var protoEmp = Object.create(prototypes.empProfile);
@@ -243,10 +241,7 @@ define ([
                 },
                 sc = function (st) {
                     // st is 'Status'
-                    if (afterTarget === 'mainEmpl') {
-                        // this is a change password operation
-                        $("#result").html("Password changed");
-                    } else if (afterTarget === 'empProfile') {
+                    if (afterTarget === 'empProfile') {
                         // this is an employee profile update
                         $("#result").html("Employee profile updated");
                     }
@@ -270,10 +265,6 @@ define ([
         myProfile: myProfile,
         loadEmpProfile: loadEmpProfile,
         empProfileUpdate: function (emp) { epuGen('empProfile', emp); },
-        passChangePending: function (emp) {
-            employeeObject = emp;
-            target.pull('confirmPassword').start();
-        },
         newEmplSubmit: newEmplSubmit,
         insertEmployee: insertEmp,
         actionEmplSearch: searchEmp,
