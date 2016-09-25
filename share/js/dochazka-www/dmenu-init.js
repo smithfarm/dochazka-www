@@ -50,7 +50,7 @@ define ([
             'menuText': 'Main menu',
             'title': 'Main menu',
             'aclProfile': 'passerby',
-            'entries': ['mainEmpl', 'mainPriv'],
+            'entries': ['mainEmpl'],
             'back': 'logout'
         });
 
@@ -60,17 +60,7 @@ define ([
             'menuText': 'Employee profile',
             'title': 'Employee profile',
             'aclProfile': 'passerby',
-            'entries': ['myProfile', 'ldapLookup', 'masqEmployee', 'searchEmployee'],
-            'back': 'mainMenu'
-        });
-
-        target.push('mainPriv', {
-            'name': 'mainPriv',
-            'type': 'dmenu',
-            'menuText': 'Privilege levels',
-            'title': 'Privilege levels',
-            'aclProfile': 'passerby',
-            'entries': ['privHistory'],
+            'entries': ['myProfile', 'privHistory', 'ldapLookup', 'masqEmployee', 'searchEmployee'],
             'back': 'mainMenu'
         });
 

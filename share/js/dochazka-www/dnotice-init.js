@@ -61,13 +61,13 @@ define ([
         target.push('privHistory', {
             'name': 'privHistory',
             'type': 'dnotice',
-            'menuText': 'Privilege history listing (quick)',
-            'title': 'History of privlevel changes for employee ' + currentUser().obj.nick,
+            'menuText': 'Status history',
+            'title': 'Status history',
             'preamble': '<span style="text-decoration: underline">Effective date/time</span>' +
                         '&nbsp;&nbsp;&nbsp;' +
                         '<span style="text-decoration: underline">Priv level&nbsp;&nbsp;</span>',
             'aclProfile': 'admin',
-            'back': 'mainPriv'
+            'back': 'mainEmpl'
         });
 
     };
