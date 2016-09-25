@@ -199,14 +199,17 @@ define ([
                 },
                 // failure callback -- employee doesn't exist
                 fc = function (st) {
-                    var err = st.payload.code;
+                    var err = st.payload.code,
+                        msg;
                     if (err === '404') {
-                        var msg = 'Employee ' + emp.nick + ' not found in LDAP';
-                        console.log(msg);
-                        $("#result").html(msg);
-                        $('input[name="sel"]').val('');
-                        $('input[name="entry0"]').focus();
+                        msg = 'Employee ' + emp.nick + ' not found in LDAP';
+                    } else {
+                        msg = st.text;
                     }
+                    console.log(msg);
+                    $("#result").html(msg);
+                    $('input[name="sel"]').val('');
+                    $('input[name="entry0"]').focus();
                 }
             if (emp.hasOwnProperty('nick')) {
                 rest.path = 'employee/nick/' + emp.nick + '/ldap';
