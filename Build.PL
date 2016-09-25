@@ -29,8 +29,8 @@ my $build = Module::Build->new(
     requires           => {
         'perl'               => 5.012,
         'App::CELL'          => 0.196,
-        'App::MFILE::WWW'    => 0.143,
-        'App::Dochazka::REST' => 0.544,
+        'App::MFILE::WWW'    => 0.144,
+        'App::Dochazka::REST' => 0.546,
     },
     meta_merge => {
         resources => {
