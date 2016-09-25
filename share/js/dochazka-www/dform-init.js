@@ -199,25 +199,24 @@ define ([
             'entriesWrite': [],
             'hook': empLib.getEmployeeObject,
             'miniMenu': {
-                entries: ['empProfileEdit'],
+                entries: ['empProfileEditRemark'],
                 back: ['Back', 'mainEmpl']
             }
         });
 
-        target.push('empProfileEdit', {
-            'name': 'empProfileEdit',
+        target.push('empProfileEditRemark', {
+            'name': 'empProfileEditRemark',
             'type': 'dform',
-            'menuText': 'Edit',
+            'menuText': 'Edit remark',
             'title': 'Edit remark',
             'preamble': null,
             'aclProfile': 'admin',
-            'entriesRead': [entries.ePfullname, entries.ePnick,
-                entries.ePsec_id, entries.ePemail],
+            'entriesRead': [entries.ePnick, entries.ePfullname],
             'entriesWrite': [entries.ePremark],
             'hook': function () { return currentUser('obj'); },
             'miniMenu': {
                 entries: ['empProfileUpdate'],
-                back: ['Back to employee menu', 'mainEmpl']
+                back: ['Back', 'empProfile']
             }
         });
 

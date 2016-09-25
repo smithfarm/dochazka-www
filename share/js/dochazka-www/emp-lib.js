@@ -245,7 +245,7 @@ define ([
                     $.extend(protoEmp, st.payload);
                     currentUser("obj", protoEmp);
                     console.log("Saved new employee object to database: ", protoEmp);
-                    t.start();
+                    target.pull(afterTarget).start();
                 },
                 fc = function (st) {
                     console.log("Failure callback received argument", st);
