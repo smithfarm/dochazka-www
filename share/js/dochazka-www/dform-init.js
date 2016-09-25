@@ -204,15 +204,15 @@ define ([
             }
         });
 
-        target.push('newEmployee', {
-            'name': 'newEmployee',
+        target.push('ldapLookup', {
+            'name': 'ldapLookup',
             'type': 'dform',
-            'menuText': 'New employee',
-            'title': 'New employee',
-            'preamble': 'Fields marked (*) are required, others are optional.',
+            'menuText': 'LDAP lookup',
+            'title': 'LDAP lookup',
+            'preamble': 'Enter employee nick for exact (case insensitive) match.',
             'aclProfile': 'admin',
             'entriesRead': null,
-            'entriesWrite': [entries.nEfullname, entries.nEnick, entries.nEemail, entries.nEremark],
+            'entriesWrite': [entries.nEnick],
             'hook': function () { return Object.create(prototypes.empProfile); },
             'miniMenu': {
                 entries: ['newEmplSubmit'],
