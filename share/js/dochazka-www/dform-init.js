@@ -210,12 +210,29 @@ define ([
             'menuText': 'LDAP lookup',
             'title': 'LDAP lookup',
             'preamble': 'Enter employee nick for exact (case insensitive) match.',
-            'aclProfile': 'admin',
+            'aclProfile': 'active',
             'entriesRead': null,
             'entriesWrite': [entries.nEnick],
             'hook': function () { return Object.create(prototypes.empProfile); },
             'miniMenu': {
                 entries: ['ldapLookupSubmit'],
+                back: ['Back', 'mainEmpl']
+            }
+        });
+
+        target.push('ldapLookupDisplay', {
+            'name': 'ldapLookupDisplay',
+            'type': 'dform',
+            'title': 'Employee profile',
+            'preamble': 'LDAP lookup success',
+            'aclProfile': 'active',
+            'entriesRead': [entries.ePfullname, entries.ePnick,
+                entries.ePsec_id, entries.ePemail, entries.ePremark,
+                entries.ePstatus, entries.ePstatusSince],
+            'entriesWrite': [],
+            'hook': empLib.getEmployeeObject,
+            'miniMenu': {
+                entries: ['masqEmployee'],
                 back: ['Back', 'mainEmpl']
             }
         });

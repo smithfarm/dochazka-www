@@ -79,8 +79,13 @@ define ([
                 sc = function (st) {
                     if (st.code === 'DISPATCH_EMPLOYEE_PROFILE_FULL') {
                         console.log("Payload is", st.payload);
-                        var effective = st.payload.privhistory.effective;
-                        effective = effective.substr(0, effective.indexOf(" "));
+                        var priv = null,
+                            effective = null;
+                        if (st.payload.privhistory !== null) {
+                            priv = st.payload.privhistory.priv
+                            effective = st.payload.privhistory.effective
+                            effective = effective.substr(0, effective.indexOf(" "));
+                        }
                         employeeObject = $.extend(
                             Object.create(prototypes.empProfile), {
                                 'eid': st.payload.emp.eid,
@@ -89,7 +94,7 @@ define ([
                                 'email': st.payload.emp.email,
                                 'remark': st.payload.emp.remark,
                                 'sec_id': st.payload.emp.sec_id,
-                                'priv': st.payload.privhistory.priv,
+                                'priv': priv,
                                 'effective': effective
                             }
                         );
@@ -170,7 +175,7 @@ define ([
                 currentUser('flag1', 1); // turn on masquerade flag
                 $('#userbox').html(appLib.fillUserBox()); // reset userbox
                 $('#mainarea').css("background-color", "red");
-                target.pull('mainMenu').start();
+                target.pull('mainEmpl').start();
                 return;
             }
         
@@ -189,7 +194,7 @@ define ([
                     if (st.code === 'DOCHAZKA_CUD_OK') {
                         console.log("Payload is", st.payload);
                         employeeObject = $.extend(employeeObject, st.payload);
-                        target.pull('empProfile').start();
+                        target.pull('ldapLookupDisplay').start();
                     }
                 },
                 // failure callback -- employee doesn't exist
