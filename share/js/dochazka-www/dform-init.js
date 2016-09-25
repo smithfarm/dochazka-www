@@ -213,7 +213,7 @@ define ([
             'aclProfile': 'admin',
             'entriesRead': [entries.ePnick, entries.ePfullname],
             'entriesWrite': [entries.ePremark],
-            'hook': function () { return currentUser('obj'); },
+            'hook': empLib.getEmployeeObject,
             'miniMenu': {
                 entries: ['empProfileUpdate'],
                 back: ['Back', 'empProfile']
