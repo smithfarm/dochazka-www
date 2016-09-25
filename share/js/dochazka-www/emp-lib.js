@@ -62,12 +62,10 @@ define ([
         getEmployeeObject = function () { return employeeObject; },
 
         myProfile = function () {
-            var cu = currentUser('obj');
-            if (cu.hasOwnProperty('effective')) {
-                employeeObject = cu;
+            if (employeeObject.effective !== null) {
                 target.pull('empProfile').start();
             } else {
-                loadEmpProfile(cu.eid);
+                loadEmpProfile(currentUser('obj').eid);
             }
         },
 
@@ -252,9 +250,9 @@ define ([
                         // this is an employee profile update
                         $("#result").html("Employee profile updated");
                     }
-                    $.extend(protoEmp, st.payload);
-                    currentUser("obj", protoEmp);
                     console.log("Saved new employee object to database: ", protoEmp);
+                    $.extend(employeeObject, st.payload);
+                    console.log("Profile object is", employeeObject);
                     target.pull(afterTarget).start();
                 },
                 fc = function (st) {
