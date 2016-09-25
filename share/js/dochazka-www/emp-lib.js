@@ -132,26 +132,6 @@ define ([
             ajax(rest, sc, fc);
         },
 
-        // "insert employee" method
-        insertEmp = function (emp) {
-            var rest = {
-                    "method": 'PUT',
-                    "path": 'employee/nick/' + emp.nick,
-                    "body": emp.sanitize()
-                },
-                // success callback
-                sc = function (st) {
-                    console.log("Created new employee: ", st.payload);
-                    $('#result').html("Created new employee " + st.payload.nick);
-                    employeeObject = st.payload;
-                    setEmployeeObject(employeeObject);
-                    target.pull('empProfile').start();
-                },
-                // failure callback
-                fc = null;
-            ajax(rest, sc, fc);        
-        },
-
         // masquerade as a different employee
         currentEmployeeStashed = null,
         currentEmplPrivStashed = null,

@@ -89,14 +89,6 @@ define ([
             'start': dactionStart('ldapLookupSubmit')
         }),
         
-        // Insert employee
-        target.push('insertEmployee', {
-            'name': 'insertEmployee',
-            'type': 'daction',
-            'aclProfile': 'admin',
-            'start': dactionStart('insertEmployee')
-        }),
-    
         // Search employee
         target.push('actionEmplSearch', {
             'name': 'actionEmplSearch',
