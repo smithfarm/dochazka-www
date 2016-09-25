@@ -162,3 +162,6 @@ Revision history for App-Dochazka-WWW
 - Use employee/self/full resource instead of employee/current/priv
 - In employee/self/full resource, current_emp prop renamed to "emp"
 
+0.135 2016-09-25 10:01 CEST
+- build/ops: require REST 0.546 and MFILE::WWW 0.144
+
