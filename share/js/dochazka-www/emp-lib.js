@@ -61,7 +61,16 @@ define ([
         // method for accessing the stored employee object
         getEmployeeObject = function () { return employeeObject; },
 
-        // method for setting the stored employee object
+        myProfile = function () {
+            var cu = currentUser('obj');
+            if (cu.hasOwnProperty('effective')) {
+                employeeObject = cu;
+                target.pull('empProfile').start();
+            } else {
+                loadEmpProfile(cu.eid);
+            }
+        },
+
         loadEmpProfile = function (eid) {
             var rest = {
                     "method": 'GET',
@@ -85,6 +94,7 @@ define ([
                                 'effective': effective
                             }
                         );
+                        currentUser('obj', employeeObject);
                         target.pull('empProfile').start();
                     }
                 },
@@ -259,6 +269,7 @@ define ([
     return {
         getEmployeeObject: getEmployeeObject,
         mainEmpl: function (emp) { epuGen('mainEmpl', emp); },
+        myProfile: myProfile,
         loadEmpProfile: loadEmpProfile,
         empProfileUpdate: function (emp) { epuGen('empProfile', emp); },
         passChangePending: function (emp) {
