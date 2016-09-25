@@ -72,7 +72,7 @@ define ([
             // actions triggered from employee menu
             "myProfile": empLib.myProfile,
             "empProfileUpdate": empLib.empProfileUpdate,
-            "newEmplSubmit": empLib.newEmplSubmit,
+            "ldapLookupSubmit": empLib.ldapLookupSubmit,
             "insertEmployee": empLib.insertEmployee,
             "actionEmplSearch": empLib.actionEmplSearch,
             "masqEmployee": empLib.masqEmployee,

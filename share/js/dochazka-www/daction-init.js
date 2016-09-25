@@ -81,12 +81,12 @@ define ([
         }),
         
         // New employee
-        target.push('newEmplSubmit', {
-            'name': 'newEmplSubmit',
+        target.push('ldapLookupSubmit', {
+            'name': 'ldapLookupSubmit',
             'type': 'daction',
             'menuText': 'Save',
             'aclProfile': 'admin',
-            'start': dactionStart('newEmplSubmit')
+            'start': dactionStart('ldapLookupSubmit')
         }),
         
         // Insert employee

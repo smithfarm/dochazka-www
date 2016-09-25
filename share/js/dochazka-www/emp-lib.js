@@ -200,8 +200,8 @@ define ([
 
         // "new employee" method - checks database if employee doesn't already exist
         // and then calls insertEmp
-        newEmplSubmit = function (emp) {
-            console.log("Entering function newEmplSubmit");
+        ldapLookupSubmit = function (emp) {
+            console.log("Entering function ldapLookupSubmit");
             var rest = {
                     method: 'GET',
                     path: 'employee/nick/' + emp.nick || ''
@@ -266,7 +266,7 @@ define ([
         myProfile: myProfile,
         loadEmpProfile: loadEmpProfile,
         empProfileUpdate: function (emp) { epuGen('empProfile', emp); },
-        newEmplSubmit: newEmplSubmit,
+        ldapLookupSubmit: ldapLookupSubmit,
         insertEmployee: insertEmp,
         actionEmplSearch: searchEmp,
         endTheMasquerade: endTheMasquerade,

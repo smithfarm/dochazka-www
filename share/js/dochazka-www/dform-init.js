@@ -215,7 +215,7 @@ define ([
             'entriesWrite': [entries.nEnick],
             'hook': function () { return Object.create(prototypes.empProfile); },
             'miniMenu': {
-                entries: ['newEmplSubmit'],
+                entries: ['ldapLookupSubmit'],
                 back: ['Back', 'mainEmpl']
             }
         });
