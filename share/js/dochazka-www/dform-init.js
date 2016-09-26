@@ -98,21 +98,21 @@ define ([
             prop: 'remark',
             maxlen: 55
         },
-        // Employee profile - status
-        'ePstatus': {
-            name: 'ePstatus',
+        // Employee profile - privlevel
+        'ePpriv': {
+            name: 'ePpriv',
             aclProfileRead: 'inactive',
             aclProfileWrite: 'admin',
-            text: 'Status',
+            text: 'Privlevel',
             prop: 'priv',
             maxlen: 10
         },
-        // Employee profile - statusSince
-        'ePstatusSince': {
-            name: 'ePstatusSince',
+        // Employee profile - effective
+        'ePeffective': {
+            name: 'ePeffective',
             aclProfileRead: 'inactive',
             aclProfileWrite: 'admin',
-            text: 'Since',
+            text: 'Effective',
             prop: 'effective',
             maxlen: 30
         },
@@ -151,7 +151,7 @@ define ([
             'aclProfile': 'passerby',
             'entriesRead': [entries.ePfullname, entries.ePnick,
                 entries.ePsec_id, entries.ePemail, entries.ePremark,
-                entries.ePstatus, entries.ePstatusSince],
+                entries.ePpriv, entries.ePeffective],
             'entriesWrite': [],
             'hook': empLib.getEmployeeProfile,
             'miniMenu': {
