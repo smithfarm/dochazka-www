@@ -194,7 +194,7 @@ define ([
             var nick = emp.nick,
                 rest = {
                     method: 'GET',
-                    path: 'employee/nick/' + nick
+                    path: 'employee/nick/' + nick + "/ldap"
                 },
                 // success callback -- employee already exists
                 sc = function (st) {
@@ -218,10 +218,7 @@ define ([
                     $('input[name="sel"]').val('');
                     $('input[name="entry0"]').focus();
                 }
-            if (emp.hasOwnProperty('nick')) {
-                rest.path = 'employee/nick/' + emp.nick + '/ldap';
-                ajax(rest, sc, fc);
-            }
+            ajax(rest, sc, fc);
         },
 
         ldapEmployeeLink = function () {
@@ -231,7 +228,7 @@ define ([
             if (ldapEmployeeObject.nick === null) {
                 return ldapEmployeeObject;
             }
-            ldapEmployeeObject.synced = false;
+            ldapEmployeeObject.dochazka = false;
             var rest = {
                     "method": 'GET',
                     "path": 'employee/nick/' + ldapEmployeeObject.nick
@@ -240,12 +237,55 @@ define ([
                 sc = function (st) {
                     if (st.code === "DISPATCH_EMPLOYEE_FOUND") {
                         console.log("Payload is", st.payload);
-                        ldapEmployeeObject.synced = true;
+                        ldapEmployeeObject.dochazka = true;
                     }
-                    target.pull('ldapDisplayEmployee').start();
+                    if (document.getElementById('ldapLookup') ||
+                        document.getElementById('ldapDisplayEmployee')) {
+                        target.pull('ldapDisplayEmployee').start();
+                    }
                 },
                 fc = function (st) {
-                    target.pull('ldapDisplayEmployee').start();
+                    if (document.getElementById('ldapLookup') ||
+                        document.getElementById('ldapDisplayEmployee')) {
+                        target.pull('ldapDisplayEmployee').start();
+                    }
+                }
+            ajax(rest, sc, fc);
+        },
+
+        ldapSync = function (ldapEmp) {
+            console.log("Entered ldapSync with object", ldapEmp);
+            if (! ldapEmp.nick) {
+                return;
+            }
+            var nick = ldapEmp.nick,
+                rest = {
+                    method: 'PUT',
+                    path: 'employee/nick/' + nick + '/ldap'
+                },
+                // success callback -- employee already exists
+                sc = function (st) {
+                    console.log("PUT ldap success, st object is", st);
+                    if (st.code === 'DOCHAZKA_CUD_OK') {
+                        console.log("Payload is", st.payload);
+                        ldapEmployeeObject = $.extend(ldapEmployeeObject, st.payload);
+                        ldapEmployeeObject.dochazka = true;
+                    }
+                    ldapEmployeeLink();
+                },
+                // failure callback -- employee doesn't exist
+                fc = function (st) {
+                    var err = st.payload.code,
+                        msg;
+                    if (err === '404') {
+                        msg = 'Employee ' + emp.nick + ' not found in LDAP';
+                    } else {
+                        msg = st.text;
+                    }
+                    console.log(msg);
+                    $("#result").html(msg);
+                    $('input[name="sel"]').val('');
+                    $('input[name="entry0"]').focus();
                 }
             ajax(rest, sc, fc);
         },
@@ -294,6 +334,7 @@ define ([
         loadEmpProfile: loadEmpProfile,
         empProfileUpdate: function (emp) { epuGen('empProfile', emp); },
         ldapLookupSubmit: ldapLookupSubmit,
+        ldapSync: ldapSync,
         actionEmplSearch: searchEmp,
         endTheMasquerade: endTheMasquerade,
         masqEmployee: masqEmp

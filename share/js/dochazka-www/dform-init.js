@@ -117,12 +117,12 @@ define ([
             maxlen: 30
         },
         // Employee profile - synced (LDAP/internal database)
-        'ePsynced': {
-            name: 'ePsynced',
+        'LDAPdochazka': {
+            name: 'LDAPdochazka',
             aclProfileRead: 'inactive',
             aclProfileWrite: 'admin',
-            text: 'Synced',
-            prop: 'synced',
+            text: 'Dochazka',
+            prop: 'dochazka',
             maxlen: 30
         },
 
@@ -199,11 +199,11 @@ define ([
             'preamble': null,
             'aclProfile': 'active',
             'entriesRead': [entries.ePfullname, entries.ePnick,
-                entries.ePsec_id, entries.ePemail, entries.ePsynced],
+                entries.ePsec_id, entries.ePemail, entries.LDAPdochazka],
             'entriesWrite': [],
             'hook': empLib.getLdapEmployeeObject,
             'miniMenu': {
-                entries: [],
+                entries: ['ldapSync'],
                 back: ['Back', 'mainEmpl']
             }
         });

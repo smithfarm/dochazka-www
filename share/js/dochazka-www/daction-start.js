@@ -73,6 +73,7 @@ define ([
             "myProfile": empLib.myProfile,
             "empProfileUpdate": empLib.empProfileUpdate,
             "ldapLookupSubmit": empLib.ldapLookupSubmit,
+            "ldapSync": empLib.ldapSync,
             "actionEmplSearch": empLib.actionEmplSearch,
             "masqEmployee": empLib.masqEmployee,
 

@@ -62,7 +62,6 @@ define ([
         // Employee actions
         //
 
-        // My profile
         target.push('myProfile', {
             'name': 'myProfile',
             'type': 'daction',
@@ -71,7 +70,6 @@ define ([
             'start': dactionStart('myProfile')
         });
 
-        // Employee profile Update
         target.push('empProfileUpdate', {
             'name': 'empProfileUpdate',
             'type': 'daction',
@@ -80,7 +78,6 @@ define ([
             'start': dactionStart('empProfileUpdate')
         }),
         
-        // New employee
         target.push('ldapLookupSubmit', {
             'name': 'ldapLookupSubmit',
             'type': 'daction',
@@ -89,7 +86,14 @@ define ([
             'start': dactionStart('ldapLookupSubmit')
         }),
         
-        // Search employee
+        target.push('ldapSync', {
+            'name': 'ldapSync',
+            'type': 'daction',
+            'menuText': 'Sync',
+            'aclProfile': 'admin',
+            'start': dactionStart('ldapSync')
+        }),
+
         target.push('actionEmplSearch', {
             'name': 'actionEmplSearch',
             'type': 'daction',
@@ -98,7 +102,6 @@ define ([
             'start': dactionStart('actionEmplSearch')
         }),
         
-        // Masquerade as a different employee
         target.push('masqEmployee', {
             'name': 'masqEmployee',
             'type': 'daction',
