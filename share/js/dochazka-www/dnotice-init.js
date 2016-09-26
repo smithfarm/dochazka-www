@@ -66,7 +66,7 @@ define ([
             'preamble': '<span style="text-decoration: underline">Effective date/time</span>' +
                         '&nbsp;&nbsp;&nbsp;' +
                         '<span style="text-decoration: underline">Priv level&nbsp;&nbsp;</span>',
-            'aclProfile': 'admin',
+            'aclProfile': 'passerby',
             'back': 'mainEmpl'
         });
 

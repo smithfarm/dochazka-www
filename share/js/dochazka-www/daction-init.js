@@ -85,7 +85,7 @@ define ([
             'name': 'ldapLookupSubmit',
             'type': 'daction',
             'menuText': 'Lookup',
-            'aclProfile': 'admin',
+            'aclProfile': 'passerby',
             'start': dactionStart('ldapLookupSubmit')
         }),
         
