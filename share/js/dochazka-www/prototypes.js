@@ -53,7 +53,26 @@ define(['lib'], function (lib) {
                     'eid', 'nick', 'fullname', 'email', 'password', 'remark',
                     'sec_id', 'priv', 'effective'
                 ]);
-                console.log("Sanitized empProfile object", sanitized);
+                console.log("Sanitized empProfile", sanitized);
+                return sanitized;
+            }
+        },
+        empObject: {
+            eid: null,
+            nick: null,
+            fullname: null,
+            email: null,
+            password: null,
+            remark: null,
+            sec_id: null,
+            sanitize: function () {
+                // object might contain properties that don't belong - 
+                // this method removes them
+                var sanitized = lib.hairCut(this, [
+                    'eid', 'nick', 'fullname', 'email', 'password', 'remark',
+                    'sec_id'
+                ]);
+                console.log("Sanitized empObject", sanitized);
                 return sanitized;
             }
         }

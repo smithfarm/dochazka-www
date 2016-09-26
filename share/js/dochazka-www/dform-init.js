@@ -57,7 +57,7 @@ define ([
         'ePnick': {
             name: 'ePnick',
             aclProfileRead: 'passerby',
-            aclProfileWrite: null,
+            aclProfileWrite: 'active',
             text: 'Nick',
             prop: 'nick',
             maxlen: 20
@@ -144,7 +144,7 @@ define ([
                 entries.ePsec_id, entries.ePemail, entries.ePremark,
                 entries.ePstatus, entries.ePstatusSince],
             'entriesWrite': [],
-            'hook': empLib.getEmployeeObject,
+            'hook': empLib.getEmployeeProfile,
             'miniMenu': {
                 entries: ['empProfileEditRemark'],
                 back: ['Back', 'mainEmpl']
@@ -160,7 +160,7 @@ define ([
             'aclProfile': 'admin',
             'entriesRead': [entries.ePnick, entries.ePfullname],
             'entriesWrite': [entries.ePremark],
-            'hook': empLib.getEmployeeObject,
+            'hook': empLib.getEmployeeProfile,
             'miniMenu': {
                 entries: ['empProfileUpdate'],
                 back: ['Back', 'empProfile']
@@ -183,15 +183,14 @@ define ([
             }
         });
 
-        target.push('ldapLookupDisplay', {
-            'name': 'ldapLookupDisplay',
+        target.push('dispEmployeeObject', {
+            'name': 'dispEmployeeObject',
             'type': 'dform',
-            'title': 'Employee profile',
-            'preamble': 'LDAP lookup success',
+            'title': 'Employee object',
+            'preamble': null,
             'aclProfile': 'active',
             'entriesRead': [entries.ePfullname, entries.ePnick,
-                entries.ePsec_id, entries.ePemail, entries.ePremark,
-                entries.ePstatus, entries.ePstatusSince],
+                entries.ePsec_id, entries.ePemail, entries.ePremark],
             'entriesWrite': [],
             'hook': empLib.getEmployeeObject,
             'miniMenu': {

@@ -55,15 +55,14 @@ define ([
 ) {
 
     var 
-        // employee object storage
-        employeeObject = Object.create(prototypes.empProfile),
-
-        // method for accessing the stored employee object
+        employeeObject = Object.create(prototypes.empObject),
+        employeeProfile = Object.create(prototypes.empProfile),
         getEmployeeObject = function () { return employeeObject; },
+        getEmployeeProfile = function () { return employeeProfile; },
 
         myProfile = function () {
             var cu = currentUser('obj');
-            if (employeeObject.effective !== null && employeeObject.nick === cu.nick) {
+            if (employeeProfile.effective !== null && employeeProfile.nick === cu.nick) {
                 target.pull('empProfile').start();
             } else {
                 loadEmpProfile(currentUser('obj').eid);
@@ -86,7 +85,7 @@ define ([
                             effective = st.payload.privhistory.effective
                             effective = effective.substr(0, effective.indexOf(" "));
                         }
-                        employeeObject = $.extend(
+                        employeeProfile = $.extend(
                             Object.create(prototypes.empProfile), {
                                 'eid': st.payload.emp.eid,
                                 'nick': st.payload.emp.nick,
@@ -98,7 +97,7 @@ define ([
                                 'effective': effective
                             }
                         );
-                        currentUser('obj', employeeObject);
+                        currentUser('obj', employeeProfile);
                         target.pull('empProfile').start();
                     }
                 },
@@ -239,8 +238,8 @@ define ([
                         $("#result").html("Employee profile updated");
                     }
                     console.log("Saved new employee object to database: ", protoEmp);
-                    $.extend(employeeObject, st.payload);
-                    console.log("Profile object is", employeeObject);
+                    $.extend(employeeProfile, st.payload);
+                    console.log("Profile object is", employeeProfile);
                     target.pull(afterTarget).start();
                 },
                 fc = function (st) {
@@ -254,6 +253,7 @@ define ([
     // employee-related actions (see daction-start.js)
     return {
         getEmployeeObject: getEmployeeObject,
+        getEmployeeProfile: getEmployeeProfile,
         mainEmpl: function (emp) { epuGen('mainEmpl', emp); },
         myProfile: myProfile,
         loadEmpProfile: loadEmpProfile,
