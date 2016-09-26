@@ -117,43 +117,6 @@ define ([
             maxlen: 30
         },
 
-        // new employee - nick
-        'nEnick': {
-            name: 'nEnick',
-            aclProfileRead: null,
-            aclProfileWrite: 'admin',
-            text: 'Nick (*)',
-            prop: 'nick',
-            maxlen: 20
-        },
-        // new employee - full name
-        'nEfullname': {
-            name: 'nEfullname',
-            aclProfileRead: null,
-            aclProfileWrite: 'admin',
-            text: 'Full name',
-            prop: 'fullname',
-            maxlen: 55
-        },
-        // new employee - email
-        'nEemail': {
-            name: 'nEemail',
-            aclProfileRead: null,
-            aclProfileWrite: 'admin',
-            text: 'Email',
-            prop: 'email',
-            maxlen: 55
-        },
-        // new employee - remark
-        'nEremark': {
-            name: 'nEremark',
-            aclProfileRead: null,
-            aclProfileWrite: 'admin',
-            text: 'Remark',
-            prop: 'remark',
-            maxlen: 55
-        },
-    
        // search employee - nick
         'sEnick': {
             name: 'sEnick',
@@ -212,7 +175,7 @@ define ([
             'preamble': 'Enter employee nick for exact (case insensitive) match.',
             'aclProfile': 'active',
             'entriesRead': null,
-            'entriesWrite': [entries.nEnick],
+            'entriesWrite': [entries.ePnick],
             'hook': function () { return Object.create(prototypes.empProfile); },
             'miniMenu': {
                 entries: ['ldapLookupSubmit'],
