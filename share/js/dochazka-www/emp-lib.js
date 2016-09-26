@@ -108,10 +108,9 @@ define ([
             ajax(rest, sc, fc);
         },
 
-        // "search employee" method
-        searchEmp = function (obj) {
+        actionEmplSearch = function (obj) {
             // obj is searchKeyNick from the form
-            console.log("Entering target 'searchEmployee' start method with argument", obj);
+            console.log("Entering target 'actionEmplSearch' with argument", obj);
             var rest = {
                     "method": 'GET',
                     "path": 'employee/search/nick/' + encodeURIComponent(obj.searchKeyNick)
@@ -300,7 +299,7 @@ define ([
                     "body": protoEmp.sanitize()
                 },
                 sc = function (st) {
-                    // st is 'Status'
+                    // st stands for "status", i.e. AJAX return value/object
                     if (afterTarget === 'empProfile') {
                         // this is an employee profile update
                         $("#result").html("Employee profile updated");
@@ -329,7 +328,7 @@ define ([
         empProfileUpdate: function (emp) { epuGen('empProfile', emp); },
         ldapLookupSubmit: ldapLookupSubmit,
         ldapSync: ldapSync,
-        actionEmplSearch: searchEmp,
+        actionEmplSearch: actionEmplSearch,
         endTheMasquerade: endTheMasquerade,
         masqEmployee: masqEmp
     };
