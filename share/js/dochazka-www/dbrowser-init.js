@@ -49,7 +49,6 @@ define ([
     //
     var entries = {        
 
-        // Employee profile - nick
         'ePnick': {
             name: 'ePnick',
             aclProfile: 'admin',
@@ -57,15 +56,13 @@ define ([
             prop: 'nick',
             maxlen: 20
         },
-        // Employee profile - EID
-        'ePeid': {
-            name: 'ePeid',
-            aclProfile: 'admin',
-            text: 'EID',
-            prop: 'eid',
+        'ePsec_id': {
+            name: 'ePsec_id',
+            aclProfile: 'passerby',
+            text: 'Workforce ID',
+            prop: 'sec_id',
             maxlen: 8
         },
-        // Employee profile - full name
         'ePfullname': {
             name: 'ePfullname',
             aclProfile: 'admin',
@@ -73,7 +70,6 @@ define ([
             prop: 'fullname',
             maxlen: 55
         },
-        // Employee profile - email
         'ePemail': {
             name: 'ePemail',
             aclProfile: 'admin',
@@ -81,7 +77,6 @@ define ([
             prop: 'email',
             maxlen: 55
         },
-        // Employee profile - remark
         'ePremark': {
             name: 'ePremark',
             aclProfile: 'admin',
@@ -103,7 +98,8 @@ define ([
             'title': 'Employee search results',
             'preamble': null,
             'aclProfile': 'admin',
-            'entries': [ entries.ePnick, entries.ePeid, entries.ePfullname, entries.ePemail, entries.ePremark ],
+            'entries': [entries.ePnick, entries.ePsec_id, entries.ePfullname,
+                        entries.ePemail, entries.ePremark],
             'hook': lib.holdObject,
             'miniMenu': {
                 entries: ['masqEmployee'],
