@@ -38,54 +38,18 @@
 
 define ([
     'lib',
+    'app/lib',
     'target'
 ], function (
     lib,
+    dochazkaLib,
     target
 ) {
 
     //
     // define dbrowser entries here
     //
-    var entries = {        
-
-        'ePnick': {
-            name: 'ePnick',
-            aclProfile: 'admin',
-            text: 'Nick',
-            prop: 'nick',
-            maxlen: 20
-        },
-        'ePsec_id': {
-            name: 'ePsec_id',
-            aclProfile: 'passerby',
-            text: 'Workforce ID',
-            prop: 'sec_id',
-            maxlen: 8
-        },
-        'ePfullname': {
-            name: 'ePfullname',
-            aclProfile: 'admin',
-            text: 'Full name',
-            prop: 'fullname',
-            maxlen: 55
-        },
-        'ePemail': {
-            name: 'ePemail',
-            aclProfile: 'admin',
-            text: 'Email',
-            prop: 'email',
-            maxlen: 55
-        },
-        'ePremark': {
-            name: 'ePremark',
-            aclProfile: 'admin',
-            text: 'Remark',
-            prop: 'remark',
-            maxlen: 55
-        },
-
-    };
+    var entries = dochazkaLib.entries;
     
     return function () {
         //
@@ -99,7 +63,7 @@ define ([
             'preamble': null,
             'aclProfile': 'admin',
             'entries': [entries.ePnick, entries.ePsec_id, entries.ePfullname,
-                        entries.ePemail, entries.ePremark],
+                        entries.ePemail, entries.ePremark, entries.LDAPdochazka],
             'hook': lib.holdObject,
             'miniMenu': {
                 entries: ['masqEmployee'],

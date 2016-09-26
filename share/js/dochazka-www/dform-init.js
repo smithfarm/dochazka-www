@@ -38,11 +38,13 @@
 
 define ([
     'current-user',
+    'app/lib',
     'app/emp-lib',
     'app/prototypes',
     'target'
 ], function (
     currentUser,
+    lib,
     empLib,
     prototypes,
     target
@@ -51,91 +53,7 @@ define ([
     //
     // first, we define all entries
     //
-    var entries = {        
-
-        // Employee profile - nick
-        'ePnick': {
-            name: 'ePnick',
-            aclProfileRead: 'passerby',
-            aclProfileWrite: 'active',
-            text: 'Nick',
-            prop: 'nick',
-            maxlen: 20
-        },
-        // Employee profile - sec_id
-        'ePsec_id': {
-            name: 'ePsec_id',
-            aclProfileRead: 'passerby',
-            aclProfileWrite: null,
-            text: 'Workforce ID',
-            prop: 'sec_id',
-            maxlen: 8
-        },
-        // Employee profile - full name
-        'ePfullname': {
-            name: 'ePfullname',
-            aclProfileRead: 'passerby',
-            aclProfileWrite: 'active',
-            text: 'Full name',
-            prop: 'fullname',
-            maxlen: 55
-        },
-        // Employee profile - email
-        'ePemail': {
-            name: 'ePemail',
-            aclProfileRead: 'passerby',
-            aclProfileWrite: 'active',
-            text: 'Email',
-            prop: 'email',
-            maxlen: 55
-        },
-        // Employee profile - remark
-        'ePremark': {
-            name: 'ePremark',
-            aclProfileRead: 'admin',
-            aclProfileWrite: 'admin',
-            text: 'Remark',
-            prop: 'remark',
-            maxlen: 55
-        },
-        // Employee profile - privlevel
-        'ePpriv': {
-            name: 'ePpriv',
-            aclProfileRead: 'inactive',
-            aclProfileWrite: 'admin',
-            text: 'Privlevel',
-            prop: 'priv',
-            maxlen: 10
-        },
-        // Employee profile - effective
-        'ePeffective': {
-            name: 'ePeffective',
-            aclProfileRead: 'inactive',
-            aclProfileWrite: 'admin',
-            text: 'Effective',
-            prop: 'effective',
-            maxlen: 30
-        },
-        // Employee profile - synced (LDAP/internal database)
-        'LDAPdochazka': {
-            name: 'LDAPdochazka',
-            aclProfileRead: 'inactive',
-            aclProfileWrite: 'admin',
-            text: 'Dochazka',
-            prop: 'dochazka',
-            maxlen: 30
-        },
-
-       // search employee - nick
-        'sEnick': {
-            name: 'sEnick',
-            aclProfileRead: null,
-            aclProfileWrite: 'admin',
-            text: 'Nick',
-            prop: 'searchKeyNick',
-            maxlen: 20
-        }
-    };
+    var entries = lib.entries;
     
     //
     // second, we define the dforms themselves

@@ -1,5 +1,5 @@
 // ************************************************************************* 
-// Copyright (c) 2014-2015, SUSE LLC
+// Copyright (c) 2014-2016, SUSE LLC
 // 
 // All rights reserved.
 // 
@@ -43,6 +43,82 @@ define ([
 ) {
 
     return {
+
+        // dform and dbrowser entries
+        entries: {
+            'ePnick': {
+                name: 'ePnick',
+                aclProfileRead: 'passerby',
+                aclProfileWrite: 'active',
+                text: 'Nick',
+                prop: 'nick',
+                maxlen: 20
+            },
+           'ePsec_id': {
+               name: 'ePsec_id',
+               aclProfileRead: 'passerby',
+               aclProfileWrite: null,
+               text: 'Workforce ID',
+               prop: 'sec_id',
+               maxlen: 8
+           },
+           'ePfullname': {
+               name: 'ePfullname',
+               aclProfileRead: 'passerby',
+               aclProfileWrite: 'active',
+               text: 'Full name',
+               prop: 'fullname',
+               maxlen: 55
+           },
+           'ePemail': {
+               name: 'ePemail',
+               aclProfileRead: 'passerby',
+               aclProfileWrite: 'active',
+               text: 'Email',
+               prop: 'email',
+               maxlen: 55
+           },
+           'ePremark': {
+               name: 'ePremark',
+               aclProfileRead: 'admin',
+               aclProfileWrite: 'admin',
+               text: 'Remark',
+               prop: 'remark',
+               maxlen: 55
+           },
+           'ePpriv': {
+               name: 'ePpriv',
+               aclProfileRead: 'inactive',
+               aclProfileWrite: 'admin',
+               text: 'Privlevel',
+               prop: 'priv',
+               maxlen: 10
+           },
+           'ePeffective': {
+               name: 'ePeffective',
+               aclProfileRead: 'inactive',
+               aclProfileWrite: 'admin',
+               text: 'Effective',
+               prop: 'effective',
+               maxlen: 30
+           },
+           'LDAPdochazka': {
+               name: 'LDAPdochazka',
+               aclProfileRead: 'inactive',
+               aclProfileWrite: 'admin',
+               text: 'Dochazka',
+               prop: 'dochazka',
+               maxlen: 30
+           },
+           'sEnick': {
+               name: 'sEnick',
+               aclProfileRead: null,
+               aclProfileWrite: 'admin',
+               text: 'Nick',
+               prop: 'searchKeyNick',
+               maxlen: 20
+           }
+        },
 
         //
         // function returns string to be displayed in the 'userbox'
