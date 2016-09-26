@@ -185,15 +185,15 @@ define ([
         ldapLookupSubmit = function (emp) {
             console.log("Entering function ldapLookupSubmit");
             var rest = {
-                    method: 'PUT',
+                    method: 'GET',
                     // path: 'employee/nick/' + emp.nick || ''
                 },
                 // success callback -- employee already exists
                 sc = function (st) {
-                    if (st.code === 'DOCHAZKA_CUD_OK') {
+                    if (st.code === 'DISPATCH_RECORDS_FOUND') {
                         console.log("Payload is", st.payload);
                         employeeObject = $.extend(employeeObject, st.payload);
-                        target.pull('ldapLookupDisplay').start();
+                        target.pull('dispEmployeeObject').start();
                     }
                 },
                 // failure callback -- employee doesn't exist
