@@ -50,17 +50,27 @@ define ([
             'menuText': 'Main menu',
             'title': 'Main menu',
             'aclProfile': 'passerby',
-            'entries': ['mainEmpl'],
+            'entries': ['mainEmpl', 'mainPriv'],
             'back': 'logout'
         });
 
         target.push('mainEmpl', {
             'name': 'mainEmpl',
             'type': 'dmenu',
-            'menuText': 'Employee profile',
-            'title': 'Employee profile',
+            'menuText': 'Employee menu',
+            'title': 'Employee menu',
             'aclProfile': 'passerby',
-            'entries': ['myProfile', 'privHistory', 'ldapLookup', 'masqEmployee', 'searchEmployee'],
+            'entries': ['myProfile', 'ldapLookup', 'masqEmployee', 'searchEmployee'],
+            'back': 'mainMenu'
+        });
+
+        target.push('mainPriv', {
+            'name': 'mainPriv',
+            'type': 'dmenu',
+            'menuText': 'Priv (status) menu',
+            'title': 'Priv (status) menu',
+            'aclProfile': 'passerby',
+            'entries': ['privHistory'],
             'back': 'mainMenu'
         });
 

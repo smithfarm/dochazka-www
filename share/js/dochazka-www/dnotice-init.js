@@ -67,7 +67,7 @@ define ([
                         '&nbsp;&nbsp;&nbsp;' +
                         '<span style="text-decoration: underline">Priv level&nbsp;&nbsp;</span>',
             'aclProfile': 'passerby',
-            'back': 'mainEmpl'
+            'back': 'mainPriv'
         });
 
     };
