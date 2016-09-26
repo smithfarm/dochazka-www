@@ -61,8 +61,8 @@ define ([
         target.push('privHistory', {
             'name': 'privHistory',
             'type': 'dnotice',
-            'menuText': 'Status history',
-            'title': 'Status history',
+            'menuText': 'Priv (status) history',
+            'title': 'Priv (status) history',
             'preamble': '<span style="text-decoration: underline">Effective date/time</span>' +
                         '&nbsp;&nbsp;&nbsp;' +
                         '<span style="text-decoration: underline">Priv level&nbsp;&nbsp;</span>',

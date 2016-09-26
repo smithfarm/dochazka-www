@@ -58,7 +58,7 @@ define ([
             'name': 'mainEmpl',
             'type': 'dmenu',
             'menuText': 'Employee menu',
-            'title': 'Employee menu',
+            'title': 'Employee',
             'aclProfile': 'passerby',
             'entries': ['myProfile', 'ldapLookup', 'masqEmployee', 'searchEmployee'],
             'back': 'mainMenu'
@@ -68,7 +68,7 @@ define ([
             'name': 'mainPriv',
             'type': 'dmenu',
             'menuText': 'Priv (status) menu',
-            'title': 'Priv (status) menu',
+            'title': 'Priv (status)',
             'aclProfile': 'passerby',
             'entries': ['privHistory'],
             'back': 'mainMenu'
