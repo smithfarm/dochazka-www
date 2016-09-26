@@ -116,6 +116,15 @@ define ([
             prop: 'effective',
             maxlen: 30
         },
+        // Employee profile - synced (LDAP/internal database)
+        'ePsynced': {
+            name: 'ePsynced',
+            aclProfileRead: 'inactive',
+            aclProfileWrite: 'admin',
+            text: 'Synced',
+            prop: 'synced',
+            maxlen: 30
+        },
 
        // search employee - nick
         'sEnick': {
@@ -183,18 +192,18 @@ define ([
             }
         });
 
-        target.push('dispEmployeeObject', {
-            'name': 'dispEmployeeObject',
+        target.push('ldapDisplayEmployee', {
+            'name': 'ldapDisplayEmployee',
             'type': 'dform',
-            'title': 'Employee object',
+            'title': 'LDAP employee record',
             'preamble': null,
             'aclProfile': 'active',
             'entriesRead': [entries.ePfullname, entries.ePnick,
-                entries.ePsec_id, entries.ePemail, entries.ePremark],
+                entries.ePsec_id, entries.ePemail, entries.ePsynced],
             'entriesWrite': [],
-            'hook': empLib.getEmployeeObject,
+            'hook': empLib.getLdapEmployeeObject,
             'miniMenu': {
-                entries: ['masqEmployee'],
+                entries: [],
                 back: ['Back', 'mainEmpl']
             }
         });

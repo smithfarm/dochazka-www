@@ -75,6 +75,26 @@ define(['lib'], function (lib) {
                 console.log("Sanitized empObject", sanitized);
                 return sanitized;
             }
+        },
+        ldapEmpObject: {
+            eid: null,
+            nick: null,
+            fullname: null,
+            email: null,
+            password: null,
+            remark: null,
+            sec_id: null,
+            synced: null,
+            sanitize: function () {
+                // object might contain properties that don't belong - 
+                // this method removes them
+                var sanitized = lib.hairCut(this, [
+                    'eid', 'nick', 'fullname', 'email', 'password', 'remark',
+                    'sec_id', 'synced'
+                ]);
+                console.log("Sanitized empObject", sanitized);
+                return sanitized;
+            }
         }
     };
 });

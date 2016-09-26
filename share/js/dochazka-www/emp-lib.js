@@ -57,8 +57,11 @@ define ([
     var 
         employeeObject = Object.create(prototypes.empObject),
         employeeProfile = Object.create(prototypes.empProfile),
+        ldapEmployeeObject = Object.create(prototypes.ldapEmpObject),
+
         getEmployeeObject = function () { return employeeObject; },
         getEmployeeProfile = function () { return employeeProfile; },
+        getLdapEmployeeObject = function () { return ldapEmployeeObject; },
 
         myProfile = function () {
             var cu = currentUser('obj');
@@ -190,11 +193,11 @@ define ([
                 },
                 // success callback -- employee already exists
                 sc = function (st) {
-                    if (st.code === 'DISPATCH_RECORDS_FOUND') {
+                    if (st.code === 'DOCHAZKA_LDAP_LOOKUP') {
                         console.log("Payload is", st.payload);
-                        employeeObject = $.extend(employeeObject, st.payload);
-                        target.pull('dispEmployeeObject').start();
+                        ldapEmployeeObject = $.extend(ldapEmployeeObject, st.payload);
                     }
+                    ldapEmployeeLink();
                 },
                 // failure callback -- employee doesn't exist
                 fc = function (st) {
@@ -214,6 +217,32 @@ define ([
                 rest.path = 'employee/nick/' + emp.nick + '/ldap';
                 ajax(rest, sc, fc);
             }
+        },
+
+        ldapEmployeeLink = function () {
+            // we assume the ldapEmployeeObject has already been 
+            // partially populated - we just need to determine whether
+            // or not the nick already exists in the local database
+            if (ldapEmployeeObject.nick === null) {
+                return ldapEmployeeObject;
+            }
+            ldapEmployeeObject.synced = false;
+            var rest = {
+                    "method": 'GET',
+                    "path": 'employee/nick/' + ldapEmployeeObject.nick
+                },
+                // success callback
+                sc = function (st) {
+                    if (st.code === "DISPATCH_EMPLOYEE_FOUND") {
+                        console.log("Payload is", st.payload);
+                        ldapEmployeeObject.synced = true;
+                    }
+                    target.pull('ldapDisplayEmployee').start();
+                },
+                fc = function (st) {
+                    target.pull('ldapDisplayEmployee').start();
+                }
+            ajax(rest, sc, fc);
         },
 
 	// epuGen ("generate employee profile update function") is called to
@@ -254,6 +283,7 @@ define ([
     return {
         getEmployeeObject: getEmployeeObject,
         getEmployeeProfile: getEmployeeProfile,
+        getLdapEmployeeObject: getLdapEmployeeObject,
         mainEmpl: function (emp) { epuGen('mainEmpl', emp); },
         myProfile: myProfile,
         loadEmpProfile: loadEmpProfile,
