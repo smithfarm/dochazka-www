@@ -206,13 +206,7 @@ define ([
                 },
                 // failure callback -- employee doesn't exist
                 fc = function (st) {
-                    var err = st.payload.code,
-                        msg;
-                    if (err === '404') {
-                        msg = 'Employee ' + emp.nick + ' not found in LDAP';
-                    } else {
-                        msg = st.text;
-                    }
+                    var msg = st.payload.message;
                     console.log(msg);
                     $("#result").html(msg);
                     $('input[name="sel"]').val('');
