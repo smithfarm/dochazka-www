@@ -186,10 +186,15 @@ define ([
         },
 
         ldapLookupSubmit = function (emp) {
-            console.log("Entering function ldapLookupSubmit");
-            var rest = {
+            console.log("Entering function ldapLookupSubmit, argument ->" + emp.nick + "<-");
+            // "nick" is the only property of emp that is populated
+            if (! emp.nick) {
+                return;
+            }
+            var nick = emp.nick,
+                rest = {
                     method: 'GET',
-                    // path: 'employee/nick/' + emp.nick || ''
+                    path: 'employee/nick/' + nick
                 },
                 // success callback -- employee already exists
                 sc = function (st) {
