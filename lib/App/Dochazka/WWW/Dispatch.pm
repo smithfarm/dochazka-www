@@ -203,7 +203,6 @@ sub process_post {
     # two possibilities: login/logout attempt or normal AJAX call
     # - login/logout attempt
     if ( $method =~ m/^LOGIN/i ) {
-        $log->debug( "Incoming login/logout attempt" );
         if ( $path =~ m/^login/i ) {
             return $self->_login_dialog( $body );
         } else {
@@ -237,6 +236,7 @@ sub _login_dialog {
     my $password = $body->{'pwd'};
     my $standalone = $meta->META_WWW_STANDALONE_MODE;
 
+    $log->debug( "Employee $nick login attempt" );
     $log->debug( "DOCHAZKA_WWW_BACKEND_URI is " .  $site->DOCHAZKA_WWW_BACKEND_URI );
 
     my ( $code, $message, $body_json );
