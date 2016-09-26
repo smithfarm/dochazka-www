@@ -32,6 +32,7 @@ my $build = Module::Build->new(
         'App::MFILE'         => 0.179,
         'App::MFILE::WWW'    => 0.144,
         'App::Dochazka::REST' => 0.546,
+        'File::Temp'         => 0,
     },
     meta_merge => {
         resources => {

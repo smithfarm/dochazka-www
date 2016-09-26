@@ -1,5 +1,5 @@
 # ************************************************************************* 
-# Copyright (c) 2014, SUSE LLC
+# Copyright (c) 2014-2016, SUSE LLC
 # 
 # All rights reserved.
 # 
@@ -43,14 +43,19 @@ use warnings;
 use App::CELL qw( $CELL $log $meta $site );
 use App::MFILE::HTTP qw( rest_req );
 use Data::Dumper;
+use File::Temp qw( tempdir );
 use JSON;
 use LWP::UserAgent;
 use Params::Validate qw(:all);
-use Plack::Session;
 use Try::Tiny;
 
 # methods/attributes not defined in this module will be inherited from:
 use parent 'App::MFILE::WWW::Resource';
+
+our $ua = LWP::UserAgent->new( 
+              cookie_jar => { file => tempdir( CLEANUP => 0 ) }
+          );
+
 
 
 
@@ -96,34 +101,24 @@ sub is_authorized {
     $log->debug( "Entering " . __PACKAGE__ . "::is_authorized()" );
 
     my $r = $self->request;
-    my $session = Plack::Session->new( $r->{'env'} );
-    my $remote_addr = $$r{'env'}{'REMOTE_ADDR'};
+    my $session = $r->{'env'}->{'psgix.session'};
+    my $remote_addr = $r->{'env'}->{'REMOTE_ADDR'};
     my $ce;
 
-    # UNCOMMENT TO DEBUG
-    $log->debug( "currentUser is " . Dumper $session->get('currentUser') );
-    $log->debug( "currentUserPriv is " . Dumper $session->get('currentUserPriv') );
-    $log->debug( "remote IP address is " . Dumper $session->get('ip_addr') );
-    $log->debug( "remote IP address is supposed to be $remote_addr" );
-    my $yesno = _is_fresh( $session );
-    $log->debug( "the session is " . ( $yesno ? '' : 'not ' ) . "fresh" );
+    $log->debug( "Session is " . Dumper( $session ) );
 
-    #
     # authorized session
-    #
-    if ( $ce = $session->get('currentUser') and
-         $session->get('ip_addr') and 
-         $session->get('ip_addr') eq $remote_addr and
+    if ( $ce = $session->{'currentUser'} and
+         $session->{'ip_addr'} and
+         $session->{'ip_addr'} eq $remote_addr and
          _is_fresh( $session ) )
     {
-        $log->debug( "is_authorized: Authorized session " . $session->id . " (" . $ce->{'nick'} . ")" );
-        $session->set('last_seen', time); 
+        $log->debug( "is_authorized: Authorized session, employee " . $ce->{'nick'} );
+        $session->{'last_seen'} = time;
         return 1;
     }
 
-    #
     # login attempt
-    #
     if ( $r->method eq 'POST' and 
          $self->context->{'request_body'} and 
          $self->context->{'request_body'}->{'method'} and
@@ -132,62 +127,23 @@ sub is_authorized {
         return 1;
     }
 
-    #
-    # check the MFILE_WWW_BYPASS_LOGIN_DIALOG site param - if true,
-    # bypass the login dialog by force-feeding it credentials from the
-    # site configuration
-    # 
+    # login bypass
     $meta->set('META_LOGIN_BYPASS_STATE', 0) if not defined $meta->META_LOGIN_BYPASS_STATE;
     if ( $site->MFILE_WWW_BYPASS_LOGIN_DIALOG and not $meta->META_LOGIN_BYPASS_STATE ) {
         $log->notice("Bypassing login dialog! Using default credentials");
-        $session->set('ip_addr', $remote_addr);
-        $session->set('last_seen', time); 
+        $session->{'ip_addr'} = $remote_addr;
+        $session->{'last_seen'} = time;
         my $bypass_result = $self->_login_dialog( {
             'nam' => $site->MFILE_WWW_DEFAULT_LOGIN_CREDENTIALS->{'nam'},
             'pwd' => $site->MFILE_WWW_DEFAULT_LOGIN_CREDENTIALS->{'pwd'},
-        }, $session );
+        } );
         $meta->set('META_LOGIN_BYPASS_STATE', 1);
         return $bypass_result;
     }
 
-    #
-    # expired session - pass it on only if method is GET, in which # case _render_response_html() will display the login dialog
-    #
-    if ( $session->get('currentUser') and
-         $session->get('ip_addr') and 
-         $session->get('ip_addr') eq $remote_addr and
-         ! _is_fresh( $session ) ) 
-    {
-        $log->debug( "is_authorized: Expired session " . $session->id );
-        $session->expire;
-        $session->set('currentUser', undef );
-        $session->set('currentUserPriv', undef );
-        $session->set('last_seen', undef );
-        return 0 if $r->method ne 'GET';
-        return 1;
-    }
-
-    #
     # unauthorized session
-    #
-    $session->set('currentUser', undef);
-    $session->set('currentUserPriv', undef);
-
-    if ( $r->method ne 'GET' ) {
-        $log->notice("is_authorized: Rejecting unauthorized session!");
-        return 0;
-    }
-    
-    if ( $session->get('last_seen') ) {
-        $log->debug( "is_authorized: Unauthorized existing session " . $session->id . " - resetting" );
-    } else {
-        $log->debug( "is_authorized: New session " . $session->id );
-    }
-
-    $session->set('ip_addr', $remote_addr);
-    $session->set('last_seen', time); 
-
-    return 1;
+    # $session = {};
+    return ( $r->method eq 'GET' ) ? 1 : 0;
 }
 
 
@@ -224,7 +180,7 @@ sub process_post {
     $log->debug( "Entering " . __PACKAGE__ . "::process_post()" );
 
     my $r = $self->request;
-    my $session = Plack::Session->new( $r->{'env'} );
+    my $session = $r->{'env'}->{'psgix.session'};
     my $ajax = $self->context->{'request_body'};  # request body (Perl string)
 
     if ( ! $ajax ) {
@@ -249,16 +205,17 @@ sub process_post {
     if ( $method =~ m/^LOGIN/i ) {
         $log->debug( "Incoming login/logout attempt" );
         if ( $path =~ m/^login/i ) {
-            return $self->_login_dialog( $body, $session );
+            return $self->_login_dialog( $body );
         } else {
-            return $self->_logout( $body, $session );
+            return $self->_logout( $body );
         }
     }
 
     # - normal AJAX call (shown for didactic purposes only; App::MFILE::WWW
     #   itself doesn't generate any AJAX calls)
     $log->debug( "Calling rest_req $method $path" );
-    my $rr = rest_req( $session->get('ua'), {
+    $session->{'last_seen'} = time;
+    my $rr = rest_req( $ua, {
         server => $site->DOCHAZKA_WWW_BACKEND_URI,
         method => $method,
         path => $path,
@@ -271,26 +228,19 @@ sub process_post {
 
 
 sub _login_dialog {
-    my ( $self, $body, $session ) = @_;
+    my ( $self, $body ) = @_;
+    $log->debug( "Entering " . __PACKAGE__ . "::_login_dialog()" );
+
+    my $r = $self->request;
+    my $session = $r->{'env'}->{'psgix.session'};
     my $nick = $body->{'nam'};
     my $password = $body->{'pwd'};
     my $standalone = $meta->META_WWW_STANDALONE_MODE;
 
-    $log->debug( "Entering " . __PACKAGE__ . "::_login_dialog()" );
-
     $log->debug( "DOCHAZKA_WWW_BACKEND_URI is " .  $site->DOCHAZKA_WWW_BACKEND_URI );
 
-    if ( ref($session->get('ua')) eq 'LWP::UserAgent' ) {
-        $log->debug("_login_dialog: there is already a LWP::UserAgent");
-    } else {
-        $session->set('ua', LWP::UserAgent->new( 
-            cookie_jar => { file => "$ENV{HOME}/.cookies" . $session->id . ".txt" } 
-        ) );
-        $log->debug( "_login_dialog: User agent created OK" ) if ref($session->get('ua')) eq 'LWP::UserAgent';
-    }
-
     my ( $code, $message, $body_json );
-    my $rr = rest_req( $session->get('ua'), {
+    my $rr = rest_req( $ua, {
         server => $site->DOCHAZKA_WWW_BACKEND_URI,
         nick => $nick,
         password => $password,
@@ -302,8 +252,10 @@ sub _login_dialog {
 
     my $status;
     if ( $code == 200 ) {
-        $session->set( 'currentUser', $body_json->{'payload'}->{'emp'} );
-        $session->set( 'currentUserPriv', $body_json->{'payload'}->{'priv'} );
+        $session->{'ip_addr'} = $r->{'env'}->{'REMOTE_ADDR'};
+        $session->{'currentUser'} = $body_json->{'payload'}->{'emp'};
+        $session->{'currentUserPriv'} = $body_json->{'payload'}->{'priv'};
+        $session->{'last_seen'} = time;
         $log->debug( 
             "Login successful, currentUser is now " . 
             Dumper( $body_json->{'payload'}->{'emp'} ) .
@@ -312,9 +264,8 @@ sub _login_dialog {
         return 1 if $site->MFILE_WWW_BYPASS_LOGIN_DIALOG and ! $meta->META_LOGIN_BYPASS_STATE;
         $status = $CELL->status_ok( 'MFILE_WWW_LOGIN_OK', payload => $body_json->{'payload'} );
     } else {
-        $session->set( 'currentUser', undef );
-        $session->set( 'currentUserPriv', undef );
-        $log->debug( "Login unsuccessful, reset currentUser to undef" );
+        $session = {};
+        $log->debug( "Login unsuccessful, reset session" );
         return 0 if $site->MFILE_WWW_BYPASS_LOGIN_DIALOG and ! $meta->META_LOGIN_BYPASS_STATE;
         $status = $CELL->status_not_ok( 
             'MFILE_WWW_LOGIN_FAIL: %s', 
@@ -328,9 +279,9 @@ sub _login_dialog {
 }
          
 sub _logout {
-    my ( $self, $body, $session ) = @_;
-    $log->debug( "mainLogout form handler expiring session " . $session->id );
-    init_session( $session );
+    my ( $self, $body ) = @_;
+    $log->debug( "Entering " . __PACKAGE__ . "::_logout()" );
+    $self->request->{'env'}->{'psgix.session'} = {};
     $self->response->header( 'Content-Type' => 'application/json' );
     $self->response->body( to_json( $CELL->status_ok( 'MFILE_WWW_LOGOUT_OK' )->expurgate ) );
     return 1;
@@ -356,44 +307,17 @@ sub _prep_ajax_response {
 
 =head3 _is_fresh
 
-Takes a single argument, which is assumed to be number of seconds since
-epoch when the session was last seen. This is compared to "now" and if the
-difference is greater than the MFILE_REST_SESSION_EXPIRATION_TIME site
-parameter, the return value is false, otherwise true.
-
 =cut
 
 sub _is_fresh {
-    my ( $session ) = validate_pos( @_, { type => HASHREF, can => 'id' } );
+    my ( $session ) = validate_pos( @_, { type => HASHREF } );
 
-    return 0 unless my $last_seen = $session->get('last_seen');
+    return 0 unless my $last_seen = $session->{'last_seen'};
 
     return ( time - $last_seen > $site->MFILE_WWW_SESSION_EXPIRATION_TIME )
         ? 0
         : 1;
 }
 
-
-=head3 init_session
-
-Takes a session and an IP address. Initializes the session so it no longer
-contains any information that might tie it to the current user.
-
-=cut
-
-sub init_session {
-    my ( $session ) = validate_pos( @_, 
-        { type => HASHREF, can => 'id' },
-    );
-
-    $session->set('eid', undef );
-    $session->set('nick', undef );
-    $session->set('priv', undef );
-    $session->set('ip_addr', undef );
-    $session->set('last_seen', undef );
-    $session->set('target', undef );
-    $session->expire;
-    return;
-}
 
 1;
