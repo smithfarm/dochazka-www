@@ -50,7 +50,7 @@ define ([
             'menuText': 'Main menu',
             'title': 'Main menu',
             'aclProfile': 'passerby',
-            'entries': ['mainEmpl', 'mainPriv'],
+            'entries': ['mainEmpl', 'mainPriv', 'mainSched'],
             'back': 'logout'
         });
 
@@ -71,6 +71,16 @@ define ([
             'title': 'Priv (status) menu',
             'aclProfile': 'passerby',
             'entries': ['privHistory'],
+            'back': 'mainMenu'
+        });
+
+        target.push('mainSched', {
+            'name': 'mainSched',
+            'type': 'dmenu',
+            'menuText': 'Schedule menu',
+            'title': 'Schedule',
+            'aclProfile': 'passerby',
+            'entries': [],
             'back': 'mainMenu'
         });
 
