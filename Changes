@@ -183,3 +183,25 @@ Revision history for App-Dochazka-WWW
 - Implement "LDAP lookup" feature
 - Provide masquerade option if LDAP lookup succeeds
 
+0.138 2016-09-27 16:59 CEST
+- Move privHistory target to Employee menu
+- ldapLookup: always display AJAX error
+- Improve AJAX error reporting
+- Dispatch.pm: revamp/simplify session management
+- Rip out entry definitions for deprecated newEmployee target
+- Plumb in an empObject prototype distinct from empProfile
+- js: make ldapLookupSubmit GET instead of PUT
+- dispatch: tweak debug log messages
+- js: lower ACL profile of ldapLookupSubmit and privHistory targets
+- Revamp LDAP lookup feature (GET first)
+- js: handle empty nick in ldapLookupSubmit
+- Add "Sync" option to LDAP lookup result miniMenu
+- js: simplify LDAP lookup failure handling
+- Reinstate "Priv (status) menu" with privHistory target
+- Display workforce ID instead of EID in simpleEmployeeBrowser
+- Change "Status"/"Since" to "Privlevel"/"Effective"
+- dmenu: add Schedule menu
+- js: Tweak text of menu entries
+- js: rename "searchEmp" to "actionEmplSearch" in emp-lib.js
+- js: move dform and dbrowser entries to lib.js
+
