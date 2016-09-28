@@ -106,7 +106,7 @@ define ([
                name: 'LDAPdochazka',
                aclProfileRead: 'inactive',
                aclProfileWrite: 'admin',
-               text: 'Dochazka',
+               text: 'In Dochazka?',
                prop: 'dochazka',
                maxlen: 30
            },

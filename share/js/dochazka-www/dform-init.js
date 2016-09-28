@@ -97,8 +97,8 @@ define ([
         target.push('ldapLookup', {
             'name': 'ldapLookup',
             'type': 'dform',
-            'menuText': 'LDAP lookup',
-            'title': 'LDAP lookup',
+            'menuText': 'Look up an LDAP employee',
+            'title': 'Look up an LDAP employee',
             'preamble': 'Enter employee nick for exact (case insensitive) match.',
             'aclProfile': 'active',
             'entriesRead': null,
@@ -129,8 +129,8 @@ define ([
         target.push('searchEmployee', {
             'name': 'searchEmployee',
             'type': 'dform',
-            'menuText': 'Search employee',
-            'title': 'Search employee',
+            'menuText': 'Search Dochazka employees',
+            'title': 'Search Dochazka employees',
             'preamble': 'Enter search key, % is wildcard',
             'aclProfile': 'admin',
             'entriesRead': null,
