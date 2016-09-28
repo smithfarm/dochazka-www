@@ -69,9 +69,7 @@ define ([
                             function (row) {
                                 return {
                                     "priv": row.priv,
-                                    "effective": row.effective.substr(
-                                        0, row.effective.indexOf(" ")
-                                    )
+                                    "effective": lib.readableDate(row.effective)
                                 };
                             }
                         );

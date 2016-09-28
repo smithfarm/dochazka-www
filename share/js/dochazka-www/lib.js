@@ -128,7 +128,7 @@ define ([
            'pHeffective': {
                name: 'pHeffective',
                aclProfileRead: 'passerby',
-               text: 'YYYY-MM-DD (effective date)',
+               text: 'Effective date',
                prop: 'effective',
                maxlen: 30
            }

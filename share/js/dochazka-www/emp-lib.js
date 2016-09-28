@@ -86,9 +86,8 @@ define ([
                         var priv = null,
                             effective = null;
                         if (st.payload.privhistory !== null) {
-                            priv = st.payload.privhistory.priv
-                            effective = st.payload.privhistory.effective
-                            effective = effective.substr(0, effective.indexOf(" "));
+                            priv = st.payload.privhistory.priv;
+                            effective = lib.readableDate(st.payload.privhistory.effective);
                         }
                         employeeProfile = $.extend(
                             Object.create(prototypes.empProfile), {

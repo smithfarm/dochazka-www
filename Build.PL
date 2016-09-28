@@ -30,7 +30,7 @@ my $build = Module::Build->new(
         'perl'               => 5.012,
         'App::CELL'          => 0.196,
         'App::MFILE'         => 0.179,
-        'App::MFILE::WWW'    => 0.147,
+        'App::MFILE::WWW'    => 0.149,
         'App::Dochazka::REST' => 0.546,
         'File::Temp'         => 0,
     },

@@ -56,7 +56,7 @@ define ([
             'title': 'Privilege (status) history',
             'preamble': null,
             'aclProfile': 'passerby',
-            'entries': [entries.pHpriv, entries.pHeffective],
+            'entries': [entries.pHeffective, entries.pHpriv],
             'hook': lib.holdObject,
             'miniMenu': {
                 entries: null,
