@@ -44,6 +44,7 @@ define ([
     "jquery",
     "current-user",
     "app/emp-lib",
+    "app/priv-lib",
     "html",
     "logout",
     "target"
@@ -51,6 +52,7 @@ define ([
     $,
     currentUser,
     empLib,
+    privLib,
     html,
     logout,
     target
@@ -69,13 +71,16 @@ define ([
                     }, 1500);
             },
 
-            // actions triggered from employee menu
+            // actions triggered from Employee menu
             "myProfile": empLib.myProfile,
             "empProfileUpdate": empLib.empProfileUpdate,
             "ldapLookupSubmit": empLib.ldapLookupSubmit,
             "ldapSync": empLib.ldapSync,
             "actionEmplSearch": empLib.actionEmplSearch,
             "masqEmployee": empLib.masqEmployee,
+
+            // actions triggered from Privhistory menu
+            "actionPrivHistory": privLib.actionPrivHistory,
 
             // return to (saved) browser state
             "returnToBrowser": function () { 

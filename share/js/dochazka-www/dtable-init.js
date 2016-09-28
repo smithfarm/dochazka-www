@@ -1,5 +1,5 @@
 // ************************************************************************* 
-// Copyright (c) 2014-2015, SUSE LLC
+// Copyright (c) 2014-2016, SUSE LLC
 // 
 // All rights reserved.
 // 
@@ -30,60 +30,39 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // ************************************************************************* 
 //
-// app/dmenu.js
+// app/dtable-init.js
 //
-// Round one of dmenu initialization - called from app/target-init.js
+// Round one of dtable initialization (called from app/target-init)
 //
 "use strict";
 
 define ([
+    'lib',
+    'app/lib',
     'target'
 ], function (
+    lib,
+    dochazkaLib,
     target
 ) {
 
+    var entries = dochazkaLib.entries;
+
     return function () {
-
-        target.push('mainMenu', {
-            'name': 'mainMenu',
-            'type': 'dmenu',
-            'menuText': 'Main menu',
-            'title': 'Main menu',
+        target.push('privHistoryReadOnly', {
+            'name': 'privHistoryReadOnly',
+            'type': 'dtable',
+            'menuText': 'Privilege (status) history',
+            'title': 'Privilege (status) history',
+            'preamble': null,
             'aclProfile': 'passerby',
-            'entries': ['mainEmpl', 'mainPriv', 'mainSched'],
-            'back': 'logout'
+            'entries': [entries.pHpriv, entries.pHeffective],
+            'hook': lib.holdObject,
+            'miniMenu': {
+                entries: null,
+                back: ['Back', 'mainPriv']
+            }
         });
-
-        target.push('mainEmpl', {
-            'name': 'mainEmpl',
-            'type': 'dmenu',
-            'menuText': 'Employee menu',
-            'title': 'Employee',
-            'aclProfile': 'passerby',
-            'entries': ['myProfile', 'ldapLookup', 'searchEmployee', 'masqEmployee'],
-            'back': 'mainMenu'
-        });
-
-        target.push('mainPriv', {
-            'name': 'mainPriv',
-            'type': 'dmenu',
-            'menuText': 'Priv (status) menu',
-            'title': 'Priv (status)',
-            'aclProfile': 'passerby',
-            'entries': ['actionPrivHistory'],
-            'back': 'mainMenu'
-        });
-
-        target.push('mainSched', {
-            'name': 'mainSched',
-            'type': 'dmenu',
-            'menuText': 'Schedule menu',
-            'title': 'Schedule',
-            'aclProfile': 'passerby',
-            'entries': [],
-            'back': 'mainMenu'
-        });
-
     };
-
+    
 });

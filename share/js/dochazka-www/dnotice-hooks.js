@@ -1,5 +1,5 @@
 // ************************************************************************* 
-// Copyright (c) 2014-2015, SUSE LLC
+// Copyright (c) 2014-2016, SUSE LLC
 // 
 // All rights reserved.
 // 
@@ -59,37 +59,6 @@ define ([
         'demoNotice': function () {
             return 'This could be anything, e.g. a random number';
         },
-
-        // display full privhistory of current user
-        'privHistory': function () {
-            var eid = currentUser().obj.eid,
-                rest = {
-                    "method": 'GET',
-                    "path": 'privhistory/eid/' + eid
-                },
-                // success callback
-                sc = function (st) {
-                    var i, nt = '';
-                    if (st.code === 'DISPATCH_RECORDS_FOUND') {
-                        // when records are found, this call always returns them in an array
-                        var ph = st.payload.privhistory;
-                        console.log("Search found " + ph.length + " privhistory records");
-                        for (i = 0; i < ph.length; i += 1) {
-                            nt += ph[i].effective + '&nbsp;&nbsp;&nbsp;' + ph[i].priv + '<br>';
-                        }
-                        console.log("Generated notice text (" + nt.length + " chars");
-                        lib.clearResult();
-                    } else {
-                        var nt = '<br>' + st.code;
-                        console.log("Generated notice text (" + nt.length + " chars");
-                        $('#result').html(st.text);
-                    }
-                    $('#noticeText').html(nt);
-                },
-                // failure callback
-                fc = null;
-            ajax(rest, sc, fc);
-        }
 
     };
 

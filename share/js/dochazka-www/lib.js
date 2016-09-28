@@ -117,6 +117,20 @@ define ([
                text: 'Nick',
                prop: 'searchKeyNick',
                maxlen: 20
+           },
+           'pHpriv': {
+               name: 'pHpriv',
+               aclProfileRead: 'passerby',
+               text: 'Priv',
+               prop: 'priv',
+               maxlen: 10
+           },
+           'pHeffective': {
+               name: 'pHeffective',
+               aclProfileRead: 'passerby',
+               text: 'YYYY-MM-DD (effective date)',
+               prop: 'effective',
+               maxlen: 30
            }
         },
 

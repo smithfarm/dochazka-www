@@ -46,22 +46,16 @@ define ([
 
     return function () {
 
-        //
         // demo action
-        //
         target.push('demoAction', {
             'name': 'demoAction',
             'type': 'daction',
             'menuText': 'Do something',
             'aclProfile': 'passerby',
             'start': dactionStart('demoAction')
-        }),
+        });
 
-
-        //
         // Employee actions
-        //
-
         target.push('myProfile', {
             'name': 'myProfile',
             'type': 'daction',
@@ -69,46 +63,50 @@ define ([
             'aclProfile': 'passerby',
             'start': dactionStart('myProfile')
         });
-
         target.push('empProfileUpdate', {
             'name': 'empProfileUpdate',
             'type': 'daction',
             'menuText': 'Save changes',
             'aclProfile': 'active',
             'start': dactionStart('empProfileUpdate')
-        }),
-        
+        });
         target.push('ldapLookupSubmit', {
             'name': 'ldapLookupSubmit',
             'type': 'daction',
             'menuText': 'Lookup',
             'aclProfile': 'passerby',
             'start': dactionStart('ldapLookupSubmit')
-        }),
-        
+        });
         target.push('ldapSync', {
             'name': 'ldapSync',
             'type': 'daction',
             'menuText': 'LDAP sync',
             'aclProfile': 'admin',
             'start': dactionStart('ldapSync')
-        }),
-
+        });
         target.push('actionEmplSearch', {
             'name': 'actionEmplSearch',
             'type': 'daction',
             'menuText': 'Search',
             'aclProfile': 'admin',
             'start': dactionStart('actionEmplSearch')
-        }),
-        
+        });
         target.push('masqEmployee', {
             'name': 'masqEmployee',
             'type': 'daction',
             'menuText': 'Masquerade (begin/end)',
             'aclProfile': 'admin',
             'start': dactionStart('masqEmployee')
-        }),
+        });
+
+        // Privhistory actions
+        target.push('actionPrivHistory', {
+            'name': 'actionPrivHistory',
+            'type': 'daction',
+            'menuText': 'Privilege (status) history',
+            'aclProfile': 'passerby',
+            'start': dactionStart('actionPrivHistory')
+        });
         
         // Run unit tests
         target.push('unitTests', {

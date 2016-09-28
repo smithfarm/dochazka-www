@@ -1,5 +1,5 @@
 // ************************************************************************* 
-// Copyright (c) 2014-2015, SUSE LLC
+// Copyright (c) 2014-2016, SUSE LLC
 // 
 // All rights reserved.
 // 
@@ -30,60 +30,62 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // ************************************************************************* 
 //
-// app/dmenu.js
-//
-// Round one of dmenu initialization - called from app/target-init.js
+// app/priv-lib.js
 //
 "use strict";
 
 define ([
+    'jquery',
+    'ajax',
+    'current-user',
+    'lib',
+    'app/lib',
+    'app/prototypes',
+    'start',
     'target'
 ], function (
+    $,
+    ajax,
+    currentUser,
+    lib,
+    appLib,
+    prototypes,
+    start,
     target
 ) {
 
-    return function () {
+    var 
+        actionPrivHistory = function () {
+            var cu = currentUser('obj');
+            var rest = {
+                    "method": 'GET',
+                    "path": 'priv/history/nick/' + cu.nick
+                },
+                // success callback
+                sc = function (st) {
+                    if (st.code === 'DISPATCH_RECORDS_FOUND') {
+                        console.log("Payload is", st.payload);
+                        var history = st.payload.history.map(
+                            function (row) {
+                                return {
+                                    "priv": row.priv,
+                                    "effective": row.effective.substr(
+                                        0, row.effective.indexOf(" ")
+                                    )
+                                };
+                            }
+                        );
+                        lib.holdObject(history);
+                        target.pull('privHistoryReadOnly').start();
+                    }
+                },
+                fc = null;
+            ajax(rest, sc, fc);
+        };
 
-        target.push('mainMenu', {
-            'name': 'mainMenu',
-            'type': 'dmenu',
-            'menuText': 'Main menu',
-            'title': 'Main menu',
-            'aclProfile': 'passerby',
-            'entries': ['mainEmpl', 'mainPriv', 'mainSched'],
-            'back': 'logout'
-        });
-
-        target.push('mainEmpl', {
-            'name': 'mainEmpl',
-            'type': 'dmenu',
-            'menuText': 'Employee menu',
-            'title': 'Employee',
-            'aclProfile': 'passerby',
-            'entries': ['myProfile', 'ldapLookup', 'searchEmployee', 'masqEmployee'],
-            'back': 'mainMenu'
-        });
-
-        target.push('mainPriv', {
-            'name': 'mainPriv',
-            'type': 'dmenu',
-            'menuText': 'Priv (status) menu',
-            'title': 'Priv (status)',
-            'aclProfile': 'passerby',
-            'entries': ['actionPrivHistory'],
-            'back': 'mainMenu'
-        });
-
-        target.push('mainSched', {
-            'name': 'mainSched',
-            'type': 'dmenu',
-            'menuText': 'Schedule menu',
-            'title': 'Schedule',
-            'aclProfile': 'passerby',
-            'entries': [],
-            'back': 'mainMenu'
-        });
-
+    return {
+        actionPrivHistory: actionPrivHistory
     };
 
 });
+
