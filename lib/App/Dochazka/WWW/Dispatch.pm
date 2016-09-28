@@ -105,7 +105,7 @@ sub is_authorized {
     my $remote_addr = $r->{'env'}->{'REMOTE_ADDR'};
     my $ce;
 
-    $log->debug( "Session is " . Dumper( $session ) );
+    #$log->debug( "Session is " . Dumper( $session ) );
 
     # authorized session
     if ( $ce = $session->{'currentUser'} and
