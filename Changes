@@ -212,3 +212,8 @@ Revision history for App-Dochazka-WWW
 - Dispatch.pm: reduce log verbosity
 - Implement LDAP sync miniMenu entry in simpleEmployeeBrowser
 
+0.140 2016-09-29 00:16 CEST
+- build/ops: change OBS_PROJECT to Application:Dochazka
+- build/ops: require App::MFILE::WWW 0.147 for dtable feature
+- Implement basic (read-only) Privhistory table
+
