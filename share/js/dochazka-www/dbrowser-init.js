@@ -63,7 +63,7 @@ define ([
             'preamble': null,
             'aclProfile': 'admin',
             'entries': [entries.ePnick, entries.ePsec_id, entries.ePfullname,
-                        entries.ePemail, entries.ePremark, entries.LDAPdochazka],
+                        entries.ePemail, entries.ePremark],
             'hook': lib.holdObject,
             'miniMenu': {
                 entries: ['masqEmployee'],
