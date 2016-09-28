@@ -205,3 +205,10 @@ Revision history for App-Dochazka-WWW
 - js: rename "searchEmp" to "actionEmplSearch" in emp-lib.js
 - js: move dform and dbrowser entries to lib.js
 
+0.139 2016-09-28 19:12 CEST
+- Drop LDAPdochazka entry from simpleEmployeeBrowser
+- Clarify difference between LDAP and Dochazka employees
+- Put masquerade at end of Employee menu
+- Dispatch.pm: reduce log verbosity
+- Implement LDAP sync miniMenu entry in simpleEmployeeBrowser
+
