@@ -89,7 +89,7 @@ define ([
         target.push('ldapSync', {
             'name': 'ldapSync',
             'type': 'daction',
-            'menuText': 'Sync Dochazka with LDAP',
+            'menuText': 'LDAP sync',
             'aclProfile': 'admin',
             'start': dactionStart('ldapSync')
         }),

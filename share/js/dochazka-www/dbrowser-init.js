@@ -66,7 +66,7 @@ define ([
                         entries.ePemail, entries.ePremark],
             'hook': lib.holdObject,
             'miniMenu': {
-                entries: ['masqEmployee'],
+                entries: ['ldapSync', 'masqEmployee'],
                 back: ['Back', 'mainEmpl']
             }
         });

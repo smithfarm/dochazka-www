@@ -43,6 +43,7 @@ define ([
     'lib',
     'app/lib',
     'app/prototypes',
+    'start',
     'target'
 ], function (
     $,
@@ -51,6 +52,7 @@ define ([
     lib,
     appLib,
     prototypes,
+    start,
     target
 ) {
 
@@ -251,6 +253,10 @@ define ([
             if (! ldapEmp.nick) {
                 return;
             }
+            ldapEmployeeObject = $.extend(
+                Object.create(prototypes.ldapEmpObject),
+                ldapEmp
+            );
             var nick = ldapEmp.nick,
                 rest = {
                     method: 'PUT',
@@ -264,14 +270,22 @@ define ([
                         ldapEmployeeObject = $.extend(ldapEmployeeObject, st.payload);
                         ldapEmployeeObject.dochazka = true;
                     }
-                    ldapEmployeeLink();
+                    if (document.getElementById('ldapDisplayEmployee')) {
+                        ldapEmployeeLink();
+                    }
+                    if (document.getElementById('simpleEmployeeBrowser')) {
+                        var obj = start.dbrowserState.set[start.dbrowserState.pos];
+                        $.extend(start.dbrowserState.obj, ldapEmployeeObject);
+                        $.extend(obj, ldapEmployeeObject);
+                        start.dbrowserListen();
+                    }
                 },
                 // failure callback -- employee doesn't exist
                 fc = function (st) {
                     var err = st.payload.code,
                         msg;
                     if (err === '404') {
-                        msg = 'Employee ' + emp.nick + ' not found in LDAP';
+                        msg = 'Employee ' + ldapEmp.nick + ' not found in LDAP';
                     } else {
                         msg = st.text;
                     }
