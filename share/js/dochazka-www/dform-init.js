@@ -1,5 +1,5 @@
 // ************************************************************************* 
-// Copyright (c) 2014-2015, SUSE LLC
+// Copyright (c) 2014-2016, SUSE LLC
 // 
 // All rights reserved.
 // 
@@ -50,14 +50,8 @@ define ([
     target
 ) {
 
-    //
-    // first, we define all entries
-    //
     var entries = lib.entries;
     
-    //
-    // second, we define the dforms themselves
-    //
     return function () {
 
         target.push('empProfile', {
@@ -73,10 +67,10 @@ define ([
             'entriesWrite': [],
             'hook': empLib.getEmployeeProfile,
             'miniMenu': {
-                entries: ['empProfileEditRemark'],
+                entries: ['empProfileEditRemark', 'ldapSyncSelf'],
                 back: ['Back', 'mainEmpl']
             }
-        });
+        }); // target.push('empProfile'
 
         target.push('empProfileEditRemark', {
             'name': 'empProfileEditRemark',
@@ -92,7 +86,7 @@ define ([
                 entries: ['empProfileUpdate'],
                 back: ['Back', 'empProfile']
             }
-        });
+        }); // target.push('empProfileEditRemark'
 
         target.push('ldapLookup', {
             'name': 'ldapLookup',
@@ -108,7 +102,7 @@ define ([
                 entries: ['ldapLookupSubmit'],
                 back: ['Back', 'mainEmpl']
             }
-        });
+        }); // target.push('ldapLookup'
 
         target.push('ldapDisplayEmployee', {
             'name': 'ldapDisplayEmployee',
@@ -124,7 +118,7 @@ define ([
                 entries: ['ldapSync'],
                 back: ['Back', 'mainEmpl']
             }
-        });
+        }); // target.push('ldapDisplayEmployee'
 
         target.push('searchEmployee', {
             'name': 'searchEmployee',
@@ -140,7 +134,7 @@ define ([
                 entries: ['actionEmplSearch'],
                 back: ['Back', 'mainEmpl']
             }
-        });
+        }); // target.push('searchEmployee'
 
         target.push('searchEmpNothingFound', {
             'name': 'searchEmpNothingFound',
@@ -154,8 +148,8 @@ define ([
                 entries: [],
                 back: ['To leave this page, press ENTER or click the Submit button', 'mainEmpl']
             }
-        });
+        }); // target.push('searchEmpNothingFound'
 
-    };
+    }; // return function ()
     
 });

@@ -1,5 +1,5 @@
 // ************************************************************************* 
-// Copyright (c) 2014-2015, SUSE LLC
+// Copyright (c) 2014-2016, SUSE LLC
 // 
 // All rights reserved.
 // 
@@ -83,6 +83,13 @@ define ([
             'menuText': 'LDAP sync',
             'aclProfile': 'admin',
             'start': dactionStart('ldapSync')
+        });
+        target.push('ldapSyncSelf', {
+            'name': 'ldapSync',
+            'type': 'daction',
+            'menuText': 'LDAP sync',
+            'aclProfile': 'active',
+            'start': dactionStart('ldapSyncSelf')
         });
         target.push('actionEmplSearch', {
             'name': 'actionEmplSearch',

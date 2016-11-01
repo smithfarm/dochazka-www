@@ -1,5 +1,5 @@
 // ************************************************************************* 
-// Copyright (c) 2014-2015, SUSE LLC
+// Copyright (c) 2014-2016, SUSE LLC
 // 
 // All rights reserved.
 // 
@@ -30,7 +30,7 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // ************************************************************************* 
 //
-// mfile-www/daction-start.js
+// app/daction-start.js
 //
 // daction 'start' method definitions
 //
@@ -63,41 +63,43 @@ define ([
 
     var act = {
 
-            // demo action from App::MFILE::WWW
-            "demoAction": function () {
-                $('#mainarea').html(html.demoAction);
-                setTimeout(function () { 
-                        target.pull('mainMenu').start(); 
-                    }, 1500);
-            },
+        // demo action from App::MFILE::WWW
+        "demoAction": function () {
+            $('#mainarea').html(html.demoAction);
+            setTimeout(function () {
+                    target.pull('mainMenu').start();
+                }, 1500);
+        },
 
-            // actions triggered from Employee menu
-            "myProfile": empLib.myProfile,
-            "empProfileUpdate": empLib.empProfileUpdate,
-            "ldapLookupSubmit": empLib.ldapLookupSubmit,
-            "ldapSync": empLib.ldapSync,
-            "actionEmplSearch": empLib.actionEmplSearch,
-            "masqEmployee": empLib.masqEmployee,
+        // actions triggered from Employee menu
+        "myProfile": empLib.myProfile,
+        "empProfileUpdate": empLib.empProfileUpdate,
+        "ldapLookupSubmit": empLib.ldapLookupSubmit,
+        "ldapSync": empLib.ldapSync,
+        "ldapSyncSelf": empLib.ldapSyncSelf,
+        "actionEmplSearch": empLib.actionEmplSearch,
+        "masqEmployee": empLib.masqEmployee,
 
-            // actions triggered from Privhistory menu
-            "actionPrivHistory": privLib.actionPrivHistory,
+        // actions triggered from Privhistory menu
+        "actionPrivHistory": privLib.actionPrivHistory,
 
-            // return to (saved) browser state
-            "returnToBrowser": function () { 
-                console.log("Now in returnToBrowser daction");
-                start.dbrowser(); 
-            },  
+        // return to (saved) browser state
+        "returnToBrowser": function () {
+            console.log("Now in returnToBrowser daction");
+            start.dbrowser();
+        },
 
-            // logout action
-            "logout": function () {
-                // if masquerading, end the masquerade;
-                if (currentUser('flag1')) {
-                    empLib.endTheMasquerade();
-                } else {
-                    logout();
-                }
+        // logout action
+        "logout": function () {
+            // if masquerading, end the masquerade;
+            if (currentUser('flag1')) {
+                empLib.endTheMasquerade();
+            } else {
+                logout();
             }
-        };
+        } // logout
+
+    }; // var act
    
     return function (a) {
         if (act.hasOwnProperty(a)) {

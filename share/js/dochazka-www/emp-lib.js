@@ -66,12 +66,7 @@ define ([
         getLdapEmployeeObject = function () { return ldapEmployeeObject; },
 
         myProfile = function () {
-            var cu = currentUser('obj');
-            if (employeeProfile.effective !== null && employeeProfile.nick === cu.nick) {
-                target.pull('empProfile').start();
-            } else {
-                loadEmpProfile(currentUser('obj').eid);
-            }
+            loadEmpProfile(currentUser('obj').eid);
         },
 
         loadEmpProfile = function (eid) {
@@ -278,6 +273,12 @@ define ([
                         $.extend(obj, ldapEmployeeObject);
                         start.dbrowserListen();
                     }
+                    if (document.getElementById('empProfile')) {
+                        console.log("ldapSyncSelf AJAX success!");
+                        myProfile();
+                        // employeeProfile = $.extend(employeeProfile, st.payload);
+                        // target.pull('empProfile').start();
+                    }
                 },
                 // failure callback -- employee doesn't exist
                 fc = function (st) {
@@ -294,6 +295,10 @@ define ([
                     $('input[name="entry0"]').focus();
                 }
             ajax(rest, sc, fc);
+        },
+
+        ldapSyncSelf = function (ldapEmp) {
+            return ldapSync(ldapEmp);
         },
 
 	// epuGen ("generate employee profile update function") is called to
@@ -341,6 +346,7 @@ define ([
         empProfileUpdate: function (emp) { epuGen('empProfile', emp); },
         ldapLookupSubmit: ldapLookupSubmit,
         ldapSync: ldapSync,
+        ldapSyncSelf: ldapSyncSelf,
         actionEmplSearch: actionEmplSearch,
         endTheMasquerade: endTheMasquerade,
         masqEmployee: masqEmp
