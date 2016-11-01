@@ -217,3 +217,8 @@ Revision history for App-Dochazka-WWW
 - build/ops: require App::MFILE::WWW 0.147 for dtable feature
 - Implement basic (read-only) Privhistory table
 
+0.141 2016-11-01 15:40 CET
+- Display effective date more readably
+- Dispatch.pm: AJAX call session/terminate on logout
+- js: Enable active users to "LDAP sync" themselves
+
