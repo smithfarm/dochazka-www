@@ -281,6 +281,14 @@ sub _login_dialog {
 sub _logout {
     my ( $self, $body ) = @_;
     $log->debug( "Entering " . __PACKAGE__ . "::_logout()" );
+    my $rr = rest_req( $ua, {
+        server => $site->DOCHAZKA_WWW_BACKEND_URI,
+        method => 'POST',
+        path => 'session/terminate',
+    } );
+    if ( $rr->{'hr'}->code ne '200' ) {
+        $log->error("session/terminate AJAX call FAILED: " . Dumper( $rr ) );
+    };
     $self->request->{'env'}->{'psgix.session'} = {};
     $self->response->header( 'Content-Type' => 'application/json' );
     $self->response->body( to_json( $CELL->status_ok( 'MFILE_WWW_LOGOUT_OK' )->expurgate ) );
