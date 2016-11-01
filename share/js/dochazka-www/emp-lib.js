@@ -276,8 +276,6 @@ define ([
                     if (document.getElementById('empProfile')) {
                         console.log("ldapSyncSelf AJAX success!");
                         myProfile();
-                        // employeeProfile = $.extend(employeeProfile, st.payload);
-                        // target.pull('empProfile').start();
                     }
                 },
                 // failure callback -- employee doesn't exist
