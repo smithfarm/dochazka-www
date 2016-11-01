@@ -131,6 +131,20 @@ define ([
                text: 'Effective date',
                prop: 'effective',
                maxlen: 30
+           },
+           'rSDurl': {
+               name: 'rSDurl',
+               aclProfileRead: 'passerby',
+               text: 'URI',
+               prop: 'url',
+               maxlen: 60
+           },
+           'rSDversion': {
+               name: 'rSDversion',
+               aclProfileRead: 'passerby',
+               text: 'Version',
+               prop: 'version',
+               maxlen: 30
            }
         },
 
@@ -191,6 +205,6 @@ define ([
             r += 'https://github.com/smithfarm/dochazka/issues</a>';
             return r;
         }
-   
+
     };
 });

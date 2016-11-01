@@ -40,12 +40,14 @@ define ([
     'current-user',
     'app/lib',
     'app/emp-lib',
+    'app/rest-lib',
     'app/prototypes',
     'target'
 ], function (
     currentUser,
     lib,
     empLib,
+    restLib,
     prototypes,
     target
 ) {
@@ -149,6 +151,23 @@ define ([
                 back: ['To leave this page, press ENTER or click the Submit button', 'mainEmpl']
             }
         }); // target.push('searchEmpNothingFound'
+
+        target.push('restServerDetails', {
+            'name': 'restServerDetails',
+            'type': 'dform',
+            'menuText': 'REST server',
+            'title': 'REST server details',
+            'preamble': '<b>URI</b> used by this App::Dochazka::WWW instance to communicate ' +
+                        'with REST server;<br><b>version</b> of App::Dochazka::REST running ' +
+                        'on REST server',
+            'aclProfile': 'admin',
+            'entriesRead': [entries.rSDurl, entries.rSDversion],
+            'hook': restLib.restServerDetails,
+            'miniMenu': {
+                entries: [],
+                back: ['To leave this page, press ENTER or click the Submit button', 'mainEmpl']
+            }
+        }); // target.push('restServerDetails'
 
     }; // return function ()
     

@@ -1,5 +1,5 @@
 // ************************************************************************* 
-// Copyright (c) 2014-2015, SUSE LLC
+// Copyright (c) 2014-2016, SUSE LLC
 // 
 // All rights reserved.
 // 
@@ -30,60 +30,48 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // ************************************************************************* 
 //
-// app/dmenu.js
-//
-// Round one of dmenu initialization - called from app/target-init.js
+// app/rest-lib.js
 //
 "use strict";
 
 define ([
-    'target'
+    'jquery',
+    'ajax',
+    'cf',
+    'lib'
 ], function (
-    target
+    $,
+    ajax,
+    cf,
+    lib
 ) {
 
-    return function () {
+    var restServerDetails = function () {
+            var ver = '...LOADING...',
+                rest = {
+                    "method": 'GET',
+                    "path": 'version'
+                },
+                // success callback
+                sc = function (st) {
+                    if (st.code === 'DISPATCH_VERSION') {
+                        // $("#mainarea").find("#rSDversion").text(st.payload.version);
+                        $("#rSDversion").text(st.payload.version);
+                        lib.clearResult();
+                    }
+                },
+                // failure callback
+                fc = null;
+            ajax(rest, sc, fc);
+            return {
+                url: cf('restURI'),
+                version: ver
+            };
+        };
 
-        target.push('mainMenu', {
-            'name': 'mainMenu',
-            'type': 'dmenu',
-            'menuText': 'Main menu',
-            'title': 'Main menu',
-            'aclProfile': 'passerby',
-            'entries': ['mainEmpl', 'mainPriv', 'mainSched', 'restServerDetails'],
-            'back': 'logout'
-        });
-
-        target.push('mainEmpl', {
-            'name': 'mainEmpl',
-            'type': 'dmenu',
-            'menuText': 'Employee menu',
-            'title': 'Employee',
-            'aclProfile': 'passerby',
-            'entries': ['myProfile', 'ldapLookup', 'searchEmployee', 'masqEmployee'],
-            'back': 'mainMenu'
-        });
-
-        target.push('mainPriv', {
-            'name': 'mainPriv',
-            'type': 'dmenu',
-            'menuText': 'Priv (status) menu',
-            'title': 'Priv (status)',
-            'aclProfile': 'passerby',
-            'entries': ['actionPrivHistory'],
-            'back': 'mainMenu'
-        });
-
-        target.push('mainSched', {
-            'name': 'mainSched',
-            'type': 'dmenu',
-            'menuText': 'Schedule menu',
-            'title': 'Schedule',
-            'aclProfile': 'passerby',
-            'entries': [],
-            'back': 'mainMenu'
-        });
-
+    return {
+        restServerDetails: restServerDetails
     };
 
 });
+
