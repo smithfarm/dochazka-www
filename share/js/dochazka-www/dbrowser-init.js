@@ -1,5 +1,5 @@
 // ************************************************************************* 
-// Copyright (c) 2014-2015, SUSE LLC
+// Copyright (c) 2014-2016, SUSE LLC
 // 
 // All rights reserved.
 // 
@@ -46,15 +46,10 @@ define ([
     target
 ) {
 
-    //
-    // define dbrowser entries here
-    //
     var entries = dochazkaLib.entries;
     
     return function () {
-        //
-        // push dbrowser object definitions onto 'target' here
-        //
+
         target.push('simpleEmployeeBrowser', {
             'name': 'simpleEmployeeBrowser',
             'type': 'dbrowser',
@@ -69,8 +64,8 @@ define ([
                 entries: ['ldapSync', 'masqEmployee'],
                 back: ['Back', 'mainEmpl']
             }
-        });
+        }); // target.push('simpleEmployeeBrowser'
 
-    };
+    }; // return function ()
     
 });

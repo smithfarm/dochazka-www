@@ -1,5 +1,5 @@
 // ************************************************************************* 
-// Copyright (c) 2014-2015, SUSE LLC
+// Copyright (c) 2014-2016, SUSE LLC
 // 
 // All rights reserved.
 // 
@@ -30,7 +30,7 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // ************************************************************************* 
 //
-// app/target-init
+// app/target-init.js
 //
 // Initialization of targets (round one)
 //
@@ -58,9 +58,8 @@ define ([
 
     return function () {
 
-        console.log("Entering app/target-init");
-
         // round one - set up the targets
+        console.log("dochazka-www/target-init.js: round one");
         dactionInitRoundOne();
         dformInitRoundOne();
         dmenuInitRoundOne();
@@ -70,13 +69,14 @@ define ([
 
         // round two - add 'source' and 'start' properties
         // (widget targets only)
+        console.log("dochazka-www/target-init.js: round two");
         initRoundTwo('dform');
         initRoundTwo('dmenu');
         initRoundTwo('dbrowser');
         initRoundTwo('dnotice');
         initRoundTwo('dtable');
 
-        // return name of target to be called first (in main.js)
+        // return name of target to be called first (in core/main.js)
         return 'mainMenu';
     };
 
