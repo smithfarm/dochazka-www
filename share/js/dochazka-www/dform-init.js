@@ -165,7 +165,7 @@ define ([
             'hook': restLib.restServerDetails,
             'miniMenu': {
                 entries: [],
-                back: ['To leave this page, press ENTER or click the Submit button', 'mainEmpl']
+                back: ['To leave this page, press ENTER or click the Submit button', 'mainMenu']
             }
         }); // target.push('restServerDetails'
 
