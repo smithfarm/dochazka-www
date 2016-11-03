@@ -82,6 +82,7 @@ define ([
 
         // actions triggered from Privhistory menu
         "actionPrivHistory": privLib.actionPrivHistory,
+        "actionPrivHistoryEdit": privLib.actionPrivHistoryEdit,
 
         // return to (saved) browser state
         "returnToBrowser": function () {

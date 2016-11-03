@@ -70,7 +70,7 @@ define ([
             'menuText': 'Priv (status) menu',
             'title': 'Priv (status)',
             'aclProfile': 'passerby',
-            'entries': ['actionPrivHistory'],
+            'entries': ['actionPrivHistory', 'actionPrivHistoryEdit'],
             'back': 'mainMenu'
         });
 

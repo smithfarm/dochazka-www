@@ -30,9 +30,9 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // ************************************************************************* 
 //
-// app/dtable-init.js
+// app/drowselect-init.js
 //
-// Round one of dtable initialization (called from app/target-init)
+// Round one of drowselect initialization (called from app/target-init)
 //
 "use strict";
 
@@ -50,13 +50,13 @@ define ([
 
     return function () {
 
-        target.push('privHistoryDtable', {
-            'name': 'privHistoryDtable',
-            'type': 'dtable',
+        target.push('privHistoryDrowselect', {
+            'name': 'privHistoryDrowselect',
+            'type': 'drowselect',
             'menuText': 'Privilege (status) history',
             'title': 'Privilege (status) history',
             'preamble': null,
-            'aclProfile': 'passerby',
+            'aclProfile': 'admin',
             'entries': [entries.pHeffective, entries.pHpriv],
             'hook': lib.holdObject,
             'miniMenu': {

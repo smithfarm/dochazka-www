@@ -107,12 +107,19 @@ define ([
         });
 
         // Privhistory actions
-        target.push('actionPrivHistory', {
+        target.push('actionPrivHistory', { // read-only
             'name': 'actionPrivHistory',
             'type': 'daction',
             'menuText': 'Privilege (status) history',
             'aclProfile': 'passerby',
             'start': dactionStart('actionPrivHistory')
+        });
+        target.push('actionPrivHistoryEdit', { // read-write
+            'name': 'actionPrivHistoryEdit',
+            'type': 'daction',
+            'menuText': 'Privilege (status) history EDIT',
+            'aclProfile': 'admin',
+            'start': dactionStart('actionPrivHistoryEdit')
         });
         
         // Run unit tests

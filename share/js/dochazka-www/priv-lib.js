@@ -37,52 +37,52 @@
 define ([
     'jquery',
     'ajax',
-    'current-user',
     'lib',
-    'app/lib',
-    'app/prototypes',
-    'start',
+    'current-user',
     'target'
 ], function (
     $,
     ajax,
-    currentUser,
     lib,
-    appLib,
-    prototypes,
-    start,
+    currentUser,
     target
 ) {
 
-    var 
-        actionPrivHistory = function () {
-            var cu = currentUser('obj');
-            var rest = {
-                    "method": 'GET',
-                    "path": 'priv/history/nick/' + cu.nick
-                },
-                // success callback
-                sc = function (st) {
-                    if (st.code === 'DISPATCH_RECORDS_FOUND') {
-                        console.log("Payload is", st.payload);
-                        var history = st.payload.history.map(
-                            function (row) {
-                                return {
-                                    "priv": row.priv,
-                                    "effective": lib.readableDate(row.effective)
-                                };
-                            }
-                        );
-                        lib.holdObject(history);
-                        target.pull('privHistoryReadOnly').start();
-                    }
-                },
-                fc = null;
-            ajax(rest, sc, fc);
+    var genPrivHistoryAction = function (tgt) {
+            return function (nick) {
+                var rest = {
+                        "method": 'GET',
+                        "path": 'priv/history/nick/' + currentUser('obj').nick
+                    },
+                    // success callback
+                    sc = function (st) {
+                        if (st.code === 'DISPATCH_RECORDS_FOUND') {
+                            console.log("Payload is", st.payload);
+                            var history = st.payload.history.map(
+                                function (row) {
+                                    return {
+                                        "phid": row.phid,
+                                        "priv": row.priv,
+                                        "effective": lib.readableDate(row.effective)
+                                    };
+                                }
+                            );
+                            lib.holdObject(history);
+                            target.pull(tgt).start();
+                        }
+                    },
+                    fc = null;
+                ajax(rest, sc, fc);
+            };
         };
-
+    
     return {
-        actionPrivHistory: actionPrivHistory
+        "actionPrivHistory":     genPrivHistoryAction(
+                                     'privHistoryDtable'
+                                 ),
+        "actionPrivHistoryEdit": genPrivHistoryAction(
+                                     'privHistoryDrowselect'
+                                 )
     };
 
 });
