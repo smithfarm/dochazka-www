@@ -39,17 +39,19 @@ define ([
     'ajax',
     'lib',
     'current-user',
-    'target'
+    'target',
+    'start'
 ], function (
     $,
     ajax,
     lib,
     currentUser,
-    target
+    target,
+    start
 ) {
 
     var genPrivHistoryAction = function (tgt) {
-            return function (nick) {
+            return function () {
                 var rest = {
                         "method": 'GET',
                         "path": 'priv/history/nick/' + currentUser('obj').nick
@@ -71,7 +73,15 @@ define ([
                             target.pull(tgt).start();
                         }
                     },
-                    fc = null;
+                    fc = function (st) {
+                        lib.displayError(st.text);
+                        if (st.payload.code === "404") {
+                            // The employee has no history records. This is not
+                            // really an error condition.
+                            lib.holdObject([]);
+                            target.pull(tgt).start();
+                        }
+                    };
                 ajax(rest, sc, fc);
             };
         };
@@ -82,7 +92,27 @@ define ([
                                  ),
         "actionPrivHistoryEdit": genPrivHistoryAction(
                                      'privHistoryDrowselect'
-                                 )
+                                 ),
+        "privHistorySaveAction": function () {
+            var rest = {
+                    "method": 'POST',
+                    "path": 'priv/history/nick/' + currentUser('obj').nick,
+                    "body": {
+                        "effective": $("#pHeffective").val(),
+                        "priv": $("#pHpriv").val()
+                    }
+                },
+                // success callback
+                sc = function (st) {
+                    if (st.code === 'DOCHAZKA_CUD_OK') {
+                        console.log("Payload is", st.payload);
+                        target.pull("actionPrivHistoryEdit").start();
+                    }
+                },
+                fc = function (st) { lib.displayError(st.text); };
+            ajax(rest, sc, fc);
+            start.drowselectListen();
+        }
     };
 
 });

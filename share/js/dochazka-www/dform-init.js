@@ -169,6 +169,29 @@ define ([
             }
         }); // target.push('restServerDetails'
 
+        target.push('privHistoryAddRecord', {
+            'name': 'privHistoryAddRecord',
+            'type': 'dform',
+            'menuText': 'Add record',
+            'title': 'Add privhistory (status) record',
+            'preamble': '<b>Effective</b> date format YYYY-MM-DD;<br>' +
+                        '<b>Priv</b> one of (passerby, inactive, active, admin)',
+            'aclProfile': 'admin',
+            'entriesRead': [entries.ePnick], 
+            'entriesWrite': [entries.pHeffective, entries.pHpriv],
+            'hook': function () {
+                    return {
+                        'nick': currentUser('obj').nick,
+                        'effective': null,
+                        'priv': null
+                    };
+                },
+            'miniMenu': {
+                entries: ['privHistorySaveAction'],
+                back: ['Back', 'drowselectListen']
+            }
+        }); // target.push('privHistoryAddRecord'
+
     }; // return function ()
     
 });

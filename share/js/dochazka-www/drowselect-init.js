@@ -60,7 +60,7 @@ define ([
             'entries': [entries.pHeffective, entries.pHpriv],
             'hook': lib.holdObject,
             'miniMenu': {
-                entries: null,
+                entries: ['privHistoryAddRecord'],
                 back: ['Back', 'mainPriv']
             }
         });

@@ -55,6 +55,15 @@ define ([
             'start': dactionStart('demoAction')
         });
 
+        // general actions
+        target.push('drowselectListen', {
+            'name': 'drowselectListen',
+            'type': 'daction',
+            'menuText': 'drowselectListen',
+            'aclProfile': 'passerby',
+            'start': dactionStart('drowselectListen')
+        });
+
         // Employee actions
         target.push('myProfile', {
             'name': 'myProfile',
@@ -120,6 +129,13 @@ define ([
             'menuText': 'Privilege (status) history EDIT',
             'aclProfile': 'admin',
             'start': dactionStart('actionPrivHistoryEdit')
+        });
+        target.push('privHistorySaveAction', { // read-write
+            'name': 'privHistorySaveAction',
+            'type': 'daction',
+            'menuText': 'Commit to database',
+            'aclProfile': 'admin',
+            'start': dactionStart('privHistorySaveAction')
         });
         
         // Run unit tests

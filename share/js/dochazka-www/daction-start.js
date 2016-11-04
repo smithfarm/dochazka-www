@@ -47,7 +47,8 @@ define ([
     "app/priv-lib",
     "html",
     "logout",
-    "target"
+    "target",
+    "start"
 ], function (
     $,
     currentUser,
@@ -55,7 +56,8 @@ define ([
     privLib,
     html,
     logout,
-    target
+    target,
+    start
 ) {
 
     // note that action methods called from forms will be called with the form
@@ -71,6 +73,11 @@ define ([
                 }, 1500);
         },
 
+        // general actions
+        "drowselectListen": function () {
+            start.drowselectListen();
+        },
+
         // actions triggered from Employee menu
         "myProfile": empLib.myProfile,
         "empProfileUpdate": empLib.empProfileUpdate,
@@ -83,6 +90,7 @@ define ([
         // actions triggered from Privhistory menu
         "actionPrivHistory": privLib.actionPrivHistory,
         "actionPrivHistoryEdit": privLib.actionPrivHistoryEdit,
+        "privHistorySaveAction": privLib.privHistorySaveAction,
 
         // return to (saved) browser state
         "returnToBrowser": function () {
