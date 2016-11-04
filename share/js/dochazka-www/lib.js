@@ -121,6 +121,7 @@ define ([
            'pHpriv': {
                name: 'pHpriv',
                aclProfileRead: 'passerby',
+               aclProfileWrite: 'admin',
                text: 'Priv',
                prop: 'priv',
                maxlen: 10
@@ -128,6 +129,7 @@ define ([
            'pHeffective': {
                name: 'pHeffective',
                aclProfileRead: 'passerby',
+               aclProfileWrite: 'admin',
                text: 'Effective date',
                prop: 'effective',
                maxlen: 30
