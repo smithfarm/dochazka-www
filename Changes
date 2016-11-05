@@ -222,3 +222,13 @@ Revision history for App-Dochazka-WWW
 - Dispatch.pm: AJAX call session/terminate on logout
 - js: Enable active users to "LDAP sync" themselves
 
+0.142 2016-11-05 22:40 CET
+- js: implement "REST server details" dform
+- js: make REST server details form return to mainMenu
+- build/ops: require App::MFILE::WWW 0.152
+- Plumb in drowselect target, privhistory edit menu option
+- lib.js: add aclProfileWrite prop to pHeffective and pHpriv
+- Implement "Add record" option in privhistory drowselect
+- emp-lib.js: call lib.displayError() whenever AJAX fails
+- Implement "Delete record" option in Privhistory drowselect
+
