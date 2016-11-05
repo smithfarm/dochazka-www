@@ -100,7 +100,9 @@ define ([
                         target.pull('empProfile').start();
                     }
                 },
-                fc = null;
+                fc = function (st) {
+                    lib.displayError(st.text);
+                };
             ajax(rest, sc, fc);
         },
 
@@ -130,7 +132,9 @@ define ([
                     }
                 },
                 // failure callback
-                fc = null;
+                fc = function (st) {
+                    lib.displayError(st.text);
+                };
             ajax(rest, sc, fc);
         },
 
@@ -201,12 +205,8 @@ define ([
                 },
                 // failure callback -- employee doesn't exist
                 fc = function (st) {
-                    var msg = st.payload.message;
-                    console.log(msg);
-                    $("#result").html(msg);
-                    $('input[name="sel"]').val('');
-                    $('input[name="entry0"]').focus();
-                }
+                    lib.displayError(st.text);
+                };
             ajax(rest, sc, fc);
         },
 
@@ -287,10 +287,7 @@ define ([
                     } else {
                         msg = st.text;
                     }
-                    console.log(msg);
-                    $("#result").html(msg);
-                    $('input[name="sel"]').val('');
-                    $('input[name="entry0"]').focus();
+                    lib.displayError(msg);
                 }
             ajax(rest, sc, fc);
         },
@@ -326,8 +323,7 @@ define ([
                     target.pull(afterTarget).start();
                 },
                 fc = function (st) {
-                    console.log("Failure callback received argument", st);
-                    $("#result").html(st.text);
+                    lib.displayError(st.text);
                 };
             ajax(rest, sc, fc);
         };
