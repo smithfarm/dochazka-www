@@ -112,6 +112,33 @@ define ([
                 fc = function (st) { lib.displayError(st.text); };
             ajax(rest, sc, fc);
             start.drowselectListen();
+        },
+        "privHistoryDeleteAction": function () {
+            var phid,
+                set = lib.drowselectState.set,
+                pos = lib.drowselectState.pos,
+                rest = {
+                    "method": 'DELETE',
+                    "path": 'priv/history/phid/'
+                },
+                // success callback
+                sc = function (st) {
+                    if (st.code === 'DOCHAZKA_CUD_OK') {
+                        console.log("Payload is", st.payload);
+                        target.pull("actionPrivHistoryEdit").start();
+                    }
+                },
+                fc = function (st) { lib.displayError(st.text); };
+
+            if (set === null || set === undefined || set.length === 0) {
+                lib.displayError("Nothing to do");
+                start.drowselectListen();
+            }
+            phid = set[pos].phid;
+            console.log("Going to delete PHID " + phid);
+            rest.path += phid;
+            ajax(rest, sc, fc);
+            start.drowselectListen();
         }
     };
 

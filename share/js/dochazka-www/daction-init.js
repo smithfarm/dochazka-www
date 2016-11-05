@@ -130,12 +130,19 @@ define ([
             'aclProfile': 'admin',
             'start': dactionStart('actionPrivHistoryEdit')
         });
-        target.push('privHistorySaveAction', { // read-write
+        target.push('privHistorySaveAction', {
             'name': 'privHistorySaveAction',
             'type': 'daction',
             'menuText': 'Commit to database',
             'aclProfile': 'admin',
             'start': dactionStart('privHistorySaveAction')
+        });
+        target.push('privHistoryDeleteAction', {
+            'name': 'privHistoryDeleteAction',
+            'type': 'daction',
+            'menuText': 'Delete record',
+            'aclProfile': 'admin',
+            'start': dactionStart('privHistoryDeleteAction')
         });
         
         // Run unit tests

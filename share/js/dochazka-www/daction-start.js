@@ -91,6 +91,7 @@ define ([
         "actionPrivHistory": privLib.actionPrivHistory,
         "actionPrivHistoryEdit": privLib.actionPrivHistoryEdit,
         "privHistorySaveAction": privLib.privHistorySaveAction,
+        "privHistoryDeleteAction": privLib.privHistoryDeleteAction,
 
         // return to (saved) browser state
         "returnToBrowser": function () {
