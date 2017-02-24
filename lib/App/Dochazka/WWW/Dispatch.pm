@@ -43,7 +43,7 @@ use warnings;
 use App::CELL qw( $CELL $log $meta $site );
 use App::MFILE::HTTP qw( rest_req );
 use Data::Dumper;
-use File::Temp qw( tempdir );
+use File::Temp qw( tempfile );
 use JSON;
 use LWP::UserAgent;
 use Params::Validate qw(:all);
@@ -52,10 +52,7 @@ use Try::Tiny;
 # methods/attributes not defined in this module will be inherited from:
 use parent 'App::MFILE::WWW::Resource';
 
-our $ua = LWP::UserAgent->new( 
-              cookie_jar => { file => tempdir( CLEANUP => 0 ) }
-          );
-
+our $ualt = {};  # user agent lookup table
 
 
 
@@ -105,7 +102,8 @@ sub is_authorized {
     my $remote_addr = $r->{'env'}->{'REMOTE_ADDR'};
     my $ce;
 
-    #$log->debug( "Session is " . Dumper( $session ) );
+    #$log->debug( "Environment is " . Dumper( $r->{'env'} ) );
+    $log->debug( "Session is " . Dumper( $session ) );
 
     # authorized session
     if ( $ce = $session->{'currentUser'} and
@@ -142,8 +140,42 @@ sub is_authorized {
     }
 
     # unauthorized session
-    # $session = {};
     return ( $r->method eq 'GET' ) ? 1 : 0;
+}
+
+
+=head2 session_id
+
+=cut
+
+sub session_id {
+    my $self = shift;
+    return $self->request->{'env'}->{'psgix.session.options'}->{'id'};
+}
+
+
+=head2 ua
+
+Returns the LWP::UserAgent object obtained from the lookup table.
+Creates it first if necessary.
+
+=cut
+
+sub ua {
+    my $self = shift;
+    my $id = $self->session_id();
+
+    # already in lookup table
+    return $ualt->{$id} if exists $$ualt{$id};
+
+    # not in lookup table yet
+    my $tf = "";
+    ( undef, $tf ) = tempfile();
+    $ualt->{$id} = LWP::UserAgent->new(
+        cookie_jar => { file => $tf },
+    );
+    $log->info("New user agent created with cookies in $tf");
+    return $ualt->{$id};
 }
 
 
@@ -212,9 +244,9 @@ sub process_post {
 
     # - normal AJAX call (shown for didactic purposes only; App::MFILE::WWW
     #   itself doesn't generate any AJAX calls)
-    $log->debug( "Calling rest_req $method $path" );
+    $log->debug( "Calling rest_req $method $path on session ID " . $self->session_id );
     $session->{'last_seen'} = time;
-    my $rr = rest_req( $ua, {
+    my $rr = rest_req( $self->ua(), {
         server => $site->DOCHAZKA_WWW_BACKEND_URI,
         method => $method,
         path => $path,
@@ -240,7 +272,7 @@ sub _login_dialog {
     $log->debug( "DOCHAZKA_WWW_BACKEND_URI is " .  $site->DOCHAZKA_WWW_BACKEND_URI );
 
     my ( $code, $message, $body_json );
-    my $rr = rest_req( $ua, {
+    my $rr = rest_req( $self->ua(), {
         server => $site->DOCHAZKA_WWW_BACKEND_URI,
         nick => $nick,
         password => $password,
@@ -281,14 +313,16 @@ sub _login_dialog {
 sub _logout {
     my ( $self, $body ) = @_;
     $log->debug( "Entering " . __PACKAGE__ . "::_logout()" );
-    my $rr = rest_req( $ua, {
-        server => $site->DOCHAZKA_WWW_BACKEND_URI,
-        method => 'POST',
-        path => 'session/terminate',
-    } );
-    if ( $rr->{'hr'}->code ne '200' ) {
-        $log->error("session/terminate AJAX call FAILED: " . Dumper( $rr ) );
-    };
+    if ( exists $$self{'ua'} ) {
+        my $rr = rest_req( $self->ua(), {
+            server => $site->DOCHAZKA_WWW_BACKEND_URI,
+            method => 'POST',
+            path => 'session/terminate',
+        } );
+        if ( $rr->{'hr'}->code ne '200' ) {
+            $log->error("session/terminate AJAX call FAILED: " . Dumper( $rr ) );
+        };
+    }
     $self->request->{'env'}->{'psgix.session'} = {};
     $self->response->header( 'Content-Type' => 'application/json' );
     $self->response->body( to_json( $CELL->status_ok( 'MFILE_WWW_LOGOUT_OK' )->expurgate ) );
