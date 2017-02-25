@@ -35,4 +35,60 @@
 #
 # -------------------------------------------------------------------------
 
-mfile-www --ddist=App-Dochazka-WWW --sitedir=/etc/dochazka-www
+function display_help {
+    echo "dochazka-www is a bash script whose job is to start"
+    echo "the App::Dochazka::WWW server"
+    echo
+    echo "It takes the following command-line options:"
+    echo "  -h --help       Displays this text"
+    echo "  -v --version   Display App::Dochazka::WWW version number"
+    echo
+    echo "dochazka-www is a wrapper for the mfile-www script from the"
+    echo "Web::MFILE::WWW distro. If you need to pass options to that"
+    echo "script, put them on the end preceded by '--'"
+    echo
+    echo "In the following example, the -c option will be passed to"
+    echo "mfile-www:"
+    echo
+    echo "    $ dochazka-www -- -c"
+    echo
+    exit 0
+}
+
+function display_version {
+    version=$(perl -e 'use App::Dochazka::WWW; print $App::Dochazka::WWW::VERSION;')
+    echo "App::Dochazka::WWW $version"
+    exit 0
+}
+
+function demo_echo {
+    # takes a parameter and echoes it back
+    echo $1
+    exit 0
+}
+
+# process command-line options
+
+TEMP=$(getopt -o e:hv --long echo:,help,version -n 'dochazka-rest' -- "$@")
+
+if [ $? != 0 ] ; then echo "Terminating..." >&2 ; exit 1 ; fi
+
+# Note the quotes around `$TEMP': they are essential!
+eval set -- "$TEMP"
+
+while true ; do
+	case "$1" in
+                -e|--echo) demo_echo $2 ; shift 2 ;;
+		-h|--help) display_help ; shift ;;
+		-v|--version) display_version ; shift ;;
+		--) shift ; break ;;
+		*) echo "Internal error!" ; exit 1 ;;
+	esac
+done
+
+if [[ $@ ]] ; then
+    echo "Passing to mfile-www:"
+    for arg do echo '--> '"\`$arg'" ; done
+fi
+
+mfile-www --ddist=App-Dochazka-WWW --sitedir=/etc/dochazka-www -- "$@"
