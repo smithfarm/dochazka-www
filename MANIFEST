@@ -20,11 +20,13 @@ share/js/dochazka-www/dform-init.js
 share/js/dochazka-www/dmenu-init.js
 share/js/dochazka-www/dnotice-init.js
 share/js/dochazka-www/dnotice-hooks.js
+share/js/dochazka-www/drowselect-init.js
 share/js/dochazka-www/dtable-init.js
 share/js/dochazka-www/emp-lib.js
 share/js/dochazka-www/priv-lib.js
 share/js/dochazka-www/lib.js
 share/js/dochazka-www/prototypes.js
+share/js/dochazka-www/rest-lib.js
 share/js/dochazka-www/target-init.js
 t/00-load.t
 t/manifest.t
