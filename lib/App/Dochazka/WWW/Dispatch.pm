@@ -140,7 +140,8 @@ sub is_authorized {
     }
 
     # unauthorized session
-    return ( $r->method eq 'GET' ) ? 1 : 0;
+    $log->debug( "is_authorized fall-through: " . $r->method . " " . $self->request->path_info );
+    return 1;
 }
 
 
