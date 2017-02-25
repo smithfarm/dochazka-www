@@ -232,3 +232,9 @@ Revision history for App-Dochazka-WWW
 - emp-lib.js: call lib.displayError() whenever AJAX fails
 - Implement "Delete record" option in Privhistory drowselect
 
+0.143 2017-02-25 09:28 CET
+- Dispatch.pm: implement user agent lookup table
+- Dispatch.pm: refactor session management
+- Fix "incoming AJAX calls on a dead session don't return"
+- script: proper arg handling in dochazka-www startup script
+
