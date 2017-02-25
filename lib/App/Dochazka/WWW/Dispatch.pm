@@ -98,7 +98,7 @@ sub is_authorized {
     $log->debug( "Entering " . __PACKAGE__ . "::is_authorized()" );
 
     my $r = $self->request;
-    my $session = $r->{'env'}->{'psgix.session'};
+    my $session = $self->session;
     my $remote_addr = $r->{'env'}->{'REMOTE_ADDR'};
     my $ce;
 
@@ -144,16 +144,6 @@ sub is_authorized {
 }
 
 
-=head2 session_id
-
-=cut
-
-sub session_id {
-    my $self = shift;
-    return $self->request->{'env'}->{'psgix.session.options'}->{'id'};
-}
-
-
 =head2 ua
 
 Returns the LWP::UserAgent object obtained from the lookup table.
@@ -163,17 +153,21 @@ Creates it first if necessary.
 
 sub ua {
     my $self = shift;
-    my $id = $self->session_id();
+    $log->debug( "Entering " . __PACKAGE__ . "::ua()" );
+    my $id = $self->session_id;
+    $log->debug( "ua: session_id is $id" );
 
     # already in lookup table
-    return $ualt->{$id} if exists $$ualt{$id};
+    if ( exists $ualt->{$id} ) {
+         $log->debug( "Session $id already has a LWP::UserAgent object" );
+         return $ualt->{$id};
+    }
 
     # not in lookup table yet
     my $tf = "";
     ( undef, $tf ) = tempfile();
-    $ualt->{$id} = LWP::UserAgent->new(
-        cookie_jar => { file => $tf },
-    );
+    $ualt->{$id} = LWP::UserAgent->new;
+    $ualt->{$id}->cookie_jar({ file => $tf });
     $log->info("New user agent created with cookies in $tf");
     return $ualt->{$id};
 }
@@ -212,7 +206,7 @@ sub process_post {
     $log->debug( "Entering " . __PACKAGE__ . "::process_post()" );
 
     my $r = $self->request;
-    my $session = $r->{'env'}->{'psgix.session'};
+    my $session = $self->session;
     my $ajax = $self->context->{'request_body'};  # request body (Perl string)
 
     if ( ! $ajax ) {
@@ -252,7 +246,7 @@ sub process_post {
         path => $path,
         req_body => $body,
     } );
-    # $log->debug( "rest_req returned: " . Dumper( $rr ) );
+    $log->debug( "rest_req returned: " . Dumper( $rr ) );
     my $hr = $rr->{'hr'};
     return $self->_prep_ajax_response( $hr, $rr->{'body'} );
 }
@@ -263,7 +257,7 @@ sub _login_dialog {
     $log->debug( "Entering " . __PACKAGE__ . "::_login_dialog()" );
 
     my $r = $self->request;
-    my $session = $r->{'env'}->{'psgix.session'};
+    my $session = $self->session;
     my $nick = $body->{'nam'};
     my $password = $body->{'pwd'};
     my $standalone = $meta->META_WWW_STANDALONE_MODE;
@@ -313,16 +307,14 @@ sub _login_dialog {
 sub _logout {
     my ( $self, $body ) = @_;
     $log->debug( "Entering " . __PACKAGE__ . "::_logout()" );
-    if ( exists $$self{'ua'} ) {
-        my $rr = rest_req( $self->ua(), {
-            server => $site->DOCHAZKA_WWW_BACKEND_URI,
-            method => 'POST',
-            path => 'session/terminate',
-        } );
-        if ( $rr->{'hr'}->code ne '200' ) {
-            $log->error("session/terminate AJAX call FAILED: " . Dumper( $rr ) );
-        };
-    }
+    my $rr = rest_req( $self->ua(), {
+        server => $site->DOCHAZKA_WWW_BACKEND_URI,
+        method => 'POST',
+        path => 'session/terminate',
+    } );
+    if ( $rr->{'hr'}->code ne '200' ) {
+        $log->error("session/terminate AJAX call FAILED: " . Dumper( $rr ) );
+    };
     $self->request->{'env'}->{'psgix.session'} = {};
     $self->response->header( 'Content-Type' => 'application/json' );
     $self->response->body( to_json( $CELL->status_ok( 'MFILE_WWW_LOGOUT_OK' )->expurgate ) );
@@ -331,6 +323,7 @@ sub _logout {
 
 sub _prep_ajax_response {
     my ( $self, $hr, $body ) = @_;
+    $log->debug( "Entering " . __PACKAGE__ . "::_prep_ajax_response()" );
     my $expurgated_status;
     if ( $hr->is_success ) {
         $expurgated_status = $body;
