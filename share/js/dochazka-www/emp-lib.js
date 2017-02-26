@@ -30,9 +30,7 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // ************************************************************************* 
 //
-// app/emp-profile-update.js
-//
-// Update employee profile to match what is in the form
+// app/emp-lib.js
 //
 "use strict";
 

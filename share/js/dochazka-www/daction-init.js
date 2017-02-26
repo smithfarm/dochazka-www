@@ -145,6 +145,15 @@ define ([
             'start': dactionStart('privHistoryDeleteAction')
         });
         
+        // Schedule actions
+        target.push('actionSchedLookup', {
+            'name': 'actionSchedLookup',
+            'type': 'daction',
+            'menuText': 'Search',
+            'aclProfile': 'admin',
+            'start': dactionStart('actionSchedLookup')
+        });
+
         // Run unit tests
         target.push('unitTests', {
             'name': 'unitTests',

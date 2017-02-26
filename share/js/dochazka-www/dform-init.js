@@ -1,5 +1,5 @@
 // ************************************************************************* 
-// Copyright (c) 2014-2016, SUSE LLC
+// Copyright (c) 2014-2017, SUSE LLC
 // 
 // All rights reserved.
 // 
@@ -38,16 +38,20 @@
 
 define ([
     'current-user',
+    'lib',
     'app/lib',
     'app/emp-lib',
     'app/rest-lib',
+    'app/sched-lib',
     'app/prototypes',
     'target'
 ], function (
     currentUser,
+    coreLib,
     lib,
     empLib,
     restLib,
+    schedLib,
     prototypes,
     target
 ) {
@@ -191,6 +195,60 @@ define ([
                 back: ['Back', 'drowselectListen']
             }
         }); // target.push('privHistoryAddRecord'
+
+        target.push('schedLookup', {
+            'name': 'schedLookup',
+            'type': 'dform',
+            'menuText': 'Look up schedule by code or ID',
+            'title': 'Look up schedule by code or ID',
+            'preamble': 'Enter a schedule code or ID',
+            'aclProfile': 'admin',
+            'entriesRead': null,
+            'entriesWrite': [entries.sScode, entries.sSid],
+            'hook': function () {
+                return {
+                    searchKeySchedCode: null,
+                    searchKeySchedID: null
+                };
+            },
+            'miniMenu': {
+                entries: ['actionSchedLookup'],
+                back: ['Back', 'mainSchedAdmin']
+            }
+        }); // target.push('schedLookup'
+
+        target.push('schedDisplay', {
+            'name': 'schedDisplay',
+            'type': 'dform',
+            'menuText': 'schedDisplay',
+            'title': 'Schedule',
+            'aclProfile': 'admin',
+            'entriesRead': [entries.sDid, entries.sDcode,
+                            coreLib.emptyLineEntry, entries.sDmon,
+                            entries.sDtue, entries.sDwed, entries.sDthu,
+                            entries.sDfri, entries.sDsat, entries.sDsun,
+                            coreLib.emptyLineEntry, entries.ePremark],
+            'entriesWrite': null,
+            'hook': schedLib.getScheduleForDisplay,
+            'miniMenu': {
+                entries: [],
+                back: ['Back', 'mainSchedAdmin']
+            }
+        }); // target.push('schedDisplay'
+
+        target.push('searchSchedNothingFound', {
+            'name': 'searchSchedNothingFound',
+            'type': 'dform',
+            'menuText': 'Schedule profile',
+            'title': 'Search Schedule - results',
+            'preamble': 'Your search found 0 Schedules',
+            'aclProfile': 'admin',
+            'hook': function () { },
+            'miniMenu': {
+                entries: [],
+                back: ['To leave this page, press ENTER or click the Submit button', 'mainSched']
+            }
+        }); // target.push('searchEmpNothingFound'
 
     }; // return function ()
     

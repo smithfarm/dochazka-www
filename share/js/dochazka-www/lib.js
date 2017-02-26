@@ -147,6 +147,102 @@ define ([
                text: 'Version',
                prop: 'version',
                maxlen: 30
+           },
+           'sScode': {
+               name: 'sScode',
+               aclProfileRead: null,
+               aclProfileWrite: 'admin',
+               text: 'Schedule code',
+               prop: 'searchKeySchedCode',
+               maxlen: 20
+           },
+           'sSid': {
+               name: 'sSid',
+               aclProfileRead: null,
+               aclProfileWrite: 'admin',
+               text: 'Schedule ID',
+               prop: 'searchKeySchedID',
+               maxlen: 20
+           },
+           'sDcode': {
+               name: 'sDcode',
+               aclProfileRead: 'admin',
+               aclProfileWrite: 'admin',
+               text: 'Code',
+               prop: 'scode',
+               maxlen: 20
+           },
+           'sDid': {
+               name: 'sDid',
+               aclProfileRead: 'admin',
+               aclProfileWrite: 'admin',
+               text: 'ID',
+               prop: 'sid',
+               maxlen: 20
+           },
+           'sDmon': {
+               name: 'sDmon',
+               aclProfileRead: 'admin',
+               aclProfileWrite: 'admin',
+               text: 'Monday',
+               prop: 'mon',
+               maxlen: 50
+           },
+           'sDtue': {
+               name: 'sDtue',
+               aclProfileRead: 'admin',
+               aclProfileWrite: 'admin',
+               text: 'Tuesday',
+               prop: 'tue',
+               maxlen: 50
+           },
+           'sDwed': {
+               name: 'sDwed',
+               aclProfileRead: 'admin',
+               aclProfileWrite: 'admin',
+               text: 'Wednesday',
+               prop: 'wed',
+               maxlen: 50
+           },
+           'sDthu': {
+               name: 'sDthu',
+               aclProfileRead: 'admin',
+               aclProfileWrite: 'admin',
+               text: 'Thursday',
+               prop: 'thu',
+               maxlen: 50
+           },
+           'sDfri': {
+               name: 'sDfri',
+               aclProfileRead: 'admin',
+               aclProfileWrite: 'admin',
+               text: 'Friday',
+               prop: 'fri',
+               maxlen: 50
+           },
+           'sDsat': {
+               name: 'sDsat',
+               aclProfileRead: 'admin',
+               aclProfileWrite: 'admin',
+               text: 'Saturday',
+               prop: 'sat',
+               maxlen: 50
+           },
+           'sDsun': {
+               name: 'sDsun',
+               aclProfileRead: 'admin',
+               aclProfileWrite: 'admin',
+               text: 'Sunday',
+               prop: 'sun',
+               maxlen: 50
+           },
+           'sDdisabled': {
+               name: 'sDdisabled',
+               aclProfileRead: 'admin',
+               aclProfileWrite: 'admin',
+               text: 'Disabled?',
+               prop: 'disabled',
+               maxlen: 10
            }
         },
 

@@ -50,7 +50,7 @@ define ([
             'menuText': 'Main menu',
             'title': 'Main menu',
             'aclProfile': 'passerby',
-            'entries': ['mainEmpl', 'mainPriv', 'mainSched', 'restServerDetails'],
+            'entries': ['mainEmpl', 'mainPriv', 'mainSchedAdmin', 'restServerDetails'],
             'back': 'logout'
         });
 
@@ -74,13 +74,13 @@ define ([
             'back': 'mainMenu'
         });
 
-        target.push('mainSched', {
-            'name': 'mainSched',
+        target.push('mainSchedAdmin', {
+            'name': 'mainSchedAdmin',
             'type': 'dmenu',
-            'menuText': 'Schedule menu',
-            'title': 'Schedule',
-            'aclProfile': 'passerby',
-            'entries': [],
+            'menuText': 'Schedule administration menu',
+            'title': 'Schedule administration',
+            'aclProfile': 'admin',
+            'entries': ['schedLookup'],
             'back': 'mainMenu'
         });
 

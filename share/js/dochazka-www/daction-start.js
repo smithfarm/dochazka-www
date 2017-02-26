@@ -45,6 +45,7 @@ define ([
     "current-user",
     "app/emp-lib",
     "app/priv-lib",
+    "app/sched-lib",
     "html",
     "logout",
     "target",
@@ -54,6 +55,7 @@ define ([
     currentUser,
     empLib,
     privLib,
+    schedLib,
     html,
     logout,
     target,
@@ -92,6 +94,9 @@ define ([
         "actionPrivHistoryEdit": privLib.actionPrivHistoryEdit,
         "privHistorySaveAction": privLib.privHistorySaveAction,
         "privHistoryDeleteAction": privLib.privHistoryDeleteAction,
+
+        // actions triggered from Schedule-admin menu
+        "actionSchedLookup": schedLib.actionSchedLookup,
 
         // return to (saved) browser state
         "returnToBrowser": function () {
