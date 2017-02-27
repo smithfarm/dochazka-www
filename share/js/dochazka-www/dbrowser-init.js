@@ -81,7 +81,7 @@ define ([
             'hook': coreLib.holdObject,
             'miniMenu': {
                 entries: [],
-                back: ['Back', 'mainSchedAdmin']
+                back: ['Back', 'mainSched']
             }
         }); // target.push('simpleScheduleBrowser'
 

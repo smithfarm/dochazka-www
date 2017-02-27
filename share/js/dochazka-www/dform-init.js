@@ -199,7 +199,7 @@ define ([
             },
             'miniMenu': {
                 entries: ['actionSchedLookup'],
-                back: ['Back', 'mainSchedAdmin']
+                back: ['Back', 'mainSched']
             }
         }); // target.push('schedLookup'
 
@@ -218,7 +218,7 @@ define ([
             'hook': schedLib.getScheduleForDisplay,
             'miniMenu': {
                 entries: [],
-                back: ['Back', 'mainSchedAdmin']
+                back: ['Back', 'mainSched']
             }
         }); // target.push('schedDisplay'
 

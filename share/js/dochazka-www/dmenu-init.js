@@ -47,18 +47,18 @@ define ([
         target.push('mainMenu', {
             'name': 'mainMenu',
             'type': 'dmenu',
-            'menuText': 'Main menu',
+            'menuText': 'Main',
             'title': 'Main menu',
             'aclProfile': 'passerby',
-            'entries': ['mainEmpl', 'mainPriv', 'mainSchedAdmin', 'restServerDetails'],
+            'entries': ['mainEmpl', 'mainPriv', 'mainSched', 'restServerDetails'],
             'back': 'logout'
         });
 
         target.push('mainEmpl', {
             'name': 'mainEmpl',
             'type': 'dmenu',
-            'menuText': 'Employee menu',
-            'title': 'Employee',
+            'menuText': 'Employee',
+            'title': 'Employee menu',
             'aclProfile': 'passerby',
             'entries': ['myProfile', 'ldapLookup', 'searchEmployee', 'masqEmployee'],
             'back': 'mainMenu'
@@ -67,18 +67,18 @@ define ([
         target.push('mainPriv', {
             'name': 'mainPriv',
             'type': 'dmenu',
-            'menuText': 'Priv (status) menu',
-            'title': 'Priv (status)',
+            'menuText': 'Priv (status)',
+            'title': 'Priv (status) menu',
             'aclProfile': 'passerby',
             'entries': ['actionPrivHistory', 'actionPrivHistoryEdit'],
             'back': 'mainMenu'
         });
 
-        target.push('mainSchedAdmin', {
-            'name': 'mainSchedAdmin',
+        target.push('mainSched', {
+            'name': 'mainSched',
             'type': 'dmenu',
-            'menuText': 'Schedule administration menu',
-            'title': 'Schedule administration',
+            'menuText': 'Schedule',
+            'title': 'Schedule menu',
             'aclProfile': 'admin',
             'entries': ['browseAllSchedules', 'schedLookup'],
             'back': 'mainMenu'
