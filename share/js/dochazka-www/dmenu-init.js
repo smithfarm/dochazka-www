@@ -50,7 +50,7 @@ define ([
             'menuText': 'Main',
             'title': 'Main menu',
             'aclProfile': 'passerby',
-            'entries': ['mainEmpl', 'mainPriv', 'mainSched', 'restServerDetails'],
+            'entries': ['mainEmpl', 'mainPriv', 'mainSched', 'mainAdmin'],
             'back': 'logout'
         });
 
@@ -81,6 +81,16 @@ define ([
             'title': 'Schedule menu',
             'aclProfile': 'admin',
             'entries': ['browseAllSchedules', 'schedLookup'],
+            'back': 'mainMenu'
+        });
+
+        target.push('mainAdmin', {
+            'name': 'mainAdmin',
+            'type': 'dmenu',
+            'menuText': 'Adminitrivia',
+            'title': 'Adminitrivia menu',
+            'aclProfile': 'admin',
+            'entries': ['restServerDetails'],
             'back': 'mainMenu'
         });
 
