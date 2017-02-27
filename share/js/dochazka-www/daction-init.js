@@ -146,10 +146,17 @@ define ([
         });
         
         // Schedule actions
+        target.push('browseAllSchedules', {
+            'name': 'browseAllSchedules',
+            'type': 'daction',
+            'menuText': 'Browse all schedules',
+            'aclProfile': 'admin',
+            'start': dactionStart('browseAllSchedules')
+        });
         target.push('actionSchedLookup', {
             'name': 'actionSchedLookup',
             'type': 'daction',
-            'menuText': 'Search',
+            'menuText': 'Lookup a schedule by name or ID',
             'aclProfile': 'admin',
             'start': dactionStart('actionSchedLookup')
         });

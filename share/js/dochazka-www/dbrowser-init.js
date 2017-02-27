@@ -41,12 +41,12 @@ define ([
     'app/lib',
     'target'
 ], function (
+    coreLib,
     lib,
-    dochazkaLib,
     target
 ) {
 
-    var entries = dochazkaLib.entries;
+    var entries = lib.entries;
     
     return function () {
 
@@ -59,12 +59,31 @@ define ([
             'aclProfile': 'admin',
             'entries': [entries.ePnick, entries.ePsec_id, entries.ePfullname,
                         entries.ePemail, entries.ePremark],
-            'hook': lib.holdObject,
+            'hook': coreLib.holdObject,
             'miniMenu': {
                 entries: ['ldapSync', 'masqEmployee'],
                 back: ['Back', 'mainEmpl']
             }
         }); // target.push('simpleEmployeeBrowser'
+
+        target.push('simpleScheduleBrowser', {
+            'name': 'simpleScheduleBrowser',
+            'type': 'dbrowser',
+            'menuText': 'Browse all schedules',
+            'title': 'All schedules',
+            'preamble': null,
+            'aclProfile': 'admin',
+            'entries': [entries.sDid, entries.sDcode,
+                        coreLib.emptyLineEntry, entries.sDmon,
+                        entries.sDtue, entries.sDwed, entries.sDthu,
+                        entries.sDfri, entries.sDsat, entries.sDsun,
+                        coreLib.emptyLineEntry, entries.ePremark],
+            'hook': coreLib.holdObject,
+            'miniMenu': {
+                entries: [],
+                back: ['Back', 'mainSchedAdmin']
+            }
+        }); // target.push('simpleScheduleBrowser'
 
     }; // return function ()
     

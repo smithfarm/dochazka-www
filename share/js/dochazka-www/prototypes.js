@@ -102,19 +102,6 @@ define(['lib'], function (lib) {
             schedule: null,
             disabled: null,
             remark: null,
-            sanitize: function () {
-                // object might contain properties that don't belong - 
-                // this method removes them
-                var sanitized = lib.hairCut(this, [
-                    'sid', 'scode', 'schedule', 'disabled', 'remark'
-                ]);
-                console.log("Sanitized schedObject", sanitized);
-                return sanitized;
-            }
-        },
-        scheduleForDisplay: {
-            sid: null,
-            scode: null,
             mon: null,
             tue: null,
             wed: null,
@@ -122,19 +109,17 @@ define(['lib'], function (lib) {
             fri: null,
             sat: null,
             sun: null,
-            disabled: null,
-            remark: null,
             sanitize: function () {
                 // object might contain properties that don't belong - 
                 // this method removes them
                 var sanitized = lib.hairCut(this, [
-                    'sid', 'scode', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat',
-                    'sun', 'disabled', 'remark'
+                    'sid', 'scode', 'schedule', 'disabled', 'remark',
+                    'mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'
                 ]);
-                console.log("Sanitized schedObjectForDisplay", sanitized);
+                console.log("Sanitized schedObject", sanitized);
                 return sanitized;
             }
-        },
+        }
     };
 });
 

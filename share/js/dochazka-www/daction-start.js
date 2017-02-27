@@ -96,6 +96,7 @@ define ([
         "privHistoryDeleteAction": privLib.privHistoryDeleteAction,
 
         // actions triggered from Schedule-admin menu
+        "browseAllSchedules": schedLib.browseAllSchedules,
         "actionSchedLookup": schedLib.actionSchedLookup,
 
         // return to (saved) browser state

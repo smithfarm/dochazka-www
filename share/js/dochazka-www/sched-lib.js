@@ -56,38 +56,72 @@ define ([
 
     var 
         scheduleObject = Object.create(prototypes.schedObject),
-        scheduleForDisplay = Object.create(prototypes.scheduleForDisplay),
+        scheduleForDisplay = Object.create(prototypes.schedObject),
 
         getScheduleForDisplay = function () { return scheduleForDisplay; },
 
-        mungeObjectForDisplay = function () {
-            var 
-            schedule = JSON.parse(scheduleObject.schedule),
-            slen = schedule.length,
-            daysOfWeek = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+        browseAllSchedules = function () {
+            console.log("Entering target 'browseAllSchedules'");
+            var rest = {
+                    "method": 'GET',
+                    "path": 'schedule/all'
+                },
+                // success callback
+                sc = function (st) {
+                    if (st.code === 'DISPATCH_RECORDS_FOUND') {
+
+                        // if only one record is returned, it might be in a result_set
+                        // or it might be alone in the payload
+                        var rs = st.payload.result_set || st.payload,
+                            count = rs.length,
+                            mungedRS = [];
+
+                        console.log("Found " + count + " schedules");
+                        for (var i = 0; i < count; i++) {
+                            mungedRS.push(mungeObjectForDisplay(rs[i]));
+                        }
+                        lib.holdObject(mungedRS);
+                        target.pull('simpleScheduleBrowser').start();
+
+                    }
+                },
+                // failure callback
+                fc = function (st) {
+                    console.log("AJAX: schedule/all failed with", st);
+                    lib.displayError(st.payload.message);
+                };
+            ajax(rest, sc, fc);
+        },
+
+        mungeObjectForDisplay = function (obj) {
+            var schedule = JSON.parse(obj.schedule),
+                slen = schedule.length,
+                daysOfWeek = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'],
+                mungedObj = Object.create(prototypes.schedObject);
             console.log("mungeObjectForDisplay: schedule has " + slen + " intervals");
-            scheduleForDisplay['sid'] = scheduleObject.sid;
-            scheduleForDisplay['scode'] = scheduleObject.scode;
-            scheduleForDisplay['remark'] = scheduleObject.remark;
-            scheduleForDisplay['disabled'] = scheduleObject.disabled;
-            scheduleForDisplay['mon'] = null;
-            scheduleForDisplay['tue'] = null;
-            scheduleForDisplay['wed'] = null;
-            scheduleForDisplay['thu'] = null;
-            scheduleForDisplay['fri'] = null;
-            scheduleForDisplay['sat'] = null;
-            scheduleForDisplay['sun'] = null;
+            mungedObj['sid'] = obj.sid;
+            mungedObj['scode'] = obj.scode;
+            mungedObj['remark'] = obj.remark;
+            mungedObj['disabled'] = obj.disabled;
+            mungedObj['mon'] = null;
+            mungedObj['tue'] = null;
+            mungedObj['wed'] = null;
+            mungedObj['thu'] = null;
+            mungedObj['fri'] = null;
+            mungedObj['sat'] = null;
+            mungedObj['sun'] = null;
             for (var i = 0; i < slen; i++) {  // loop over schedule intervals
                 var dow = schedule[i]['low_dow'].toLowerCase();
                 // console.log("Schedule interval #" + i + " starts on " + dow);
-                if (scheduleForDisplay[dow] === null) {
-                    scheduleForDisplay[dow] = '';
+                if (mungedObj[dow] === null) {
+                    mungedObj[dow] = '';
                 } else {
-                    scheduleForDisplay[dow] += '; ';
+                    mungedObj[dow] += '; ';
                 }
-                scheduleForDisplay[dow] += schedule[i]['low_time'] + '-' + schedule[i]['high_time'];
+                mungedObj[dow] += schedule[i]['low_time'] + '-' + schedule[i]['high_time'];
             }
-            console.log("mungescheduleForDisplayectForDisplay: munged scheduleForDisplayect", scheduleForDisplay);
+            // console.log("mungemungedObjectForDisplay: mungedObj", mungedObj);
+            return mungedObj;
         },
 
         actionSchedLookup = function (obj) {
@@ -108,13 +142,14 @@ define ([
                                 'remark': st.payload.remark
                             }
                         );
-                        mungeObjectForDisplay();
+                        scheduleForDisplay = mungeObjectForDisplay(scheduleObject);
                         target.pull('schedDisplay').start();
                     }
                 },
                 // failure callback
                 fc = function (st) {
-                    lib.displayError(st.text);
+                    console.log("AJAX: " + rest["path"] + " failed with", st);
+                    lib.displayError(st.payload.message);
                 };
             if (obj.searchKeySchedID) {
                 rest["path"] = 'schedule/sid/' + encodeURIComponent(obj.searchKeySchedID);
@@ -130,6 +165,7 @@ define ([
     // schedule-related actions (see daction-start.js)
     return {
         getScheduleForDisplay: getScheduleForDisplay,
+        browseAllSchedules: browseAllSchedules,
         actionSchedLookup: actionSchedLookup
     };
 

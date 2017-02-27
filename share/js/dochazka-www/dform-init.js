@@ -239,16 +239,16 @@ define ([
         target.push('searchSchedNothingFound', {
             'name': 'searchSchedNothingFound',
             'type': 'dform',
-            'menuText': 'Schedule profile',
-            'title': 'Search Schedule - results',
-            'preamble': 'Your search found 0 Schedules',
+            'menuText': 'searchSchedNothingFound',
+            'title': 'Browse all schedules',
+            'preamble': 'There are no schedules in the database!',
             'aclProfile': 'admin',
             'hook': function () { },
             'miniMenu': {
                 entries: [],
                 back: ['To leave this page, press ENTER or click the Submit button', 'mainSched']
             }
-        }); // target.push('searchEmpNothingFound'
+        }); // target.push('searchSchedNothingFound'
 
     }; // return function ()
     

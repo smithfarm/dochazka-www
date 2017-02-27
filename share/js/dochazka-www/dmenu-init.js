@@ -80,7 +80,7 @@ define ([
             'menuText': 'Schedule administration menu',
             'title': 'Schedule administration',
             'aclProfile': 'admin',
-            'entries': ['schedLookup'],
+            'entries': ['browseAllSchedules', 'schedLookup'],
             'back': 'mainMenu'
         });
 
