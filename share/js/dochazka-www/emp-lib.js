@@ -96,10 +96,13 @@ define ([
                         );
                         currentUser('obj', employeeProfile);
                         target.pull('empProfile').start();
+                    } else {
+                        lib.displayError("Unexpected status code " + st.code);
                     }
                 },
                 fc = function (st) {
-                    lib.displayError(st.text);
+                    console.log("AJAX: " + rest["path"] + " failed with", st);
+                    lib.displayError(st.payload.message);
                 };
             ajax(rest, sc, fc);
         },
@@ -125,13 +128,13 @@ define ([
                         target.pull('simpleEmployeeBrowser').start();
 
                     } else {
-                        console.log("Search found 0 employees");
-                        target.pull('searchEmpNothingFound').start();
+                        lib.displayError("Unexpected status code " + st.code);
                     }
                 },
                 // failure callback
                 fc = function (st) {
-                    lib.displayError(st.text);
+                    console.log("AJAX: " + rest["path"] + " failed with", st);
+                    lib.displayError(st.payload.message);
                 };
             ajax(rest, sc, fc);
         },
