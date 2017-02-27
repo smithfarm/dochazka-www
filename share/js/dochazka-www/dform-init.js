@@ -142,20 +142,6 @@ define ([
             }
         }); // target.push('searchEmployee'
 
-        target.push('searchEmpNothingFound', {
-            'name': 'searchEmpNothingFound',
-            'type': 'dform',
-            'menuText': 'Employee profile',
-            'title': 'Search employee - results',
-            'preamble': 'Your search found 0 employees',
-            'aclProfile': 'admin',
-            'hook': function () { },
-            'miniMenu': {
-                entries: [],
-                back: ['To leave this page, press ENTER or click the Submit button', 'mainEmpl']
-            }
-        }); // target.push('searchEmpNothingFound'
-
         target.push('restServerDetails', {
             'name': 'restServerDetails',
             'type': 'dform',
@@ -235,20 +221,6 @@ define ([
                 back: ['Back', 'mainSchedAdmin']
             }
         }); // target.push('schedDisplay'
-
-        target.push('searchSchedNothingFound', {
-            'name': 'searchSchedNothingFound',
-            'type': 'dform',
-            'menuText': 'searchSchedNothingFound',
-            'title': 'Browse all schedules',
-            'preamble': 'There are no schedules in the database!',
-            'aclProfile': 'admin',
-            'hook': function () { },
-            'miniMenu': {
-                entries: [],
-                back: ['To leave this page, press ENTER or click the Submit button', 'mainSched']
-            }
-        }); // target.push('searchSchedNothingFound'
 
     }; // return function ()
     
