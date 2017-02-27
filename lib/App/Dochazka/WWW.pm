@@ -48,11 +48,11 @@ App::Dochazka::WWW - Dochazka Attendance & Time Tracking system web client
 
 =head1 VERSION
 
-Version 0.143
+Version 0.144
 
 =cut
 
-our $VERSION = '0.143';
+our $VERSION = '0.144';
 
 
 

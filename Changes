@@ -238,3 +238,11 @@ Revision history for App-Dochazka-WWW
 - Fix "incoming AJAX calls on a dead session don't return"
 - script: proper arg handling in dochazka-www startup script
 
+0.144 2017-02-27 22:38 CET
+- MANIFEST: add new JavaScript files
+- Implement feature: "look up schedule by code or ID"
+- build/ops: require App::MFILE::WWW 0.154
+- Implement "browse all schedules" functionality
+- cleanup: remove dead code from dform-init.js
+- emp-lib.js: improve AJAX call error-reporting
+
