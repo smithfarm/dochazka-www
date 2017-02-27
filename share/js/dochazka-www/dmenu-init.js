@@ -80,7 +80,7 @@ define ([
             'menuText': 'Schedule',
             'title': 'Schedule menu',
             'aclProfile': 'admin',
-            'entries': ['browseAllSchedules', 'schedLookup'],
+            'entries': ['browseAllSchedules', 'schedLookup', 'schedNew'],
             'back': 'mainMenu'
         });
 
@@ -92,6 +92,16 @@ define ([
             'aclProfile': 'admin',
             'entries': ['restServerDetails'],
             'back': 'mainMenu'
+        });
+
+        target.push('schedNew', {
+            'name': 'schedNew',
+            'type': 'dmenu',
+            'menuText': 'Create a new schedule',
+            'title': 'Create a new schedule - options',
+            'aclProfile': 'admin',
+            'entries': ['schedNewBoilerplate', 'schedNewCustom'],
+            'back': 'mainSched'
         });
 
     };

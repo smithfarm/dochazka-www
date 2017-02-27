@@ -243,6 +243,14 @@ define ([
                text: 'Disabled?',
                prop: 'disabled',
                maxlen: 10
+           },
+           'sCboiler': {
+               name: 'sCboiler',
+               aclProfileRead: 'admin',
+               aclProfileWrite: 'admin',
+               text: 'Boilerplate',
+               prop: 'boilerplate',
+               maxlen: 50
            }
         },
 

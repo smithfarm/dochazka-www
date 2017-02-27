@@ -222,6 +222,58 @@ define ([
             }
         }); // target.push('schedDisplay'
 
+        target.push('schedNewBoilerplate', {
+            'name': 'schedNewBoilerplate',
+            'type': 'dform',
+            'menuText': 'Boilerplate',
+            'title': 'Create a new schedule - boilerplate',
+            'preamble': '<b>Code</b>: optional schedule code;<br>' +
+                        '<b>Boilerplate</b>: Monday-Friday schedule intervals, separated by semi-colon',
+            'aclProfile': 'admin',
+            'entriesRead': null,
+            'entriesWrite': [entries.sDcode, entries.sCboiler],
+            'hook': function () {
+                 return {
+                     'scode': null,
+                     'boilerplate': null,
+                 };
+            },
+            'miniMenu': {
+                entries: [],
+                back: ['Back', 'schedNew']
+            }
+        }); // target.push('schedDisplay'
+
+        target.push('schedNewCustom', {
+            'name': 'schedNewCustom',
+            'type': 'dform',
+            'menuText': 'Custom',
+            'title': 'Create a new schedule - custom',
+            'preamble': '<b>Code</b>: optional schedule code;<br>' +
+                        'Hint: separate schedule intervals by semi-colon',
+            'aclProfile': 'admin',
+            'entriesRead': null,
+            'entriesWrite': [entries.sDcode, entries.sDmon, entries.sDtue,
+                             entries.sDwed, entries.sDthu, entries.sDfri,
+                             entries.sDsat, entries.sDsun],
+            'hook': function () {
+                 return {
+                     'scode': null,
+                     'mon': null,
+                     'tue': null,
+                     'wed': null,
+                     'thu': null,
+                     'fri': null,
+                     'sat': null,
+                     'sun': null,
+                 };
+            },
+            'miniMenu': {
+                entries: [],
+                back: ['Back', 'schedNew']
+            }
+        }); // target.push('schedDisplay'
+
     }; // return function ()
     
 });
