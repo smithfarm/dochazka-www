@@ -45,6 +45,7 @@ define ([
     "current-user",
     "app/emp-lib",
     "app/priv-lib",
+    "app/sched-history-lib",
     "app/sched-lib",
     "html",
     "logout",
@@ -55,6 +56,7 @@ define ([
     currentUser,
     empLib,
     privLib,
+    schedHistLib,
     schedLib,
     html,
     logout,
@@ -94,6 +96,12 @@ define ([
         "actionPrivHistoryEdit": privLib.actionPrivHistoryEdit,
         "privHistorySaveAction": privLib.privHistorySaveAction,
         "privHistoryDeleteAction": privLib.privHistoryDeleteAction,
+
+        // actions triggered from Schedhistory menu
+        "actionSchedHistory": schedHistLib.actionSchedHistory,
+        "actionSchedHistoryEdit": schedHistLib.actionSchedHistoryEdit,
+        "schedHistorySaveAction": schedHistLib.schedHistorySaveAction,
+        "schedHistoryDeleteAction": schedHistLib.schedHistoryDeleteAction,
 
         // actions triggered from Schedule-admin menu
         "browseAllSchedules": schedLib.browseAllSchedules,

@@ -144,7 +144,37 @@ define ([
             'aclProfile': 'admin',
             'start': dactionStart('privHistoryDeleteAction')
         });
-        
+
+        // Schedhistory actions
+        target.push('actionSchedHistory', { // read-only
+            'name': 'actionSchedHistory',
+            'type': 'daction',
+            'menuText': 'Schedule history',
+            'aclProfile': 'passerby',
+            'start': dactionStart('actionSchedHistory')
+        });
+        target.push('actionSchedHistoryEdit', { // read-write
+            'name': 'actionSchedHistoryEdit',
+            'type': 'daction',
+            'menuText': 'Schedule history EDIT',
+            'aclProfile': 'admin',
+            'start': dactionStart('actionSchedHistoryEdit')
+        });
+        target.push('schedHistorySaveAction', {
+            'name': 'schedHistorySaveAction',
+            'type': 'daction',
+            'menuText': 'Commit to database',
+            'aclProfile': 'admin',
+            'start': dactionStart('schedHistorySaveAction')
+        });
+        target.push('schedHistoryDeleteAction', {
+            'name': 'schedHistoryDeleteAction',
+            'type': 'daction',
+            'menuText': 'Delete record',
+            'aclProfile': 'admin',
+            'start': dactionStart('schedHistoryDeleteAction')
+        });
+
         // Schedule actions
         target.push('browseAllSchedules', {
             'name': 'browseAllSchedules',

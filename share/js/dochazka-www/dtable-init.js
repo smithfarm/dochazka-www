@@ -65,6 +65,21 @@ define ([
             }
         });
 
+        target.push('schedHistoryDtable', {
+            'name': 'schedHistoryDtable',
+            'type': 'dtable',
+            'menuText': 'Schedule history',
+            'title': 'Schedule history',
+            'preamble': null,
+            'aclProfile': 'passerby',
+            'entries': [entries.pHeffective, entries.sDid, entries.sHid],
+            'hook': lib.holdObject,
+            'miniMenu': {
+                entries: null,
+                back: ['Back', 'mainSched']
+            }
+        });
+
     };
     
 });

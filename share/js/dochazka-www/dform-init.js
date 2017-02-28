@@ -182,6 +182,30 @@ define ([
             }
         }); // target.push('privHistoryAddRecord'
 
+        target.push('schedHistoryAddRecord', {
+            'name': 'schedHistoryAddRecord',
+            'type': 'dform',
+            'menuText': 'Add record',
+            'title': 'Add schedule history record',
+            'preamble': '<b>Effective date</b> format YYYY-MM-DD;<br>' +
+                        'Enter schedule ID or schedule code - not both',
+            'aclProfile': 'admin',
+            'entriesRead': [entries.ePnick],
+            'entriesWrite': [entries.pHeffective, entries.sDid, entries.sDcode],
+            'hook': function () {
+                    return {
+                        'nick': currentUser('obj').nick,
+                        'effective': null,
+                        'sid': null,
+                        'scode': null
+                    };
+                },
+            'miniMenu': {
+                entries: ['schedHistorySaveAction'],
+                back: ['Back', 'drowselectListen']
+            }
+        }); // target.push('privHistoryAddRecord'
+
         target.push('schedLookup', {
             'name': 'schedLookup',
             'type': 'dform',

@@ -168,7 +168,7 @@ define ([
                name: 'sDcode',
                aclProfileRead: 'admin',
                aclProfileWrite: 'admin',
-               text: 'Code',
+               text: 'Schedule code',
                prop: 'scode',
                maxlen: 20
            },
@@ -176,7 +176,7 @@ define ([
                name: 'sDid',
                aclProfileRead: 'admin',
                aclProfileWrite: 'admin',
-               text: 'ID',
+               text: 'Schedule ID',
                prop: 'sid',
                maxlen: 20
            },
@@ -251,7 +251,15 @@ define ([
                text: 'Intervals',
                prop: 'boilerplate',
                maxlen: 50
-           }
+           },
+           'sHid': {
+               name: 'sHid',
+               aclProfileRead: 'admin',
+               aclProfileWrite: 'admin',
+               text: 'History ID',
+               prop: 'shid',
+               maxlen: 20
+           },
         },
 
         //

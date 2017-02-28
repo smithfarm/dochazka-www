@@ -65,6 +65,21 @@ define ([
             }
         });
 
+        target.push('schedHistoryDrowselect', {
+            'name': 'schedHistoryDrowselect',
+            'type': 'drowselect',
+            'menuText': 'Schedule history',
+            'title': 'Schedule history',
+            'preamble': null,
+            'aclProfile': 'admin',
+            'entries': [entries.pHeffective, entries.sDid, entries.sHid],
+            'hook': lib.holdObject,
+            'miniMenu': {
+                entries: ['schedHistoryAddRecord', 'schedHistoryDeleteAction'],
+                back: ['Back', 'mainSched']
+            }
+        });
+
     };
     
 });

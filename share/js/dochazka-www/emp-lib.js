@@ -206,7 +206,8 @@ define ([
                 },
                 // failure callback -- employee doesn't exist
                 fc = function (st) {
-                    lib.displayError(st.text);
+                    console.log("AJAX: " + rest["path"] + " failed with", st);
+                    lib.displayError(st.payload.message);
                 };
             ajax(rest, sc, fc);
         },
@@ -283,10 +284,11 @@ define ([
                 fc = function (st) {
                     var err = st.payload.code,
                         msg;
+                    console.log("AJAX: " + rest["path"] + " failed with", st);
                     if (err === '404') {
                         msg = 'Employee ' + ldapEmp.nick + ' not found in LDAP';
                     } else {
-                        msg = st.text;
+                        msg = st.payload.message;
                     }
                     lib.displayError(msg);
                 }
@@ -324,7 +326,8 @@ define ([
                     target.pull(afterTarget).start();
                 },
                 fc = function (st) {
-                    lib.displayError(st.text);
+                    console.log("AJAX: " + rest["path"] + " failed with", st);
+                    lib.displayError(st.payload.message);
                 };
             ajax(rest, sc, fc);
         };
