@@ -239,7 +239,7 @@ define ([
                  };
             },
             'miniMenu': {
-                entries: [],
+                entries: ['createSchedule'],
                 back: ['Back', 'schedNew']
             }
         }); // target.push('schedDisplay'
@@ -269,7 +269,7 @@ define ([
                  };
             },
             'miniMenu': {
-                entries: [],
+                entries: ['createSchedule'],
                 back: ['Back', 'schedNew']
             }
         }); // target.push('schedDisplay'

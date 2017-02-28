@@ -160,6 +160,13 @@ define ([
             'aclProfile': 'admin',
             'start': dactionStart('actionSchedLookup')
         });
+        target.push('createSchedule', {
+            'name': 'createSchedule',
+            'type': 'daction',
+            'menuText': 'Create',
+            'aclProfile': 'admin',
+            'start': dactionStart('createSchedule')
+        });
 
         // Run unit tests
         target.push('unitTests', {

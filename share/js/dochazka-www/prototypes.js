@@ -47,7 +47,7 @@ define(['lib'], function (lib) {
             priv: null,
             effective: null,
             sanitize: function () {
-                // object might contain properties that don't belong - 
+                // object might contain properties that don't belong -
                 // this method removes them
                 var sanitized = lib.hairCut(this, [
                     'eid', 'nick', 'fullname', 'email', 'password', 'remark',
@@ -66,7 +66,7 @@ define(['lib'], function (lib) {
             remark: null,
             sec_id: null,
             sanitize: function () {
-                // object might contain properties that don't belong - 
+                // object might contain properties that don't belong -
                 // this method removes them
                 var sanitized = lib.hairCut(this, [
                     'eid', 'nick', 'fullname', 'email', 'password', 'remark',
@@ -86,7 +86,7 @@ define(['lib'], function (lib) {
             sec_id: null,
             dochazka: null,
             sanitize: function () {
-                // object might contain properties that don't belong - 
+                // object might contain properties that don't belong -
                 // this method removes them
                 var sanitized = lib.hairCut(this, [
                     'eid', 'nick', 'fullname', 'email', 'password', 'remark',
@@ -96,7 +96,20 @@ define(['lib'], function (lib) {
                 return sanitized;
             }
         },
-        schedObject: {
+        schedObjectForCreate: {
+            scode: null,
+            schedule: null,
+            sanitize: function () {
+                // object might contain properties that don't belong -
+                // this method removes them
+                var sanitized = lib.hairCut(this, [
+                    'scode', 'schedule'
+                ]);
+                console.log("Sanitized schedObject", sanitized);
+                return sanitized;
+            }
+        },
+        schedObjectForDisplay: {
             sid: null,
             scode: null,
             schedule: null,
@@ -110,7 +123,7 @@ define(['lib'], function (lib) {
             sat: null,
             sun: null,
             sanitize: function () {
-                // object might contain properties that don't belong - 
+                // object might contain properties that don't belong -
                 // this method removes them
                 var sanitized = lib.hairCut(this, [
                     'sid', 'scode', 'schedule', 'disabled', 'remark',

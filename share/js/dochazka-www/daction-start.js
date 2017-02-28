@@ -98,6 +98,7 @@ define ([
         // actions triggered from Schedule-admin menu
         "browseAllSchedules": schedLib.browseAllSchedules,
         "actionSchedLookup": schedLib.actionSchedLookup,
+        "createSchedule": schedLib.createSchedule,
 
         // return to (saved) browser state
         "returnToBrowser": function () {
