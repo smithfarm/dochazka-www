@@ -225,13 +225,15 @@ define ([
         target.push('schedNewBoilerplate', {
             'name': 'schedNewBoilerplate',
             'type': 'dform',
-            'menuText': 'Boilerplate',
+            'menuText': 'Boilerplate (quick form for Mon-Fri schedules)',
             'title': 'Create a new schedule - boilerplate',
-            'preamble': '<b>Code</b>: optional schedule code;<br>' +
-                        '<b>Boilerplate</b>: Monday-Friday schedule intervals, separated by semi-colon',
+            'preamble': 'Hint: separate schedule intervals by semi-colon<br>' +
+                        'Example: 8:00-12:00; 12:30-16:30<br>' +
+                        '<b>Schedule intervals will be replicated for Monday-Friday</b><br>' +
+                        'Note: schedule code is optional',
             'aclProfile': 'admin',
             'entriesRead': null,
-            'entriesWrite': [entries.sDcode, entries.sCboiler],
+            'entriesWrite': [entries.sCboiler, entries.sDcode],
             'hook': function () {
                  return {
                      'scode': null,
@@ -247,15 +249,16 @@ define ([
         target.push('schedNewCustom', {
             'name': 'schedNewCustom',
             'type': 'dform',
-            'menuText': 'Custom',
+            'menuText': 'Custom (long form)',
             'title': 'Create a new schedule - custom',
-            'preamble': '<b>Code</b>: optional schedule code;<br>' +
-                        'Hint: separate schedule intervals by semi-colon',
+            'preamble': 'Hint: separate schedule intervals by semi-colon<br>' +
+                        'Example: 8:00-12:00; 12:30-16:30<br>' +
+                        'Note: schedule code is optional',
             'aclProfile': 'admin',
             'entriesRead': null,
-            'entriesWrite': [entries.sDcode, entries.sDmon, entries.sDtue,
+            'entriesWrite': [entries.sDmon, entries.sDtue,
                              entries.sDwed, entries.sDthu, entries.sDfri,
-                             entries.sDsat, entries.sDsun],
+                             entries.sDsat, entries.sDsun, entries.sDcode],
             'hook': function () {
                  return {
                      'scode': null,

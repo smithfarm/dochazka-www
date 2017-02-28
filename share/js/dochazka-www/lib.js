@@ -248,7 +248,7 @@ define ([
                name: 'sCboiler',
                aclProfileRead: 'admin',
                aclProfileWrite: 'admin',
-               text: 'Boilerplate',
+               text: 'Intervals',
                prop: 'boilerplate',
                maxlen: 50
            }
