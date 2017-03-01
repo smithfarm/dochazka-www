@@ -253,3 +253,7 @@ Revision history for App-Dochazka-WWW
 - Basic "Create a new schedule" functionality
 - Improve the "Create a schedule" experience
 
+0.146 2017-03-01 17:13 CET
+- build/ops: require App::MFILE::WWW 0.156
+- Implement "Schedule history (browse and edit)" feature
+
