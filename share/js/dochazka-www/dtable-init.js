@@ -72,7 +72,7 @@ define ([
             'title': 'Schedule history',
             'preamble': null,
             'aclProfile': 'passerby',
-            'entries': [entries.pHeffective, entries.sDid, entries.sHid],
+            'entries': [entries.pHeffective, entries.sDid],
             'hook': lib.holdObject,
             'miniMenu': {
                 entries: null,
