@@ -338,7 +338,7 @@ define ([
         getEmployeeObject: getEmployeeObject,
         getEmployeeProfile: getEmployeeProfile,
         getLdapEmployeeObject: getLdapEmployeeObject,
-        mainEmpl: function (emp) { epuGen('mainEmpl', emp); },
+        // mainEmpl: function (emp) { epuGen('mainEmpl', emp); },
         myProfile: myProfile,
         loadEmpProfile: loadEmpProfile,
         empProfileEditSave: function (emp) { epuGen('empProfile', emp); },
