@@ -166,7 +166,7 @@ define ([
            },
            'sDcode': {
                name: 'sDcode',
-               aclProfileRead: 'admin',
+               aclProfileRead: 'inactive',
                aclProfileWrite: 'admin',
                text: 'Schedule code',
                prop: 'scode',
@@ -174,7 +174,7 @@ define ([
            },
            'sDid': {
                name: 'sDid',
-               aclProfileRead: 'admin',
+               aclProfileRead: 'inactive',
                aclProfileWrite: 'admin',
                text: 'Schedule ID',
                prop: 'sid',
