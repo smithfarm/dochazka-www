@@ -247,6 +247,25 @@ define ([
             }
             console.log("Ready to call schedule/new with body", obj);
             createScheduleAjax(obj);
+        },
+
+        schedEditSave = function (schedObj) {
+            var rest = {
+                    "method": 'PUT',
+                    "path": 'schedule/sid/' + schedObj.sid,
+                    "body": schedObj
+                },
+                sc = function (st) {
+                    scheduleForDisplay.scode = schedObj.scode;
+                    scheduleForDisplay.remark = schedObj.remark;
+                    target.pull('schedDisplay').start();
+                    $("#result").html("Schedule updated");
+                },
+                fc = function (st) {
+                    console.log("AJAX: " + rest["path"] + " failed with", st);
+                    lib.displayError(st.payload.message);
+                };
+            ajax(rest, sc, fc);
         };
 
     // here is where we define methods implementing the various
@@ -255,7 +274,8 @@ define ([
         getScheduleForDisplay: getScheduleForDisplay,
         browseAllSchedules: browseAllSchedules,
         actionSchedLookup: actionSchedLookup,
-        createSchedule: createSchedule
+        createSchedule: createSchedule,
+        schedEditSave: schedEditSave
     };
 
 });

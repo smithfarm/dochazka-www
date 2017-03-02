@@ -197,6 +197,13 @@ define ([
             'aclProfile': 'admin',
             'start': dactionStart('createSchedule')
         });
+        target.push('schedEditSave', {
+            'name': 'schedEditSave',
+            'type': 'daction',
+            'menuText': 'Save changes',
+            'aclProfile': 'active',
+            'start': dactionStart('schedEditSave')
+        });
 
         // Run unit tests
         target.push('unitTests', {

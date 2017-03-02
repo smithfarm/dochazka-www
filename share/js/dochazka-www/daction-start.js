@@ -97,16 +97,15 @@ define ([
         "privHistorySaveAction": privLib.privHistorySaveAction,
         "privHistoryDeleteAction": privLib.privHistoryDeleteAction,
 
-        // actions triggered from Schedhistory menu
+        // actions triggered from Schedule menu
         "actionSchedHistory": schedHistLib.actionSchedHistory,
         "actionSchedHistoryEdit": schedHistLib.actionSchedHistoryEdit,
         "schedHistorySaveAction": schedHistLib.schedHistorySaveAction,
         "schedHistoryDeleteAction": schedHistLib.schedHistoryDeleteAction,
-
-        // actions triggered from Schedule-admin menu
         "browseAllSchedules": schedLib.browseAllSchedules,
         "actionSchedLookup": schedLib.actionSchedLookup,
         "createSchedule": schedLib.createSchedule,
+        "schedEditSave": schedLib.schedEditSave,
 
         // return to (saved) browser state
         "returnToBrowser": function () {
