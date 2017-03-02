@@ -241,8 +241,28 @@ define ([
             'entriesWrite': null,
             'hook': schedLib.getScheduleForDisplay,
             'miniMenu': {
-                entries: [],
+                entries: ['schedUpdate'],
                 back: ['Back', 'mainSched']
+            }
+        }); // target.push('schedDisplay'
+
+        target.push('schedUpdate', {
+            'name': 'schedUpdate',
+            'type': 'dform',
+            'menuText': 'schedUpdate',
+            'title': 'Schedule update',
+            'preamble': 'Only schedule code and remark can be updated<br>' +
+                        'Note: code will change for <b>all employees</b>',
+            'aclProfile': 'passerby',
+            'entriesRead': [entries.sDid,
+                            coreLib.emptyLineEntry, entries.sDmon,
+                            entries.sDtue, entries.sDwed, entries.sDthu,
+                            entries.sDfri, entries.sDsat, entries.sDsun],
+            'entriesWrite': [entries.sDcode, entries.ePremark],
+            'hook': schedLib.getScheduleForDisplay,
+            'miniMenu': {
+                entries: [],
+                back: ['Back', 'schedDisplay']
             }
         }); // target.push('schedDisplay'
 
