@@ -106,6 +106,7 @@ define ([
         "actionSchedLookup": schedLib.actionSchedLookup,
         "createSchedule": schedLib.createSchedule,
         "schedEditSave": schedLib.schedEditSave,
+        "schedReallyDelete": schedLib.schedReallyDelete,
 
         // return to (saved) browser state
         "returnToBrowser": function () {

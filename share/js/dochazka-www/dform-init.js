@@ -243,7 +243,7 @@ define ([
             'entriesWrite': null,
             'hook': schedLib.getScheduleForDisplay,
             'miniMenu': {
-                entries: ['schedEdit'],
+                entries: ['schedEdit', 'schedDelete'],
                 back: ['Back', 'mainSched']
             }
         }); // target.push('schedDisplay'
@@ -255,7 +255,7 @@ define ([
             'title': 'Schedule edit',
             'preamble': 'Only schedule code and remark can be modified<br>' +
                         'Note: code change will affect <b>all employees</b> with this schedule',
-            'aclProfile': 'passerby',
+            'aclProfile': 'admin',
             'entriesRead': [entries.sDid,
                             coreLib.emptyLineEntry, entries.sDmon,
                             entries.sDtue, entries.sDwed, entries.sDthu,
@@ -267,6 +267,27 @@ define ([
                 back: ['Back', 'schedDisplay']
             }
         }); // target.push('schedDisplay'
+
+        target.push('schedDelete', {
+            'name': 'schedDelete',
+            'type': 'dform',
+            'menuText': 'Delete',
+            'title': 'Schedule delete',
+            'preamble': 'If you are really sure you want to delete this schedule,<br>' +
+                        'select "Yes, I really mean it" below',
+            'aclProfile': 'admin',
+            'entriesRead': [entries.sDid, entries.sDcode,
+                            coreLib.emptyLineEntry, entries.sDmon,
+                            entries.sDtue, entries.sDwed, entries.sDthu,
+                            entries.sDfri, entries.sDsat, entries.sDsun,
+                            coreLib.emptyLineEntry, entries.ePremark],
+            'entriesWrite': null,
+            'hook': schedLib.getScheduleForDisplay,
+            'miniMenu': {
+                entries: ['schedReallyDelete'],
+                back: ['Back', 'schedDisplay']
+            }
+        }); // target.push('schedDelete'
 
         target.push('schedNewBoilerplate', {
             'name': 'schedNewBoilerplate',

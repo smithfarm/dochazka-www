@@ -256,10 +256,30 @@ define ([
                     "body": schedObj
                 },
                 sc = function (st) {
+                    console.log("Schedule edit save completed, afterTarget is", afterTarget);
                     scheduleForDisplay.scode = schedObj.scode;
                     scheduleForDisplay.remark = schedObj.remark;
                     target.pull('schedDisplay').start();
                     $("#result").html("Schedule updated");
+                },
+                fc = function (st) {
+                    console.log("AJAX: " + rest["path"] + " failed with", st);
+                    lib.displayError(st.payload.message);
+                };
+            ajax(rest, sc, fc);
+        },
+
+        schedReallyDelete = function (schedObj) {
+            var rest = {
+                    "method": 'DELETE',
+                    "path": 'schedule/sid/' + schedObj.sid,
+                    "body": schedObj
+                },
+                sc = function (st) {
+                    console.log("Schedule delete completed, afterTarget is", afterTarget);
+                    scheduleForDisplay = null;
+                    target.pull('mainSched').start();
+                    $("#result").html("Schedule deleted");
                 },
                 fc = function (st) {
                     console.log("AJAX: " + rest["path"] + " failed with", st);
@@ -275,7 +295,8 @@ define ([
         browseAllSchedules: browseAllSchedules,
         actionSchedLookup: actionSchedLookup,
         createSchedule: createSchedule,
-        schedEditSave: schedEditSave
+        schedEditSave: schedEditSave,
+        schedReallyDelete: schedReallyDelete
     };
 
 });

@@ -204,6 +204,13 @@ define ([
             'aclProfile': 'active',
             'start': dactionStart('schedEditSave')
         });
+        target.push('schedReallyDelete', {
+            'name': 'schedReallyDelete',
+            'type': 'daction',
+            'menuText': 'Yes, I really mean it',
+            'aclProfile': 'admin',
+            'start': dactionStart('schedReallyDelete')
+        });
 
         // Run unit tests
         target.push('unitTests', {
