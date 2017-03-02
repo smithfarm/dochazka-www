@@ -69,7 +69,7 @@ define ([
         target.push('simpleScheduleBrowser', {
             'name': 'simpleScheduleBrowser',
             'type': 'dbrowser',
-            'menuText': 'Browse all schedules',
+            'menuText': 'Browse schedules',
             'title': 'All schedules',
             'preamble': null,
             'aclProfile': 'admin',

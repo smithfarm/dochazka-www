@@ -186,7 +186,7 @@ define ([
         target.push('browseAllSchedules', {
             'name': 'browseAllSchedules',
             'type': 'daction',
-            'menuText': 'Browse all schedules',
+            'menuText': 'Browse schedules',
             'aclProfile': 'admin',
             'start': dactionStart('browseAllSchedules')
         });
