@@ -94,7 +94,7 @@ define ([
         "actionEmplSearch": empLib.actionEmplSearch,
         "masqEmployee": empLib.masqEmployee,
 
-        // actions triggered from Privhistory menu
+        // actions triggered from Priv (status) menu
         "actionPrivHistory": privLib.actionPrivHistory,
         "actionPrivHistoryEdit": privLib.actionPrivHistoryEdit,
         "privHistorySaveAction": privLib.privHistorySaveAction,

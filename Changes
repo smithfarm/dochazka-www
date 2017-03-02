@@ -257,3 +257,16 @@ Revision history for App-Dochazka-WWW
 - build/ops: require App::MFILE::WWW 0.156
 - Implement "Schedule history (browse and edit)" feature
 
+0.147 2017-03-02 22:59 CET
+- Drop SHID column from schedule history table
+- build/ops: designed to work with App::Dochazka::REST >=0.549
+- Add scode field to schedhistory dtable and drowselect
+- Make schedule menu visible to all
+- Implement schedule update dform
+- Improve usability of "employee profile edit" feature
+- Implement "schedule edit (from schedule display)" feature
+- Implement "delete schedule from lookup" feature
+- sched-lib.js: refactor schedEditSave and schedDelete
+- Implement "schedule edit and delete from browser" feature
+- Move "{priv,schedule} history EDIT" to miniMenu
+
