@@ -73,26 +73,28 @@ define ([
             'entriesWrite': [],
             'hook': empLib.getEmployeeProfile,
             'miniMenu': {
-                entries: ['empProfileEditRemark', 'ldapSyncSelf'],
+                entries: ['empProfileEdit', 'ldapSyncSelf'],
                 back: ['Back', 'mainEmpl']
             }
         }); // target.push('empProfile'
 
-        target.push('empProfileEditRemark', {
-            'name': 'empProfileEditRemark',
+        target.push('empProfileEdit', {
+            'name': 'empProfileEdit',
             'type': 'dform',
-            'menuText': 'Edit remark',
-            'title': 'Edit remark',
-            'preamble': null,
+            'menuText': 'Edit',
+            'title': 'Employee profile edit',
+            'preamble': 'Only the remark field can be modified;<br>' +
+                        'All other fields are synced from LDAP',
             'aclProfile': 'admin',
-            'entriesRead': [entries.ePnick, entries.ePfullname],
+            'entriesRead': [entries.ePfullname, entries.ePnick,
+                entries.ePsec_id, entries.ePemail],
             'entriesWrite': [entries.ePremark],
             'hook': empLib.getEmployeeProfile,
             'miniMenu': {
-                entries: ['empProfileUpdate'],
+                entries: ['empProfileEditSave'],
                 back: ['Back', 'empProfile']
             }
-        }); // target.push('empProfileEditRemark'
+        }); // target.push('empProfileEdit'
 
         target.push('ldapLookup', {
             'name': 'ldapLookup',

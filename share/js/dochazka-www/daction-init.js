@@ -72,12 +72,12 @@ define ([
             'aclProfile': 'passerby',
             'start': dactionStart('myProfile')
         });
-        target.push('empProfileUpdate', {
-            'name': 'empProfileUpdate',
+        target.push('empProfileEditSave', {
+            'name': 'empProfileEditSave',
             'type': 'daction',
             'menuText': 'Save changes',
             'aclProfile': 'active',
-            'start': dactionStart('empProfileUpdate')
+            'start': dactionStart('empProfileEditSave')
         });
         target.push('ldapLookupSubmit', {
             'name': 'ldapLookupSubmit',

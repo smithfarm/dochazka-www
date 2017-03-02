@@ -84,7 +84,7 @@ define ([
 
         // actions triggered from Employee menu
         "myProfile": empLib.myProfile,
-        "empProfileUpdate": empLib.empProfileUpdate,
+        "empProfileEditSave": empLib.empProfileEditSave,
         "ldapLookupSubmit": empLib.ldapLookupSubmit,
         "ldapSync": empLib.ldapSync,
         "ldapSyncSelf": empLib.ldapSyncSelf,

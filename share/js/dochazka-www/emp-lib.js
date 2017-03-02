@@ -341,7 +341,7 @@ define ([
         mainEmpl: function (emp) { epuGen('mainEmpl', emp); },
         myProfile: myProfile,
         loadEmpProfile: loadEmpProfile,
-        empProfileUpdate: function (emp) { epuGen('empProfile', emp); },
+        empProfileEditSave: function (emp) { epuGen('empProfile', emp); },
         ldapLookupSubmit: ldapLookupSubmit,
         ldapSync: ldapSync,
         ldapSyncSelf: ldapSyncSelf,
