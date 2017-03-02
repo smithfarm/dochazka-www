@@ -69,7 +69,7 @@ define ([
             'aclProfile': 'passerby',
             'entriesRead': [entries.ePfullname, entries.ePnick,
                 entries.ePsec_id, entries.ePemail, entries.ePremark,
-                entries.ePpriv, entries.ePeffective],
+                entries.ePpriv, entries.ePprivEffective],
             'entriesWrite': [],
             'hook': empLib.getEmployeeProfile,
             'miniMenu': {

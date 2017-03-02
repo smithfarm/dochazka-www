@@ -91,7 +91,7 @@ define ([
                                 'remark': st.payload.emp.remark,
                                 'sec_id': st.payload.emp.sec_id,
                                 'priv': priv,
-                                'effective': effective
+                                'privEffective': effective
                             }
                         );
                         currentUser('obj', employeeProfile);

@@ -90,7 +90,7 @@ define ([
                name: 'ePpriv',
                aclProfileRead: 'inactive',
                aclProfileWrite: 'admin',
-               text: 'Privlevel',
+               text: 'Status',
                prop: 'priv',
                maxlen: 10
            },
@@ -100,6 +100,14 @@ define ([
                aclProfileWrite: 'admin',
                text: 'Effective',
                prop: 'effective',
+               maxlen: 30
+           },
+           'ePprivEffective': {
+               name: 'ePprivEffective',
+               aclProfileRead: 'inactive',
+               aclProfileWrite: 'admin',
+               text: 'Status since',
+               prop: 'privEffective',
                maxlen: 30
            },
            'LDAPdochazka': {
