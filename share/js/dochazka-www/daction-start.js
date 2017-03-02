@@ -81,6 +81,9 @@ define ([
         "drowselectListen": function () {
             start.drowselectListen();
         },
+        "returnToBrowser": function () {
+            start.dbrowserListen();
+        },
 
         // actions triggered from Employee menu
         "myProfile": empLib.myProfile,

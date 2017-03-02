@@ -48,7 +48,7 @@ define ([
 ], function (
     currentUser,
     coreLib,
-    lib,
+    appLib,
     empLib,
     restLib,
     schedLib,
@@ -56,7 +56,7 @@ define ([
     target
 ) {
 
-    var entries = lib.entries;
+    var entries = appLib.entries;
     
     return function () {
 
@@ -248,46 +248,62 @@ define ([
             }
         }); // target.push('schedDisplay'
 
-        target.push('schedEdit', {
-            'name': 'schedEdit',
-            'type': 'dform',
-            'menuText': 'Edit',
-            'title': 'Schedule edit',
-            'preamble': 'Only schedule code and remark can be modified<br>' +
-                        'Note: code change will affect <b>all employees</b> with this schedule',
-            'aclProfile': 'admin',
-            'entriesRead': [entries.sDid,
-                            coreLib.emptyLineEntry, entries.sDmon,
-                            entries.sDtue, entries.sDwed, entries.sDthu,
-                            entries.sDfri, entries.sDsat, entries.sDsun],
-            'entriesWrite': [entries.sDcode, entries.ePremark],
-            'hook': schedLib.getScheduleForDisplay,
-            'miniMenu': {
-                entries: ['schedEditSave'],
-                back: ['Back', 'schedDisplay']
-            }
-        }); // target.push('schedDisplay'
+        var schedEditObj = {
+                'name': 'schedEdit',
+                'type': 'dform',
+                'menuText': 'Edit',
+                'title': 'Schedule edit',
+                'preamble': 'Only schedule code and remark can be modified<br>' +
+                            'Note: code change will affect <b>all employees</b> with this schedule',
+                'aclProfile': 'admin',
+                'entriesRead': [entries.sDid,
+                                coreLib.emptyLineEntry, entries.sDmon,
+                                entries.sDtue, entries.sDwed, entries.sDthu,
+                                entries.sDfri, entries.sDsat, entries.sDsun],
+                'entriesWrite': [entries.sDcode, entries.ePremark],
+                'hook': schedLib.getScheduleForDisplay,
+                'miniMenu': {
+                    entries: ['schedEditSave'],
+                    back: ['Back', 'schedDisplay']
+                }
+            },
+            schedEditFromBrowserObj = coreLib.shallowCopy(schedEditObj);
+        schedEditFromBrowserObj.name = 'schedEditFromBrowser';
+        schedEditFromBrowserObj.miniMenu.back = ['Back', 'returnToBrowser'];
+        schedEditFromBrowserObj.hook = function () {
+            return coreLib.dbrowserState.set[coreLib.dbrowserState.pos];
+        };
+        target.push('schedEdit', schedEditObj);
+        target.push('schedEditFromBrowser', schedEditFromBrowserObj);
 
-        target.push('schedDelete', {
-            'name': 'schedDelete',
-            'type': 'dform',
-            'menuText': 'Delete',
-            'title': 'Schedule delete',
-            'preamble': 'If you are really sure you want to delete this schedule,<br>' +
-                        'select "Yes, I really mean it" below',
-            'aclProfile': 'admin',
-            'entriesRead': [entries.sDid, entries.sDcode,
-                            coreLib.emptyLineEntry, entries.sDmon,
-                            entries.sDtue, entries.sDwed, entries.sDthu,
-                            entries.sDfri, entries.sDsat, entries.sDsun,
-                            coreLib.emptyLineEntry, entries.ePremark],
-            'entriesWrite': null,
-            'hook': schedLib.getScheduleForDisplay,
-            'miniMenu': {
-                entries: ['schedReallyDelete'],
-                back: ['Back', 'schedDisplay']
-            }
-        }); // target.push('schedDelete'
+        var schedDeleteObj = {
+                'name': 'schedDelete',
+                'type': 'dform',
+                'menuText': 'Delete',
+                'title': 'Schedule delete',
+                'preamble': 'If you are really sure you want to delete this schedule,<br>' +
+                            'select "Yes, I really mean it" below',
+                'aclProfile': 'admin',
+                'entriesRead': [entries.sDid, entries.sDcode,
+                                coreLib.emptyLineEntry, entries.sDmon,
+                                entries.sDtue, entries.sDwed, entries.sDthu,
+                                entries.sDfri, entries.sDsat, entries.sDsun,
+                                coreLib.emptyLineEntry, entries.ePremark],
+                'entriesWrite': null,
+                'hook': schedLib.getScheduleForDisplay,
+                'miniMenu': {
+                    entries: ['schedReallyDelete'],
+                    back: ['Back', 'schedDisplay']
+                }
+            },
+            schedDeleteFromBrowserObj = coreLib.shallowCopy(schedDeleteObj);
+        schedDeleteFromBrowserObj.name = 'schedDeleteFromBrowser';
+        schedDeleteFromBrowserObj.miniMenu.back = ['Back', 'returnToBrowser'];
+        schedDeleteFromBrowserObj.hook = function () {
+            return coreLib.dbrowserState.set[coreLib.dbrowserState.pos];
+        };
+        target.push('schedDelete', schedDeleteObj);
+        target.push('schedDeleteFromBrowser', schedDeleteFromBrowserObj);
 
         target.push('schedNewBoilerplate', {
             'name': 'schedNewBoilerplate',

@@ -57,8 +57,16 @@ define ([
 
         getScheduleForDisplay = function () { return scheduleForDisplay; },
 
+        setScheduleForDisplay = function (obj) {
+            scheduleForDisplay = Object.create(prototypes.schedObjectForDisplay),
+            $.extend(scheduleForDisplay, obj);
+            return scheduleForDisplay;
+        },
+
+        browsing,
         browseAllSchedules = function () {
             console.log("Entering target 'browseAllSchedules'");
+            browsing = true;
             var rest = {
                     "method": 'GET',
                     "path": 'schedule/all'
@@ -123,6 +131,7 @@ define ([
 
         actionSchedLookup = function (obj) {
             console.log("Entering target 'actionSchedLookup' with argument", obj);
+            browsing = false;
             var rest = {
                     "method": 'GET',
                 },
@@ -260,15 +269,33 @@ define ([
                         dispMsg = "Edited schedule saved";
                         scheduleForDisplay.scode = schedObj.scode;
                         scheduleForDisplay.remark = schedObj.remark;
+                        if (browsing) {
+                            var obj = coreLib.dbrowserState.set[coreLib.dbrowserState.pos];
+                            $.extend(coreLib.dbrowserState.obj, schedObj);
+                            $.extend(obj, schedObj);
+                        }
                     } else if (mode === "delete") {
                         dispMsg = "Schedule deleted";
+                        if (browsing) {
+                            var set = coreLib.dbrowserState.set,
+                                pos = coreLib.dbrowserState.pos,
+                                len = set.length;
+                            set.splice(pos, 1);
+                            if (pos > 0) {
+                                coreLib.dbrowserState.pos -= 1;
+                            }
+                        }
                     }
-                    target.pull(afterTarget).start();
+                    if (browsing) {
+                        target.pull('returnToBrowser').start();
+                    } else {
+                        target.pull(afterTarget).start();
+                    }
                     $("#result").html(dispMsg);
                 },
                 fc = function (st) {
                     console.log("AJAX: " + rest["path"] + " failed with", st);
-                    lib.displayError(st.payload.message);
+                    coreLib.displayError(st.payload.message);
                 };
             if (mode === 'edit') {
                 rest.method = 'PUT';
@@ -285,8 +312,12 @@ define ([
         browseAllSchedules: browseAllSchedules,
         actionSchedLookup: actionSchedLookup,
         createSchedule: createSchedule,
-        schedEditSave: function (obj) { schedGen('edit', 'schedDisplay', obj); },
-        schedReallyDelete: function (obj) { schedGen('delete', 'mainSched', obj); }
+        schedEditSave: function (obj) {
+            schedGen('edit', 'schedDisplay', obj);
+        },
+        schedReallyDelete: function (obj) {
+            schedGen('delete', 'mainSched', obj);
+        }
     };
 
 });

@@ -47,7 +47,7 @@ define ([
     $,
     ajax,
     currentUser,
-    lib,
+    coreLib,
     appLib,
     prototypes,
     start,
@@ -80,7 +80,7 @@ define ([
                             effective = null;
                         if (st.payload.privhistory !== null) {
                             priv = st.payload.privhistory.priv;
-                            effective = lib.readableDate(st.payload.privhistory.effective);
+                            effective = coreLib.readableDate(st.payload.privhistory.effective);
                         }
                         employeeProfile = $.extend(
                             Object.create(prototypes.empProfile), {
@@ -97,12 +97,12 @@ define ([
                         currentUser('obj', employeeProfile);
                         target.pull('empProfile').start();
                     } else {
-                        lib.displayError("Unexpected status code " + st.code);
+                        coreLib.displayError("Unexpected status code " + st.code);
                     }
                 },
                 fc = function (st) {
                     console.log("AJAX: " + rest["path"] + " failed with", st);
-                    lib.displayError(st.payload.message);
+                    coreLib.displayError(st.payload.message);
                 };
             ajax(rest, sc, fc);
         },
@@ -124,17 +124,17 @@ define ([
                             count = rs.length;
         
                         console.log("Search found " + count + " employees");
-                        lib.holdObject(rs);
+                        coreLib.holdObject(rs);
                         target.pull('simpleEmployeeBrowser').start();
 
                     } else {
-                        lib.displayError("Unexpected status code " + st.code);
+                        coreLib.displayError("Unexpected status code " + st.code);
                     }
                 },
                 // failure callback
                 fc = function (st) {
                     console.log("AJAX: " + rest["path"] + " failed with", st);
-                    lib.displayError(st.payload.message);
+                    coreLib.displayError(st.payload.message);
                 };
             ajax(rest, sc, fc);
         },
@@ -207,7 +207,7 @@ define ([
                 // failure callback -- employee doesn't exist
                 fc = function (st) {
                     console.log("AJAX: " + rest["path"] + " failed with", st);
-                    lib.displayError(st.payload.message);
+                    coreLib.displayError(st.payload.message);
                 };
             ajax(rest, sc, fc);
         },
@@ -270,8 +270,8 @@ define ([
                         ldapEmployeeLink();
                     }
                     if (document.getElementById('simpleEmployeeBrowser')) {
-                        var obj = start.dbrowserState.set[start.dbrowserState.pos];
-                        $.extend(start.dbrowserState.obj, ldapEmployeeObject);
+                        var obj = coreLib.dbrowserState.set[coreLib.dbrowserState.pos];
+                        $.extend(coreLib.dbrowserState.obj, ldapEmployeeObject);
                         $.extend(obj, ldapEmployeeObject);
                         start.dbrowserListen();
                     }
@@ -290,7 +290,7 @@ define ([
                     } else {
                         msg = st.payload.message;
                     }
-                    lib.displayError(msg);
+                    coreLib.displayError(msg);
                 }
             ajax(rest, sc, fc);
         },
@@ -327,7 +327,7 @@ define ([
                 },
                 fc = function (st) {
                     console.log("AJAX: " + rest["path"] + " failed with", st);
-                    lib.displayError(st.payload.message);
+                    coreLib.displayError(st.payload.message);
                 };
             ajax(rest, sc, fc);
         };

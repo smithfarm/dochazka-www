@@ -80,7 +80,7 @@ define ([
                         coreLib.emptyLineEntry, entries.ePremark],
             'hook': coreLib.holdObject,
             'miniMenu': {
-                entries: [],
+                entries: ['schedEditFromBrowser', 'schedDeleteFromBrowser'],
                 back: ['Back', 'mainSched']
             }
         }); // target.push('simpleScheduleBrowser'

@@ -63,6 +63,13 @@ define ([
             'aclProfile': 'passerby',
             'start': dactionStart('drowselectListen')
         });
+        target.push('returnToBrowser', {
+            'name': 'returnToBrowser',
+            'type': 'daction',
+            'menuText': 'returnToBrowser',
+            'aclProfile': 'passerby',
+            'start': dactionStart('returnToBrowser')
+        });
 
         // Employee actions
         target.push('myProfile', {
@@ -196,6 +203,20 @@ define ([
             'menuText': 'Create',
             'aclProfile': 'admin',
             'start': dactionStart('createSchedule')
+        });
+        target.push('schedEditFromBrowser', {
+            'name': 'schedEditFromBrowser',
+            'type': 'daction',
+            'menuText': 'Edit',
+            'aclProfile': 'admin',
+            'start': dactionStart('schedEditFromBrowser')
+        });
+        target.push('schedDeleteFromBrowser', {
+            'name': 'schedDeleteFromBrowser',
+            'type': 'daction',
+            'menuText': 'Delete',
+            'aclProfile': 'admin',
+            'start': dactionStart('schedDeleteFromBrowser')
         });
         target.push('schedEditSave', {
             'name': 'schedEditSave',
