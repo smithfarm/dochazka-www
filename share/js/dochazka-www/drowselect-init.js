@@ -61,7 +61,7 @@ define ([
             'hook': lib.holdObject,
             'miniMenu': {
                 entries: ['privHistoryAddRecord', 'privHistoryDeleteAction'],
-                back: ['Back', 'mainPriv']
+                back: ['Back', 'actionPrivHistory']
             }
         });
 
@@ -76,7 +76,7 @@ define ([
             'hook': lib.holdObject,
             'miniMenu': {
                 entries: ['schedHistoryAddRecord', 'schedHistoryDeleteAction'],
-                back: ['Back', 'mainSched']
+                back: ['Back', 'actionSchedHistory']
             }
         });
 

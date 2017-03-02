@@ -60,7 +60,7 @@ define ([
             'entries': [entries.pHeffective, entries.pHpriv],
             'hook': lib.holdObject,
             'miniMenu': {
-                entries: null,
+                entries: ['actionPrivHistoryEdit'],
                 back: ['Back', 'mainPriv']
             }
         });
@@ -75,10 +75,9 @@ define ([
             'entries': [entries.pHeffective, entries.sDid, entries.sDcode],
             'hook': lib.holdObject,
             'miniMenu': {
-                entries: null,
+                entries: ['actionSchedHistoryEdit'],
                 back: ['Back', 'mainSched']
-            }
-        });
+            } });
 
     };
     

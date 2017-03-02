@@ -133,7 +133,7 @@ define ([
         target.push('actionPrivHistoryEdit', { // read-write
             'name': 'actionPrivHistoryEdit',
             'type': 'daction',
-            'menuText': 'Privilege (status) history EDIT',
+            'menuText': 'Edit',
             'aclProfile': 'admin',
             'start': dactionStart('actionPrivHistoryEdit')
         });
@@ -163,7 +163,7 @@ define ([
         target.push('actionSchedHistoryEdit', { // read-write
             'name': 'actionSchedHistoryEdit',
             'type': 'daction',
-            'menuText': 'Schedule history EDIT',
+            'menuText': 'Edit',
             'aclProfile': 'admin',
             'start': dactionStart('actionSchedHistoryEdit')
         });

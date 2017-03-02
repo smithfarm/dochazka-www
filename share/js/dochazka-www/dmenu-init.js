@@ -70,7 +70,7 @@ define ([
             'menuText': 'Priv (status)',
             'title': 'Priv (status) menu',
             'aclProfile': 'passerby',
-            'entries': ['actionPrivHistory', 'actionPrivHistoryEdit'],
+            'entries': ['actionPrivHistory'],
             'back': 'mainMenu'
         });
 
@@ -80,7 +80,7 @@ define ([
             'menuText': 'Schedule',
             'title': 'Schedule menu',
             'aclProfile': 'passerby',
-            'entries': ['actionSchedHistory', 'actionSchedHistoryEdit',
+            'entries': ['actionSchedHistory',
                         'browseAllSchedules', 'schedLookup', 'schedNew'],
             'back': 'mainMenu'
         });
