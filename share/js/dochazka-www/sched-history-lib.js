@@ -65,7 +65,8 @@ define ([
                                     return {
                                         "shid": row.shid,
                                         "sid": row.sid,
-                                        "effective": lib.readableDate(row.effective)
+                                        "effective": lib.readableDate(row.effective),
+                                        "scode": row.scode
                                     };
                                 }
                             );

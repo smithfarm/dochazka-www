@@ -72,7 +72,7 @@ define ([
             'title': 'Schedule history',
             'preamble': null,
             'aclProfile': 'admin',
-            'entries': [entries.pHeffective, entries.sDid],
+            'entries': [entries.pHeffective, entries.sDid, entries.sDcode],
             'hook': lib.holdObject,
             'miniMenu': {
                 entries: ['schedHistoryAddRecord', 'schedHistoryDeleteAction'],
