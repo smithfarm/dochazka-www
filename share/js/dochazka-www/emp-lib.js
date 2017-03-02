@@ -77,10 +77,24 @@ define ([
                     if (st.code === 'DISPATCH_EMPLOYEE_PROFILE_FULL') {
                         console.log("Payload is", st.payload);
                         var priv = null,
-                            effective = null;
+                            privEffective = null,
+                            sched = null,
+                            schedEffective = null;
                         if (st.payload.privhistory !== null) {
                             priv = st.payload.privhistory.priv;
-                            effective = coreLib.readableDate(st.payload.privhistory.effective);
+                            privEffective = coreLib.readableDate(
+                                st.payload.privhistory.effective
+                            );
+                        }
+                        if (st.payload.schedhistory !== null) {
+                            if (st.payload.schedhistory.scode !== null) {
+                                sched = st.payload.schedhistory.scode;
+                            } else {
+                                sched = '(Schedule ID ' + st.payload.schedhistory.sid + ')';
+                            }
+                            schedEffective = coreLib.readableDate(
+                                st.payload.schedhistory.effective
+                            );
                         }
                         employeeProfile = $.extend(
                             Object.create(prototypes.empProfile), {
@@ -91,7 +105,9 @@ define ([
                                 'remark': st.payload.emp.remark,
                                 'sec_id': st.payload.emp.sec_id,
                                 'priv': priv,
-                                'privEffective': effective
+                                'privEffective': privEffective,
+                                'sched': sched,
+                                'schedEffective': schedEffective
                             }
                         );
                         currentUser('obj', employeeProfile);

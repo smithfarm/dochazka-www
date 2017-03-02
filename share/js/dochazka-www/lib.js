@@ -110,6 +110,22 @@ define ([
                prop: 'privEffective',
                maxlen: 30
            },
+           'ePsched': {
+               name: 'ePsched',
+               aclProfileRead: 'inactive',
+               aclProfileWrite: 'admin',
+               text: 'Schedule',
+               prop: 'sched',
+               maxlen: 20
+           },
+           'ePschedEffective': {
+               name: 'ePschedEffective',
+               aclProfileRead: 'inactive',
+               aclProfileWrite: 'admin',
+               text: 'Schedule since',
+               prop: 'schedEffective',
+               maxlen: 30
+           },
            'LDAPdochazka': {
                name: 'LDAPdochazka',
                aclProfileRead: 'inactive',
