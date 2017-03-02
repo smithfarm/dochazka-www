@@ -212,7 +212,7 @@ define ([
             'menuText': 'Look up schedule by code or ID',
             'title': 'Look up schedule by code or ID',
             'preamble': 'Enter a schedule code or ID',
-            'aclProfile': 'admin',
+            'aclProfile': 'passerby',
             'entriesRead': null,
             'entriesWrite': [entries.sScode, entries.sSid],
             'hook': function () {
@@ -232,7 +232,7 @@ define ([
             'type': 'dform',
             'menuText': 'schedDisplay',
             'title': 'Schedule',
-            'aclProfile': 'admin',
+            'aclProfile': 'passerby',
             'entriesRead': [entries.sDid, entries.sDcode,
                             coreLib.emptyLineEntry, entries.sDmon,
                             entries.sDtue, entries.sDwed, entries.sDthu,

@@ -79,7 +79,7 @@ define ([
             'type': 'dmenu',
             'menuText': 'Schedule',
             'title': 'Schedule menu',
-            'aclProfile': 'admin',
+            'aclProfile': 'passerby',
             'entries': ['actionSchedHistory', 'actionSchedHistoryEdit',
                         'browseAllSchedules', 'schedLookup', 'schedNew'],
             'back': 'mainMenu'
