@@ -297,9 +297,11 @@ define ([
                         ldapEmployeeObject.dochazka = true;
                     }
                     if (document.getElementById('ldapDisplayEmployee')) {
+                        console.log("ldapDisplayEmployee DOM element is present");
                         ldapEmployeeLink();
                     }
                     if (document.getElementById('simpleEmployeeBrowser')) {
+                        console.log("simpleEmployeeBrowser DOM element is present");
                         // FIXME: this code belongs in App::MFILE::WWW
                         var obj = coreLib.dbrowserState.set[coreLib.dbrowserState.pos];
                         $.extend(coreLib.dbrowserState.obj, ldapEmployeeObject);
@@ -307,8 +309,9 @@ define ([
                         start.dbrowserListen();
                     }
                     if (document.getElementById('empProfile')) {
-                        // console.log("ldapSync AJAX success!");
-                        // myProfile();
+                        console.log("empProfile DOM element is present");
+                        $("#result").html("Employee profile updated from LDAP");
+                        stack.unwindToFlag(); // return to most recent dmenu
                     }
                 },
                 // failure callback -- employee doesn't exist

@@ -6,6 +6,7 @@ dmenu.mainMenu (sets flag)
           daction.empProfileEditSave
             unwindToFlag()
         daction.ldapSync -> empLib.ldapSync
+          unwindToFlag()
     dform.ldapLookup
       daction.ldapLookupSubmit -> empLib.ldapLookupSubmit
         dform.ldapDisplayEmployee
