@@ -30,6 +30,8 @@ share/js/dochazka-www/lib.js
 share/js/dochazka-www/prototypes.js
 share/js/dochazka-www/rest-lib.js
 share/js/dochazka-www/target-init.js
+share/js/dochazka-www/test.js
+share/js/dochazka-www/tests/dummy.js
 t/00-load.t
 t/manifest.t
 t/pod-coverage.t
