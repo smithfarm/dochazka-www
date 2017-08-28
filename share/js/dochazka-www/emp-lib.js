@@ -330,9 +330,8 @@ define ([
             coreLib.ajaxMessage();
         },
 
-        empProfileEditSave = function () {
+        empProfileEditSave = function (emp) {
             var protoEmp = Object.create(prototypes.empProfile),
-                emp = stack.getState(),
                 employeeProfile;
             console.log("Entering empProfileEditSave with object", emp);
             $.extend(protoEmp, emp);
