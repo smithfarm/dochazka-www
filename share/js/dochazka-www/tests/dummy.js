@@ -44,8 +44,8 @@ define ([
 
     return function () {
 
-        test(prefix + 'unit testing framework present', function () {
-            ok(true, "Passed!");
+        test(prefix + 'unit testing framework present', function (assert) {
+            assert.ok(true, "Passed!");
         });
 
     };
