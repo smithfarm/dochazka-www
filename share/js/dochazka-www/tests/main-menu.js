@@ -40,7 +40,7 @@ define ([
   'QUnit',
   'jquery',
   'current-user',
-  'root',
+  'root'
 ], function (
   QUnit,
   $,
@@ -57,13 +57,13 @@ define ([
                 currentUserObj = currentUser('obj'),
                 currentUserPriv = currentUser('priv');
             assert.ok(currentUserObj, 'There is a currentUser object: ' +
-                QUnit.dump.parse(currentUserObj);
+                QUnit.dump.parse(currentUserObj));
             assert.ok(currentUserPriv, 'Current user has a priv value: ' + currentUserPriv);
             root(); // start app in QUnit fixture
             mainarea = $('#mainarea');
             assert.ok(mainarea.html(), "#mainarea contains: " + mainarea.html());
             assert.strictEqual($('form', mainarea).length, 1, "#mainarea contains 1 form");
-            assert.strictEqual($('form', mainarea)[0].id, 'mainMenu', "#mainarea form id is demoMenu");
+            assert.strictEqual($('form', mainarea)[0].id, 'mainMenu', "#mainarea form id is mainMenu");
         });
 
     };
