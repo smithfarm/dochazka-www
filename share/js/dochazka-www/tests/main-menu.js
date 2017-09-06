@@ -56,9 +56,15 @@ define ([
             var mainarea,
                 currentUserObj = currentUser('obj'),
                 currentUserPriv = currentUser('priv');
-            assert.ok(currentUserObj, 'There is a currentUser object: ' +
+            assert.strictEqual(currentUserObj, null, 'starting currentUser object is ' +
                 QUnit.dump.parse(currentUserObj));
-            assert.ok(currentUserPriv, 'Current user has a priv value: ' + currentUserPriv);
+            assert.strictEqual(currentUserPriv, null, 'starting currentUser priv is ' +
+                QUnit.dump.parse(currentUserPriv));
+            currentUserObj = currentUser('obj', { "nick" : "root" }),
+            currentUserPriv = currentUser('priv', "admin");
+            assert.strictEqual(currentUserObj.nick, "root", 'we are now root');
+            assert.strictEqual(currentUserPriv, 'admin', 'root has admin privileges');
+            assert.ok(true, "Starting app in fixture");
             root(); // start app in QUnit fixture
             mainarea = $('#mainarea');
             assert.ok(mainarea.html(), "#mainarea contains: " + mainarea.html());
