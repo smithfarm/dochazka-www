@@ -280,7 +280,10 @@ sub _login_dialog {
     my $status;
     if ( $code == 200 ) {
         $session->{'ip_addr'} = $r->{'env'}->{'REMOTE_ADDR'};
-        $session->{'currentUser'} = $body_json->{'payload'}->{'emp'};
+        my $cu = $body_json->{'payload'}->{'emp'};
+        delete $cu->{'passhash'};
+        delete $cu->{'salt'};
+        $session->{'currentUser'} = $cu;
         $session->{'currentUserPriv'} = $body_json->{'payload'}->{'priv'};
         $session->{'last_seen'} = time;
         $log->debug( 
