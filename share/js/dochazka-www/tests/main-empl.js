@@ -30,20 +30,58 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // *************************************************************************
 //
-// test.js
+// app/tests/main-empl.js
 //
-// runs routines in tests/ directory to declare unit tests. Each js file in
-// tests/ needs to be mentioned here.
+// Tests exercising the "mainEmpl" dmenu
 //
 "use strict";
 
-require ([
-    'app/tests/dummy',
-    'app/tests/main-menu',
+define ([
+  'QUnit',
+  'jquery',
+  'current-user',
+  'root',
 ], function (
-    dummyTests,
-    mainMenuTests,
+  QUnit,
+  $,
+  currentUser,
+  root
 ) {
-    dummyTests();
-    mainMenuTests();
+
+    var prefix = "dochazka-www: ";
+
+    return function () {
+
+/*
+        QUnit.test(prefix + 'press 0 in main menu', function (assert) {
+            var done = askksert.async(),
+                sel;
+            assert.timeout(200);
+            root(); // start mfile-www demo app in QUnit fixture
+            sel = $('input[name="sel"]').val();
+            assert.strictEqual(sel, '', "Selection form field is empty");
+            // press '0' key in sel, but value does not change?
+            $('input[name="sel"]').trigger($.Event("keydown", {keyCode: 48})); // press '0' key
+            sel = $('input[name="sel"]').val();
+            assert.strictEqual(sel, '', "Selection form field is empty even after simulating 0 keypress");
+            // simulating keypress doesn't work, so just set the value to "0"
+            $('input[name="sel"]').val('0');
+            // press ENTER -> submit the form
+            $('input[name="sel"]').trigger($.Event("keydown", {keyCode: 13}));
+            setTimeout(function() {
+                var mainarea = $('#mainarea').html();
+                assert.ok(mainarea, "#mainarea has non-empty html: " + mainarea);
+                assert.notStrictEqual(
+                    mainarea.indexOf('SOMETHING IS HAPPENING'),
+                    -1,
+                    "#mainarea html contains substring \"SOMETHING IS HAPPENING\""
+                );
+                done();
+            });
+        });
+*/
+
+    };
+
 });
+

@@ -30,20 +30,43 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // *************************************************************************
 //
-// test.js
+// app/tests/main-menu.js
 //
-// runs routines in tests/ directory to declare unit tests. Each js file in
-// tests/ needs to be mentioned here.
+// Tests exercising the "mainMenu" dmenu
 //
 "use strict";
 
-require ([
-    'app/tests/dummy',
-    'app/tests/main-menu',
+define ([
+  'QUnit',
+  'jquery',
+  'current-user',
+  'root',
 ], function (
-    dummyTests,
-    mainMenuTests,
+  QUnit,
+  $,
+  currentUser,
+  root
 ) {
-    dummyTests();
-    mainMenuTests();
+
+    var prefix = "dochazka-www: ";
+
+    return function () {
+
+        QUnit.test(prefix + 'main menu appears', function (assert) {
+            var mainarea,
+                currentUserObj = currentUser('obj'),
+                currentUserPriv = currentUser('priv');
+            assert.ok(currentUserObj, 'There is a currentUser object: ' +
+                QUnit.dump.parse(currentUserObj);
+            assert.ok(currentUserPriv, 'Current user has a priv value: ' + currentUserPriv);
+            root(); // start app in QUnit fixture
+            mainarea = $('#mainarea');
+            assert.ok(mainarea.html(), "#mainarea contains: " + mainarea.html());
+            assert.strictEqual($('form', mainarea).length, 1, "#mainarea contains 1 form");
+            assert.strictEqual($('form', mainarea)[0].id, 'mainMenu', "#mainarea form id is demoMenu");
+        });
+
+    };
+
 });
+
