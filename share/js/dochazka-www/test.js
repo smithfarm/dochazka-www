@@ -39,11 +39,14 @@
 
 require ([
     'app/tests/dummy',
-    'app/tests/main-menu'
+    'app/tests/main-menu',
+    'app/tests/main-empl'
 ], function (
     dummyTests,
-    mainMenuTests
+    mainMenuTests,
+    mainEmplTests
 ) {
     dummyTests();
     mainMenuTests();
+    mainEmplTests();
 });

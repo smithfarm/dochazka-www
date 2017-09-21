@@ -41,23 +41,38 @@ define ([
   'jquery',
   'current-user',
   'root',
+  'stack'
 ], function (
   QUnit,
   $,
   currentUser,
-  root
+  root,
+  stack
 ) {
 
     var prefix = "dochazka-www: ";
 
     return function () {
 
-/*
-        QUnit.test(prefix + 'press 0 in main menu', function (assert) {
-            var done = askksert.async(),
-                sel;
+        QUnit.test(prefix + 'Employee menu appears', function (assert) {
+            var done = assert.async(),
+                sel,
+                currentUserObj = currentUser('obj'),
+                currentUserPriv = currentUser('priv'),
+                theStack;
             assert.timeout(200);
+            assert.deepEqual(currentUserObj, { "nick": "" }, 'starting currentUser object is ' +
+                QUnit.dump.parse(currentUserObj));
+            assert.strictEqual(currentUserPriv, null, 'starting currentUser priv is ' +
+                QUnit.dump.parse(currentUserPriv));
+            currentUserObj = currentUser('obj', { "nick": "demo" }),
+            currentUserPriv = currentUser('priv', "passerby");
+            assert.strictEqual(currentUserObj.nick, "demo", 'we are now demo');
+            assert.strictEqual(currentUserPriv, 'passerby', 'demo has passerby privileges');
+            assert.ok(true, "Starting app in fixture");
             root(); // start mfile-www demo app in QUnit fixture
+            theStack = stack.getStack();
+            assert.strictEqual(theStack.length, 1, "One item on the stack after starting app");
             sel = $('input[name="sel"]').val();
             assert.strictEqual(sel, '', "Selection form field is empty");
             // press '0' key in sel, but value does not change?
@@ -69,18 +84,86 @@ define ([
             // press ENTER -> submit the form
             $('input[name="sel"]').trigger($.Event("keydown", {keyCode: 13}));
             setTimeout(function() {
-                var mainarea = $('#mainarea').html();
-                assert.ok(mainarea, "#mainarea has non-empty html: " + mainarea);
+                var mainarea = $('#mainarea'),
+                    htmlbuf = mainarea.html();
+                assert.ok(htmlbuf, "#mainarea has non-empty html: " + htmlbuf);
+                assert.strictEqual($('form', mainarea).length, 1, "#mainarea contains 1 form");
+                assert.strictEqual($('form', mainarea)[0].id, 'mainEmpl', "#mainarea form id is mainEmpl");
                 assert.notStrictEqual(
-                    mainarea.indexOf('SOMETHING IS HAPPENING'),
+                    htmlbuf.indexOf('My profile'),
                     -1,
-                    "#mainarea html contains substring \"SOMETHING IS HAPPENING\""
+                    "#mainarea html contains substring \"My profile\""
                 );
+            });
+            // teardown
+            currentUser('obj', null);
+            currentUser('priv', null);
+            done();
+        });
+
+        QUnit.test(prefix + 'Employee profile - ACL failure', function (assert) {
+            var done = assert.async(),
+                sel,
+                currentUserObj = currentUser('obj'),
+                currentUserPriv = currentUser('priv'),
+                mainarea,
+                result,
+                htmlbuf,
+                theStack;
+            assert.timeout(1000);
+            assert.deepEqual(currentUserObj, { "nick": "" }, 'starting currentUser object is ' +
+                QUnit.dump.parse(currentUserObj));
+            assert.strictEqual(currentUserPriv, null, 'starting currentUser priv is ' +
+                QUnit.dump.parse(currentUserPriv));
+            currentUserObj = currentUser('obj', { "nick": "demo" }),
+            currentUserPriv = currentUser('priv', "passerby");
+            assert.strictEqual(currentUserObj.nick, "demo", 'we are now demo');
+            assert.strictEqual(currentUserPriv, 'passerby', 'demo has passerby privileges');
+            assert.ok(true, "Starting app in fixture");
+            root(); // start app in QUnit fixture
+            theStack = stack.getStack();
+            assert.strictEqual(theStack.length, 1, "One item on the stack after starting app");
+            assert.ok(theStack, "stack contains items: " + QUnit.dump.parse(theStack));
+            // select 0 in Main Menu
+            $('input[name="sel"]').val('0');
+            // press ENTER -> submit the form
+            $('input[name="sel"]').trigger($.Event("keydown", {keyCode: 13}));
+            theStack = stack.getStack();
+            assert.strictEqual(theStack.length, 2, "Two items on the stack after selecting 0 in main menu");
+            assert.ok(theStack, "stack contains items: " + QUnit.dump.parse(theStack));
+            mainarea = $('#mainarea');
+            htmlbuf = mainarea.html();
+            assert.ok(htmlbuf, "#mainarea has non-empty html: " + htmlbuf);
+            assert.strictEqual($('form', mainarea).length, 1, "#mainarea contains 1 form");
+            assert.strictEqual($('form', mainarea)[0].id, 'mainEmpl', "#mainarea form id is mainEmpl");
+            assert.notStrictEqual(
+                htmlbuf.indexOf('My profile'),
+                -1,
+                "#mainarea html contains substring \"My profile\""
+            );
+            // select 0 ("My profile") in Employee menu
+            $('input[name="sel"]').val('0');
+            // press ENTER -> submit the form
+            $('input[name="sel"]').trigger($.Event("keydown", {keyCode: 13}));
+            result = $('#result');
+            htmlbuf = result.html();
+            assert.ok(htmlbuf, "#result has non-empty html: " + htmlbuf);
+            assert.notStrictEqual(
+                htmlbuf.indexOf('AJAX call'),
+                -1,
+                "#mainarea html contains substring \"AJAX call\""
+            );
+            // wait for AJAX call to complete, and then test for ACL error
+            setTimeout(function() {
+                var result = $("#result"),
+                    htmlbuf = result.html();
+                assert.ok(htmlbuf, "#result has non-empty html: " + htmlbuf);
+                // teardown
+                currentUser('obj', null);
+                currentUser('priv', null);
                 done();
             });
         });
-*/
-
     };
 
 });
