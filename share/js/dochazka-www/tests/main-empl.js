@@ -110,7 +110,6 @@ define ([
                 result,
                 htmlbuf,
                 theStack;
-            assert.timeout(1000);
             assert.deepEqual(currentUserObj, { "nick": "" }, 'starting currentUser object is ' +
                 QUnit.dump.parse(currentUserObj));
             assert.strictEqual(currentUserPriv, null, 'starting currentUser priv is ' +
@@ -162,7 +161,7 @@ define ([
                 currentUser('obj', null);
                 currentUser('priv', null);
                 done();
-            });
+            }, 1000);
         });
     };
 
