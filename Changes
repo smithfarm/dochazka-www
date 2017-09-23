@@ -281,3 +281,16 @@ Revision history for App-Dochazka-WWW
 - tests: js: migrate unit test to QUnit 2.4.0
 - build/ops: require App::MFILE::WWW 0.158
 
+0.149 2017-09-24 00:03 CEST
+- build/ops: add ext/codepaths file to MANIFEST
+- js: tests: add simple test cases for mainMenu targets
+- Dispatch.pm: upon login success, expurgate currentUser object
+- js: tests: force root user for mainMenu test
+- js: tests: refactor and add test for mainEmpl menu
+- js: tests: use setTimeout properly
+- js: tests/main-menu.js: refactor to do login/logout
+- Dispatch.pm: use _prep_ajax_response for logout
+- daction-start.js: call loggout instead of logout
+- tests/main-menu.js: use current user object correctly
+- js: tests: refactor all three existing tests
+
