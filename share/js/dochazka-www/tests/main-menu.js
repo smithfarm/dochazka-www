@@ -40,12 +40,16 @@ define ([
   'QUnit',
   'jquery',
   'current-user',
+  'login',
+  'loggout',
   'root',
   'stack'
 ], function (
   QUnit,
   $,
   currentUser,
+  login,
+  loggout,
   root,
   stack
 ) {
@@ -54,32 +58,56 @@ define ([
 
     return function () {
 
-        QUnit.test(prefix + 'main menu appears', function (assert) {
-            var mainarea,
+        var test_desc = prefix + 'main menu appears';
+
+        QUnit.test(test_desc, function (assert) {
+            console.log('***TEST*** ' + test_desc);
+            var done = assert.async(2),
+                mainarea,
+                htmlbuf,
                 currentUserObj = currentUser('obj'),
                 currentUserPriv = currentUser('priv'),
                 theStack;
-            assert.deepEqual(currentUserObj, { "nick": "" }, 'starting currentUser object is ' +
-                QUnit.dump.parse(currentUserObj));
-            assert.strictEqual(currentUserPriv, null, 'starting currentUser priv is ' +
-                QUnit.dump.parse(currentUserPriv));
-            currentUserObj = currentUser('obj', { "nick": "root" }),
-            currentUserPriv = currentUser('priv', "admin");
-            assert.strictEqual(currentUserObj.nick, "root", 'we are now root');
-            assert.strictEqual(currentUserPriv, 'admin', 'root has admin privileges');
-            assert.ok(true, "Starting app in fixture");
-            root(); // start app in QUnit fixture
-            theStack = stack.getStack();
-            assert.strictEqual(theStack.length, 1, "One item on stack after starting app");
-            assert.strictEqual(theStack[0].target.type, "dmenu", "Stack target type is \"dmenu\"");
-            assert.strictEqual(theStack[0].target.name, "mainMenu", "Stack target name is \"mainMenu\"");
-            mainarea = $('#mainarea');
-            assert.ok(mainarea.html(), "#mainarea contains: " + mainarea.html());
-            assert.strictEqual($('form', mainarea).length, 1, "#mainarea contains 1 form");
-            assert.strictEqual($('form', mainarea)[0].id, 'mainMenu', "#mainarea form id is mainMenu");
-            // teardown
-            currentUser('obj', null);
-            currentUser('priv', null);
+            console.log("TEST: logging in as root");
+            login("root", "immutable");
+            setTimeout(function () {
+                console.log("TEST: post-login tests");
+                currentUserObj = currentUser();
+                assert.ok(currentUserObj, "currentUserObj after login: " + QUnit.dump.parse(currentUserObj));
+                currentUserObj = currentUser('obj', { "nick": "root" }),
+                currentUserPriv = currentUser('priv', "admin");
+                assert.strictEqual(currentUserObj.nick, "root", 'we are now root');
+                assert.strictEqual(currentUserPriv, 'admin', 'root has admin privileges');
+                assert.ok(true, "Starting app in fixture");
+                root(); // start app in QUnit fixture
+                theStack = stack.getStack();
+                assert.strictEqual(theStack.length, 1, "One item on stack after starting app");
+                assert.strictEqual(theStack[0].target.type, "dmenu", "Stack target type is \"dmenu\"");
+                assert.strictEqual(theStack[0].target.name, "mainMenu", "Stack target name is \"mainMenu\"");
+                mainarea = $('#mainarea');
+                htmlbuf = mainarea.html();
+                assert.ok(htmlbuf, "#mainarea contains: " + htmlbuf);
+                assert.strictEqual($('form', mainarea).length, 1, "#mainarea contains 1 form");
+                assert.strictEqual($('form', mainarea)[0].id, 'mainMenu', "#mainarea form id is mainMenu");
+                loggout();
+                done();
+            }, 500);
+            setTimeout(function () {
+                console.log("TEST: post-logout tests");
+                currentUserObj = currentUser();
+                assert.ok(currentUserObj, "currentUserObj after logout: " + QUnit.dump.parse(currentUserObj));
+                assert.strictEqual(currentUserObj.obj.nick, null, 'Current user object reset to null');
+                assert.strictEqual(currentUserObj.priv, null, 'Current user priv reset to null');
+                mainarea = $('#mainarea');
+                htmlbuf = mainarea.html();
+                assert.ok(htmlbuf, "#mainarea contains: " + htmlbuf);
+                assert.notStrictEqual(
+                    htmlbuf.indexOf('You have been logged out'),
+                    -1,
+                    "#mainarea html contains substring \"You have been logged out\""
+                );
+                done();
+            }, 1000);
         });
 
     };
