@@ -65,19 +65,16 @@ define ([
             var done = assert.async(2),
                 mainarea,
                 htmlbuf,
-                currentUserObj = currentUser('obj'),
-                currentUserPriv = currentUser('priv'),
+                cu,
                 theStack;
             console.log("TEST: logging in as root");
             login("root", "immutable");
             setTimeout(function () {
                 console.log("TEST: post-login tests");
-                currentUserObj = currentUser();
-                assert.ok(currentUserObj, "currentUserObj after login: " + QUnit.dump.parse(currentUserObj));
-                currentUserObj = currentUser('obj', { "nick": "root" }),
-                currentUserPriv = currentUser('priv', "admin");
-                assert.strictEqual(currentUserObj.nick, "root", 'we are now root');
-                assert.strictEqual(currentUserPriv, 'admin', 'root has admin privileges');
+                cu = currentUser();
+                assert.ok(cu, "currentUserObj after login: " + QUnit.dump.parse(cu));
+                assert.strictEqual(cu.obj.nick, "root", 'we are now root');
+                assert.strictEqual(cu.priv, 'admin', 'root has admin privileges');
                 assert.ok(true, "Starting app in fixture");
                 root(); // start app in QUnit fixture
                 theStack = stack.getStack();
@@ -94,10 +91,10 @@ define ([
             }, 500);
             setTimeout(function () {
                 console.log("TEST: post-logout tests");
-                currentUserObj = currentUser();
-                assert.ok(currentUserObj, "currentUserObj after logout: " + QUnit.dump.parse(currentUserObj));
-                assert.strictEqual(currentUserObj.obj.nick, null, 'Current user object reset to null');
-                assert.strictEqual(currentUserObj.priv, null, 'Current user priv reset to null');
+                cu = currentUser();
+                assert.ok(cu, "currentUserObj after logout: " + QUnit.dump.parse(cu));
+                assert.strictEqual(cu.obj.nick, null, 'Current user object reset to null');
+                assert.strictEqual(cu.priv, null, 'Current user priv reset to null');
                 mainarea = $('#mainarea');
                 htmlbuf = mainarea.html();
                 assert.ok(htmlbuf, "#mainarea contains: " + htmlbuf);
