@@ -49,7 +49,7 @@ define ([
     "app/sched-lib",
     "app/rest-lib",
     "html",
-    "logout",
+    "loggout",
     "target",
     "start"
 ], function (
@@ -61,7 +61,7 @@ define ([
     schedLib,
     restLib,
     html,
-    logout,
+    loggout,
     target,
     start
 ) {
@@ -118,12 +118,11 @@ define ([
 
         // logout action
         "logout": function () {
-            // if masquerading, end the masquerade;
+            console.log("Reached logout action");
             if (currentUser('flag1')) {
                 empLib.endTheMasquerade();
-            } else {
-                logout();
             }
+            loggout();
         } // logout
 
     }; // var act
