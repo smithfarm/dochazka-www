@@ -228,8 +228,8 @@ sub process_post {
     }
 
     # two possibilities: login/logout attempt or normal AJAX call
-    # - login/logout attempt
     if ( $method =~ m/^LOGIN/i ) {
+        $log->debug( "Incoming login/logout attempt" );
         if ( $path =~ m/^login/i ) {
             return $self->_login_dialog( $body );
         } else {
@@ -237,8 +237,7 @@ sub process_post {
         }
     }
 
-    # - normal AJAX call (shown for didactic purposes only; App::MFILE::WWW
-    #   itself doesn't generate any AJAX calls)
+    # - normal AJAX call
     $log->debug( "Calling rest_req $method $path on session ID " . $self->session_id );
     $session->{'last_seen'} = time;
     my $rr = rest_req( $self->ua(), {
@@ -309,8 +308,9 @@ sub _login_dialog {
 }
          
 sub _logout {
-    my ( $self, $body ) = @_;
+    my ( $self ) = @_;
     $log->debug( "Entering " . __PACKAGE__ . "::_logout()" );
+
     my $rr = rest_req( $self->ua(), {
         server => $site->DOCHAZKA_WWW_BACKEND_URI,
         method => 'POST',
@@ -320,19 +320,24 @@ sub _logout {
         $log->error("session/terminate AJAX call FAILED: " . Dumper( $rr ) );
     };
     $self->request->{'env'}->{'psgix.session'} = {};
-    $self->response->header( 'Content-Type' => 'application/json' );
-    $self->response->body( to_json( $CELL->status_ok( 'MFILE_WWW_LOGOUT_OK' )->expurgate ) );
-    return 1;
+
+    #my $status = $CELL->status_ok( 'DOCHAZKA_WWW_LOGOUT_OK' );
+    #$self->response->header( 'Content-Type' => 'application/json' );
+    #$self->response->body( to_json( $status->expurgate ) );
+    #return 1;
+
+    my $hr = $rr->{'hr'};
+    return $self->_prep_ajax_response( $hr, $rr->{'body'} );
 }
 
 sub _prep_ajax_response {
     my ( $self, $hr, $body ) = @_;
     $log->debug( "Entering " . __PACKAGE__ . "::_prep_ajax_response()" );
+    $log->debug( "AJAX response body: " . Dumper( $body ) );
     my $expurgated_status;
     if ( $hr->is_success ) {
         $expurgated_status = $body;
     } else {
-        $log->debug( "AJAX response body: " . Dumper( $body ) );
         $expurgated_status = $CELL->status_err( 
             $body->{'code'},
             payload => { code => $hr->code, message => $body->{'text'} },
