@@ -39,70 +39,38 @@
 define ([
   'QUnit',
   'jquery',
-  'current-user',
+  'app/canned-tests',
   'login',
   'loggout',
-  'root',
-  'stack'
 ], function (
   QUnit,
   $,
-  currentUser,
+  cannedTests,
   login,
   loggout,
-  root,
-  stack
 ) {
 
-    var prefix = "dochazka-www: ";
+    var prefix = "dochazka-www: ",
+        test_desc;
 
     return function () {
 
-        var test_desc = prefix + 'main menu appears';
-
+        test_desc = 'main menu appears';
         QUnit.test(test_desc, function (assert) {
-            console.log('***TEST*** ' + test_desc);
+            console.log('***TEST*** ' + prefix + test_desc);
             var done = assert.async(2),
                 mainarea,
                 htmlbuf,
                 cu,
                 theStack;
-            console.log("TEST: logging in as root");
             login("root", "immutable");
             setTimeout(function () {
-                console.log("TEST: post-login tests");
-                cu = currentUser();
-                assert.ok(cu, "currentUserObj after login: " + QUnit.dump.parse(cu));
-                assert.strictEqual(cu.obj.nick, "root", 'we are now root');
-                assert.strictEqual(cu.priv, 'admin', 'root has admin privileges');
-                assert.ok(true, "Starting app in fixture");
-                root(); // start app in QUnit fixture
-                theStack = stack.getStack();
-                assert.strictEqual(theStack.length, 1, "One item on stack after starting app");
-                assert.strictEqual(theStack[0].target.type, "dmenu", "Stack target type is \"dmenu\"");
-                assert.strictEqual(theStack[0].target.name, "mainMenu", "Stack target name is \"mainMenu\"");
-                mainarea = $('#mainarea');
-                htmlbuf = mainarea.html();
-                assert.ok(htmlbuf, "#mainarea contains: " + htmlbuf);
-                assert.strictEqual($('form', mainarea).length, 1, "#mainarea contains 1 form");
-                assert.strictEqual($('form', mainarea)[0].id, 'mainMenu', "#mainarea form id is mainMenu");
+                cannedTests.login(assert, "root", "admin");
                 loggout();
                 done();
             }, 500);
             setTimeout(function () {
-                console.log("TEST: post-logout tests");
-                cu = currentUser();
-                assert.ok(cu, "currentUserObj after logout: " + QUnit.dump.parse(cu));
-                assert.strictEqual(cu.obj.nick, null, 'Current user object reset to null');
-                assert.strictEqual(cu.priv, null, 'Current user priv reset to null');
-                mainarea = $('#mainarea');
-                htmlbuf = mainarea.html();
-                assert.ok(htmlbuf, "#mainarea contains: " + htmlbuf);
-                assert.notStrictEqual(
-                    htmlbuf.indexOf('You have been logged out'),
-                    -1,
-                    "#mainarea html contains substring \"You have been logged out\""
-                );
+                cannedTests.loggout(assert);
                 done();
             }, 1000);
         });

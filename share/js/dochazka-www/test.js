@@ -38,14 +38,17 @@
 "use strict";
 
 require ([
+    'QUnit',
     'app/tests/dummy',
     'app/tests/main-menu',
     'app/tests/main-empl'
 ], function (
+    QUnit,
     dummyTests,
     mainMenuTests,
     mainEmplTests
 ) {
+    QUnit.module("dochazka-www");
     dummyTests();
     mainMenuTests();
     mainEmplTests();
