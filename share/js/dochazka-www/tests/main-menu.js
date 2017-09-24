@@ -63,7 +63,7 @@ define ([
                 htmlbuf,
                 cu,
                 theStack;
-            login("root", "immutable");
+            login({"nam": "root", "pwd": "immutable"});
             setTimeout(function () {
                 cannedTests.login(assert, "root", "admin");
                 loggout();

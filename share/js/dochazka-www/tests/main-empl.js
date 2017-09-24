@@ -42,12 +42,16 @@ define ([
   'app/canned-tests',
   'login',
   'loggout',
+  'stack',
+  'start',
 ], function (
   QUnit,
   $,
   cannedTests,
   login,
   loggout,
+  stack,
+  start,
 ) {
 
     var prefix = "dochazka-www: ",
@@ -59,7 +63,7 @@ define ([
         QUnit.test(test_desc, function (assert) {
             console.log('***TEST*** ' + prefix + test_desc);
             var done = assert.async(3);
-            login("demo", "demo");
+            login({"nam": "demo", "pwd": "demo"});
             setTimeout(function () {
                 cannedTests.login(assert, "demo", "passerby");
                 done();
@@ -77,26 +81,20 @@ define ([
 
         test_desc = 'employee profile - ACL failure';
         QUnit.test(test_desc, function (assert) {
-            var done = assert.async(4);
+            var done = assert.async(3);
             console.log("***TEST*** " + prefix + test_desc);
-            login("demo", "demo");
+            login({"nam": "demo", "pwd": "demo"});
             setTimeout(function() {
-                cannedTests.login(assert, "demo", "passerby");
-                done();
-            }, 500);
-            setTimeout(function () {
                 var htmlbuf,
                     result;
+                cannedTests.login(assert, "demo", "passerby");
                 cannedTests.mainMenuToMainEmpl(assert);
                 assert.ok(true, 'select 0 ("My profile") in mainEmpl as demo');
                 $('input[name="sel"]').val('0');
                 $('input[name="sel"]').trigger($.Event("keydown", {keyCode: 13}));
-                result = $('#result');
-                htmlbuf = result.html();
-                assert.ok(htmlbuf, "#result html: " + htmlbuf);
-                cannedTests.contains(assert, htmlbuf, "#result", 'AJAX call');
+                cannedTests.ajaxCallInitiated(assert);
                 done();
-            }, 1000);
+            }, 500);
             setTimeout(function() {
                 var result = $("#result"),
                     htmlbuf = result.html();
@@ -104,13 +102,59 @@ define ([
                 cannedTests.contains(assert, htmlbuf, "#result", 'ACL check failed for resource');
                 loggout();
                 done();
-            }, 1500);
+            }, 1000);
             setTimeout(function () {
                 cannedTests.loggout(assert);
                 done();
-            }, 2000);
+            }, 1500);
         });
-    };
 
+        test_desc = 'LDAP lookup - success';
+        QUnit.test(test_desc, function (assert) {
+            console.log('***TEST*** ' + prefix + test_desc);
+            var done = assert.async(3);
+            login({"nam": "root", "pwd": "immutable"});
+            setTimeout(function () {
+                cannedTests.login(assert, "root", "admin");
+                cannedTests.mainMenuToMainEmpl(assert);
+                cannedTests.mainEmplToLdapLookup(assert);
+                // fill out form and initiate AJAX call
+                $('input[name="entry0"]').val("ncutler");
+                $('input[name="sel"]').val('0');
+                $('input[name="sel"]').focus();
+                start.mmKeyListener($.Event("keydown", {keyCode: 13}));
+                assert.ok(true, "*** REACHED ldapLookup form submitted");
+                cannedTests.ajaxCallInitiated(assert);
+                done();
+            }, 1000);
+            // allow a full two seconds for the LDAP call to go through
+            setTimeout(function () {
+                var theStack;
+                console.log("in development");
+                var htmlbuf = $("#result").html();
+                assert.ok(htmlbuf, "#result html: " + htmlbuf);
+                theStack = stack.getStack();
+                assert.ok(theStack.length, "Stack length: " + theStack.length);
+                assert.ok(
+                    theStack[theStack.length - 1],
+                    "Top of stack: " + QUnit.dump.parse(theStack[theStack.length - 1])
+                );
+                cannedTests.stack(
+                    assert,
+                    4,
+                    'Displaying LDAP employee after successful LDAP lookup',
+                    'dform',
+                    'ldapDisplayEmployee'
+                );
+                loggout();
+                done();
+            }, 3000);
+            setTimeout(function () {
+                cannedTests.loggout(assert);
+                done();
+            }, 3500);
+        });
+
+    };
 });
 

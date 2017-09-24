@@ -169,7 +169,7 @@ define ([
             currentEmployeeStashed = null;
             $('#userbox').html(appLib.fillUserBox()); // reset userbox
             $('#mainarea').css("background-color", backgroundColorStashed);
-            $('#result').html('Masquerade is finished');
+            coreLib.displayResult('Masquerade is finished');
             $('input[name="sel"]').val('');
         },
         masqEmp = function (obj) {
@@ -186,7 +186,7 @@ define ([
 
             if (! coreLib.isObjEmpty(obj)) {
                 if (obj.nick === cu.nick) {
-                    $('#result').html('Request to masquerade as self makes no sense');
+                    coreLib.displayResult('Request to masquerade as self makes no sense');
                     return;
                 }
                 // let the masquerade begin
@@ -313,7 +313,7 @@ define ([
                     }
                     if (document.getElementById('empProfile')) {
                         console.log("empProfile DOM element is present");
-                        $("#result").html("Employee profile updated from LDAP");
+                        coreLib.displayResult("Employee profile updated from LDAP");
                         stack.unwindToFlag(); // return to most recent dmenu
                     }
                 },
@@ -351,7 +351,7 @@ define ([
                     console.log("Profile object is", employeeProfile);
                     currentUser('obj', employeeProfile);
                     stack.unwindToFlag(); // return to most recent dmenu
-                    $("#result").html("Employee profile updated");
+                    coreLib.displayResult("Employee profile updated");
                 },
                 fc = function (st) {
                     console.log("AJAX: " + rest["path"] + " failed with", st);

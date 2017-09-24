@@ -48,7 +48,12 @@ define ([
     stack,
 ) {
 
-    var containsFunc = function (assert, lookIn, lookInDesc, lookFor) {
+    var ajaxCallInitiatedFunc = function (assert) {
+            var htmlbuf = $("#result").html();
+            assert.ok(htmlbuf, "#result html: " + htmlbuf);
+            containsFunc(assert, htmlbuf, "#result", 'AJAX call');
+        },
+        containsFunc = function (assert, lookIn, lookInDesc, lookFor) {
             // asserts that the string lookIn contains substring lookFor
             // lookInDesc describes what lookIn represents
             assert.notStrictEqual(
@@ -90,6 +95,8 @@ define ([
 
     return {
 
+        "ajaxCallInitiated": ajaxCallInitiatedFunc,
+
         "contains": containsFunc,
 
         "loggout": function (assert) {
@@ -99,7 +106,7 @@ define ([
             console.log("TEST: post-logout tests");
             assert.ok(true, '*** REACHED logging out ***');
             cu = currentUser();
-            assert.ok(cu, "currentUserObj after logout: " + QUnit.dump.parse(cu));
+            assert.ok(cu.obj, "currentUserObj after logout: " + QUnit.dump.parse(cu));
             assert.strictEqual(cu.obj.nick, null, 'Current user object reset to null');
             assert.strictEqual(cu.priv, null, 'Current user priv reset to null');
             containsFunc(assert, $('#mainarea').html(), "#mainarea", 'You have been logged out');
@@ -123,11 +130,37 @@ define ([
 
         "mainareaForm": mainareaFormFunc,
 
+        "mainEmplToLdapLookup": function (assert) {
+            var htmlbuf,
+                input;
+            assert.ok(true, 'select 1 ("Look up an LDAP employee") in mainEmpl as root');
+            mainareaFormFunc(assert, 'mainEmpl');
+            stackFunc(assert, 2, 'In mainEmpl before navigating to ldapLookup', 'dmenu', 'mainEmpl');
+            $('input[name="sel"]').val('1');
+            $('input[name="sel"]').trigger($.Event("keydown", {keyCode: 13}));
+            mainareaFormFunc(assert, 'ldapLookup');
+            stackFunc(assert, 3, 'Reached ldapLookup dform', 'dform', 'ldapLookup');
+            htmlbuf = $('#mainarea').html();
+            assert.ok(htmlbuf, "#mainarea html: " + htmlbuf);
+            containsFunc(
+                assert,
+                htmlbuf,
+                "#mainarea html",
+                "Enter employee nick for exact (case insensitive) match"
+            );
+            assert.ok(
+                $('#ldapLookup input[name="entry0"]'),
+                "The ldapLookup form contains a data entry field"
+            );
+            assert.ok(true, "*** REACHED ldapLookup dform");
+        },
+
         "mainMenuToMainEmpl": function (assert) {
             var htmlbuf,
                 mainmarea,
                 sel,
                 theStack;
+            mainareaFormFunc(assert, 'mainMenu');
             sel = $('input[name="sel"]').val();
             assert.strictEqual(sel, '', "Selection form field is empty");
             // press '0' key in sel, but value does not change?
