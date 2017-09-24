@@ -115,7 +115,7 @@ define ([
         test_desc = 'LDAP lookup - success';
         QUnit.test(test_desc, function (assert) {
             console.log('***TEST*** ' + prefix + test_desc);
-            var done = assert.async(3);
+            var done = assert.async(4);
             login({"nam": "root", "pwd": "immutable"});
             setTimeout(function () {
                 cannedTests.login(assert, "root", "admin");
@@ -125,7 +125,9 @@ define ([
                 done();
             }, 1000);
             setTimeout(function () {
-                var focusedItem;
+                var ldapDochazka,
+                    mainarea,
+                    htmlbuf;
                 cannedTests.stack(
                     assert,
                     4,
@@ -144,7 +146,44 @@ define ([
                     "ncutler",
                     "Successful LDAP lookup displayed nick ncutler",
                 );
+                ldapDochazka = $('#LDAPdochazka').text();
+                assert.ok(ldapDochazka, "ncutler is in Dochazka already? " + ldapDochazka);
+                assert.ok(
+                    ldapDochazka === "YES" || ldapDochazka === "NO",
+                    "Answer to whether ncutler is in Dochazka (" + ldapDochazka + ") makes sense",
+                );
                 assert.ok(true, "*** REACHED Employee LDAP lookup success");
+                mainarea = $('#mainarea');
+                htmlbuf = mainarea.html();
+                cannedTests.contains(
+                    assert,
+                    htmlbuf,
+                    "#mainarea html",
+                    "0. LDAP sync",
+                );
+                assert.ok(true, "*** REACHED miniMenu contains 0. LDAP sync");
+                // choose '0' for ldapSync
+                $('input[name="sel"]').val('0');
+                $('input[name="sel"]').focus();
+                start.mmKeyListener($.Event("keydown", {keyCode: 13}));
+                assert.ok(true, "*** REACHED pressed 0 for LDAP sync");
+                done();
+            }, 3000);
+            setTimeout(function () {
+                var ldapDochazka = $('#LDAPdochazka').text();
+                cannedTests.stack(
+                    assert,
+                    4,
+                    'Displaying LDAP employee after successful LDAP lookup',
+                    'dform',
+                    'ldapDisplayEmployee',
+                );
+                cannedTests.mainareaForm(assert, 'ldapDisplayEmployee');
+                assert.ok(ldapDochazka, "ncutler is in Dochazka already? " + ldapDochazka);
+                assert.ok(
+                    ldapDochazka === "YES",
+                    "ncutler is now in Dochazka, no question about it",
+                );
                 $('input[name="sel"]').val('x');
                 $('input[name="sel"]').focus();
                 start.mmKeyListener($.Event("keydown", {keyCode: 13}));
@@ -174,7 +213,7 @@ define ([
                 assert.ok(true, "*** REACHED mainEmpl dmenu via X from ldapLookup");
                 loggout();
                 done();
-            }, 3000);
+            }, 4000);
             setTimeout(function () {
                 cannedTests.loggout(assert);
                 done();
@@ -194,7 +233,6 @@ define ([
                 done();
             }, 1000);
             setTimeout(function () {
-                var focusedItem;
                 cannedTests.stack(
                     assert,
                     3,
