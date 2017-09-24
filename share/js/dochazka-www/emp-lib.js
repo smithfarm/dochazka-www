@@ -235,6 +235,12 @@ define ([
             coreLib.ajaxMessage();
         },
 
+        displayLdapEmployee = function (emp) {
+            stack.push('ldapDisplayEmployee', emp);
+            stack.setXTarget('ldapLookup');
+            coreLib.displayResult("Employee " + emp.nick + " found via LDAP");
+        },
+
         ldapEmployeeLink = function () {
             // we assume the ldapEmployeeObject has already been 
             // partially populated - we just need to determine whether
@@ -255,16 +261,13 @@ define ([
                     }
                     if (document.getElementById('ldapLookup') ||
                         document.getElementById('ldapDisplayEmployee')) {
-                        stack.push('ldapDisplayEmployee', ldapEmployeeObject);
-                        coreLib.displayResult(
-                            "Employee " + ldapEmployeeObject.nick + " found via LDAP"
-                        );
+                        displayLdapEmployee(ldapEmployeeObject);
                     }
                 },
                 fc = function (st) {
                     if (document.getElementById('ldapLookup') ||
                         document.getElementById('ldapDisplayEmployee')) {
-                        target.pull('ldapDisplayEmployee').start(ldapEmployeeObject);
+                        displayLdapEmployee(ldapEmployeeObject);
                     }
                 }
             ajax(rest, sc, fc);
