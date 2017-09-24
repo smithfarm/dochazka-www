@@ -121,16 +121,7 @@ define ([
                 cannedTests.login(assert, "root", "admin");
                 cannedTests.mainMenuToMainEmpl(assert);
                 cannedTests.mainEmplToLdapLookup(assert);
-                // fill out form and initiate AJAX call
-                $('input[name="entry0"]').val("ncutler");
-                $('input[name="sel"]').val('0');
-                $('input[name="sel"]').focus();
-                // $('input[name="sel"]').trigger($.Event("keydown", {keyCode: 13}));
-                // trigger() does not work with dform, so send the keydown event
-                // directory to mmKeyListener()
-                start.mmKeyListener($.Event("keydown", {keyCode: 13}));
-                assert.ok(true, "*** REACHED ldapLookup form submitted");
-                cannedTests.ajaxCallInitiated(assert);
+                cannedTests.submitLdapLookup(assert, 'ncutler');
                 done();
             }, 1000);
             setTimeout(function () {
@@ -179,6 +170,69 @@ define ([
                 loggout();
                 done();
             }, 3000);
+            setTimeout(function () {
+                cannedTests.loggout(assert);
+                done();
+            }, 5000);
+        });
+
+        test_desc = 'LDAP lookup - failure';
+        QUnit.test(test_desc, function (assert) {
+            console.log('***TEST*** ' + prefix + test_desc);
+            var done = assert.async(4);
+            login({"nam": "root", "pwd": "immutable"});
+            setTimeout(function () {
+                cannedTests.login(assert, "root", "admin");
+                cannedTests.mainMenuToMainEmpl(assert);
+                cannedTests.mainEmplToLdapLookup(assert);
+                cannedTests.submitLdapLookup(assert, 'NONEXISTENTfoobarbazblatFISHBEAR');
+                done();
+            }, 1000);
+            setTimeout(function () {
+                var focusedItem;
+                cannedTests.stack(
+                    assert,
+                    3,
+                    'failed LDAP lookup',
+                    'dform',
+                    'ldapLookup',
+                );
+                cannedTests.contains(
+                    assert,
+                    $("#result").html(),
+                    "#result html",
+                    "Employee not found in LDAP",
+                );
+                assert.strictEqual(
+                    coreLib.focusedItem().name,
+                    'entry0',
+                    'Focus is on data entry field',
+                );
+                cannedTests.submitLdapLookup(assert, 'NONEXISTENTpseudoDataEntered');
+                done();
+            }, 3000);
+            setTimeout(function () {
+                cannedTests.stack(
+                    assert,
+                    3,
+                    'failed LDAP lookup',
+                    'dform',
+                    'ldapLookup',
+                );
+                cannedTests.contains(
+                    assert,
+                    $("#result").html(),
+                    "#result html",
+                    "Employee not found in LDAP",
+                );
+                assert.strictEqual(
+                    coreLib.focusedItem().name,
+                    'entry0',
+                    'Focus is on data entry field',
+                );
+                loggout();
+                done();
+            }, 4000);
             setTimeout(function () {
                 cannedTests.loggout(assert);
                 done();

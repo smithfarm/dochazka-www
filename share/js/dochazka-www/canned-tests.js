@@ -42,12 +42,14 @@ define ([
     "lib",
     "root",
     "stack",
+    "start",
 ], function (
     $,
     currentUser,
     coreLib,
     root,
     stack,
+    start,
 ) {
 
     var ajaxCallInitiatedFunc = function (assert) {
@@ -93,6 +95,22 @@ define ([
                 tgtName,
                 "Target on top of stack has name \"" + tgtName + "\"",
             );
+        },
+        submitLdapLookupFunc = function (assert, searchTerm) {
+            // fill out form and initiate AJAX call
+            assert.ok(
+                true,
+                "*** REACHED submitting ldapLookup for search term \"" + searchTerm + "\"",
+            );
+            $('input[name="entry0"]').val(searchTerm);
+            $('input[name="sel"]').val('0');
+            $('input[name="sel"]').focus();
+            // $('input[name="sel"]').trigger($.Event("keydown", {keyCode: 13}));
+            // trigger() does not work with dform, so send the keydown event
+            // directory to mmKeyListener()
+            start.mmKeyListener($.Event("keydown", {keyCode: 13}));
+            assert.ok(true, "*** REACHED ldapLookup form submitted");
+            ajaxCallInitiatedFunc(assert);
         };
 
     return {
@@ -186,6 +204,8 @@ define ([
         },
 
         "stack": stackFunc,
+
+        "submitLdapLookup": submitLdapLookupFunc,
 
     };
 
