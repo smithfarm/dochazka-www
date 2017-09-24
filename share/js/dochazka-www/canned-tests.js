@@ -137,6 +137,7 @@ define ([
             mainareaFormFunc(assert, 'mainEmpl');
             stackFunc(assert, 2, 'In mainEmpl before navigating to ldapLookup', 'dmenu', 'mainEmpl');
             $('input[name="sel"]').val('1');
+            $('input[name="sel"]').focus();
             $('input[name="sel"]').trigger($.Event("keydown", {keyCode: 13}));
             mainareaFormFunc(assert, 'ldapLookup');
             stackFunc(assert, 3, 'Reached ldapLookup dform', 'dform', 'ldapLookup');
@@ -169,6 +170,7 @@ define ([
             assert.strictEqual(sel, '', "Selection form field is empty even after simulating 0 keypress");
             // simulating keypress doesn't work, so just set the value to "0"
             $('input[name="sel"]').val('0');
+            $('input[name="sel"]').focus();
             // press ENTER -> submit the form
             $('input[name="sel"]').trigger($.Event("keydown", {keyCode: 13}));
             stackFunc(assert, 2, 'navigating from mainMenu to mainEmpl', 'dmenu', 'mainEmpl');

@@ -91,6 +91,7 @@ define ([
                 cannedTests.mainMenuToMainEmpl(assert);
                 assert.ok(true, 'select 0 ("My profile") in mainEmpl as demo');
                 $('input[name="sel"]').val('0');
+                $('input[name="sel"]').focus();
                 $('input[name="sel"]').trigger($.Event("keydown", {keyCode: 13}));
                 cannedTests.ajaxCallInitiated(assert);
                 done();
