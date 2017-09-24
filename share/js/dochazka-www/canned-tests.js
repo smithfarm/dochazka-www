@@ -75,19 +75,19 @@ define ([
             // asserts that stack has a certain length (stackLen) after doing
             // some action (afterWhat) and that the target on the top of the
             // stack is of type tgtType and has name tgtName
-            var theStack = stack.getStack();
+            var topTarget = stack.getTarget();
             assert.strictEqual(
-                theStack.length,
+                stack.getLength(),
                 stackLen,
                 stackLen + " item(s) on stack after " + afterWhat
             );
             assert.strictEqual(
-                theStack[stackLen - 1].target.type,
+                topTarget.type,
                 tgtType,
                 "Target on top of stack is of type \"" + tgtType + "\"",
             );
             assert.strictEqual(
-                theStack[stackLen - 1].target.name,
+                topTarget.name,
                 tgtName,
                 "Target on top of stack has name \"" + tgtName + "\"",
             );
