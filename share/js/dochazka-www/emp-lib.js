@@ -56,8 +56,11 @@ define ([
     target
 ) {
 
-    var 
-        ldapEmployeeObject = Object.create(prototypes.ldapEmpObject),
+    var ldapEmployeeObject,
+
+        resetLdapEmployeeObject = function () {
+            ldapEmployeeObject = Object.create(prototypes.ldapEmpObject);
+        },
 
         getLdapEmployeeObject = function () { return ldapEmployeeObject; },
 
@@ -221,7 +224,9 @@ define ([
                 // success callback -- employee already exists
                 sc = function (st) {
                     if (st.code === 'DOCHAZKA_LDAP_LOOKUP') {
-                        console.log("Payload is", st.payload);
+                        console.log("Employee exists in LDAP");
+                        console.log("Server said", st);
+                        resetLdapEmployeeObject();
                         $.extend(ldapEmployeeObject, st.payload);
                     }
                     ldapEmployeeLink();
@@ -235,10 +240,9 @@ define ([
             coreLib.ajaxMessage();
         },
 
-        displayLdapEmployee = function (emp) {
+        displayLdapEmployee = function (emp, xtarget) {
             stack.push('ldapDisplayEmployee', emp);
-            stack.setXTarget('ldapLookup');
-            coreLib.displayResult("Employee " + emp.nick + " found via LDAP");
+            stack.setXTarget(xtarget);
         },
 
         ldapEmployeeLink = function () {
@@ -261,13 +265,13 @@ define ([
                     }
                     if (document.getElementById('ldapLookup') ||
                         document.getElementById('ldapDisplayEmployee')) {
-                        displayLdapEmployee(ldapEmployeeObject);
+                        displayLdapEmployee(ldapEmployeeObject, 'ldapLookup');
                     }
                 },
                 fc = function (st) {
                     if (document.getElementById('ldapLookup') ||
                         document.getElementById('ldapDisplayEmployee')) {
-                        displayLdapEmployee(ldapEmployeeObject);
+                        displayLdapEmployee(ldapEmployeeObject, 'ldapLookup');
                     }
                 }
             ajax(rest, sc, fc);
@@ -367,6 +371,7 @@ define ([
     // employee-related actions (see daction-start.js)
     return {
         getLdapEmployeeObject: getLdapEmployeeObject,
+        resetLdapEmployeeObject: resetLdapEmployeeObject,
         myProfileAction: myProfileAction,
         empProfileEditSave: empProfileEditSave,
         ldapLookupSubmit: ldapLookupSubmit,
@@ -374,7 +379,7 @@ define ([
         ldapSyncFromBrowser: ldapSyncFromBrowser,
         actionEmplSearch: actionEmplSearch,
         endTheMasquerade: endTheMasquerade,
-        masqEmployee: masqEmp
+        masqEmployee: masqEmp,
     };
 
 });
