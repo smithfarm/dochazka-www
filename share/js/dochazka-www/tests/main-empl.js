@@ -282,6 +282,19 @@ define ([
             }, 5000);
         });
 
+        test_desc = 'Search Dochazka employees - success';
+        QUnit.test(test_desc, function (assert) {
+            console.log('***TEST*** ' + prefix + test_desc);
+            var done = assert.async(1);
+            login({"nam": "root", "pwd": "immutable"});
+            setTimeout(function () {
+                cannedTests.login(assert, "root", "admin");
+                cannedTests.mainMenuToMainEmpl(assert);
+                cannedTests.mainEmplToSearchEmployee(assert);
+                done();
+            }, 1000);
+        });
+
     };
 });
 

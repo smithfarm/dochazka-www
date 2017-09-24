@@ -151,11 +151,10 @@ define ([
         "mainareaForm": mainareaFormFunc,
 
         "mainEmplToLdapLookup": function (assert) {
-            var htmlbuf,
-                input;
-            assert.ok(true, 'select 1 ("Look up an LDAP employee") in mainEmpl as root');
+            var htmlbuf;
             mainareaFormFunc(assert, 'mainEmpl');
             stackFunc(assert, 2, 'In mainEmpl before navigating to ldapLookup', 'dmenu', 'mainEmpl');
+            assert.ok(true, 'select 1 ("Look up an LDAP employee") in mainEmpl as root');
             $('input[name="sel"]').val('1');
             $('input[name="sel"]').focus();
             $('input[name="sel"]').trigger($.Event("keydown", {keyCode: 13}));
@@ -179,6 +178,36 @@ define ([
                 'Focus is on data entry field'
             );
             assert.ok(true, "*** REACHED ldapLookup dform");
+        },
+
+        "mainEmplToSearchEmployee": function (assert) {
+            var htmlbuf;
+            mainareaFormFunc(assert, 'mainEmpl');
+            stackFunc(assert, 2, 'In mainEmpl before navigating to searchEmployee', 'dmenu', 'mainEmpl');
+            assert.ok(true, 'select 2 ("Search Dochazka employees") in mainEmpl as root');
+            $('input[name="sel"]').val('2');
+            $('input[name="sel"]').focus();
+            $('input[name="sel"]').trigger($.Event("keydown", {keyCode: 13}));
+            mainareaFormFunc(assert, 'searchEmployee');
+            stackFunc(assert, 3, 'Reached searchEmployee dform', 'dform', 'searchEmployee');
+            htmlbuf = $('#mainarea').html();
+            assert.ok(htmlbuf, "#mainarea html: " + htmlbuf);
+            containsFunc(
+                assert,
+                htmlbuf,
+                "#mainarea html",
+                "Enter search key, % is wildcard",
+            );
+            assert.ok(
+                $('#searchEmployee input[name="entry0"]'),
+                "The searchEmployee form contains a data entry field"
+            );
+            assert.strictEqual(
+                coreLib.focusedItem().name,
+                'entry0',
+                'Focus is on data entry field'
+            );
+            assert.ok(true, "*** REACHED searchEmployee dform");
         },
 
         "mainMenuToMainEmpl": function (assert) {
