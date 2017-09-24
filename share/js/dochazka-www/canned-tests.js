@@ -198,6 +198,12 @@ define ([
                 "#mainarea html",
                 "Enter search key, % is wildcard",
             );
+            containsFunc(
+                assert,
+                htmlbuf,
+                "#mainarea html",
+                "0. Search"
+            );
             assert.ok(
                 $('#searchEmployee input[name="entry0"]'),
                 "The searchEmployee form contains a data entry field"

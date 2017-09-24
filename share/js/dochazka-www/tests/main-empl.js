@@ -125,9 +125,7 @@ define ([
                 done();
             }, 1000);
             setTimeout(function () {
-                var ldapDochazka,
-                    mainarea,
-                    htmlbuf;
+                var ldapDochazka;
                 cannedTests.stack(
                     assert,
                     4,
@@ -153,11 +151,9 @@ define ([
                     "Answer to whether ncutler is in Dochazka (" + ldapDochazka + ") makes sense",
                 );
                 assert.ok(true, "*** REACHED Employee LDAP lookup success");
-                mainarea = $('#mainarea');
-                htmlbuf = mainarea.html();
                 cannedTests.contains(
                     assert,
-                    htmlbuf,
+                    $('#mainarea').html(),
                     "#mainarea html",
                     "0. LDAP sync",
                 );
@@ -282,7 +278,7 @@ define ([
             }, 5000);
         });
 
-        test_desc = 'Search Dochazka employees - success';
+        test_desc = 'Search Dochazka employees - success no wildcard';
         QUnit.test(test_desc, function (assert) {
             console.log('***TEST*** ' + prefix + test_desc);
             var done = assert.async(1);
@@ -291,6 +287,7 @@ define ([
                 cannedTests.login(assert, "root", "admin");
                 cannedTests.mainMenuToMainEmpl(assert);
                 cannedTests.mainEmplToSearchEmployee(assert);
+                $('#searchEmployee input[name="entry0"]').val('ncutler');
                 done();
             }, 1000);
         });

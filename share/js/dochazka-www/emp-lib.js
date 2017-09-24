@@ -241,6 +241,15 @@ define ([
         },
 
         displayLdapEmployee = function (emp, xtarget) {
+            // The user might cause the LDAP employee to be displayed 
+            // several times in a row, e.g. by selecting LDAP sync from
+            // ldapDisplayEmployee - make sure we don't push duplicate
+            // ldapDisplayEmployee targets onto the stack!
+            var topTarget = stack.getTarget().name;
+            console.log("In displayLdapEmployee, topTarget is " + topTarget);
+            if (topTarget === 'ldapDisplayEmployee') {
+                stack.popWithoutStart();
+            }
             stack.push('ldapDisplayEmployee', emp);
             stack.setXTarget(xtarget);
         },
