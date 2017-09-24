@@ -206,8 +206,8 @@ define ([
             });
         },
 
-        ldapLookupSubmit = function () {
-            var emp = stack.getState();
+        ldapLookupSubmit = function (obj) {
+            var emp = obj;
             console.log("Entering function ldapLookupSubmit, object", emp);
             // "nick" is the only property of emp that is populated
             if (! emp.nick) {
@@ -255,7 +255,10 @@ define ([
                     }
                     if (document.getElementById('ldapLookup') ||
                         document.getElementById('ldapDisplayEmployee')) {
-                        target.pull('ldapDisplayEmployee').start(ldapEmployeeObject);
+                        stack.push('ldapDisplayEmployee', ldapEmployeeObject);
+                        coreLib.displayResult(
+                            "Employee " + ldapEmployeeObject.nick + " found via LDAP"
+                        );
                     }
                 },
                 fc = function (st) {
