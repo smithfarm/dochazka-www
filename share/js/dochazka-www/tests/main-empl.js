@@ -40,6 +40,7 @@ define ([
   'QUnit',
   'jquery',
   'app/canned-tests',
+  'lib',
   'login',
   'loggout',
   'stack',
@@ -48,6 +49,7 @@ define ([
   QUnit,
   $,
   cannedTests,
+  coreLib,
   login,
   loggout,
   stack,
@@ -123,37 +125,64 @@ define ([
                 $('input[name="entry0"]').val("ncutler");
                 $('input[name="sel"]').val('0');
                 $('input[name="sel"]').focus();
+                // $('input[name="sel"]').trigger($.Event("keydown", {keyCode: 13}));
+                // trigger() does not work with dform, so send the keydown event
+                // directory to mmKeyListener()
                 start.mmKeyListener($.Event("keydown", {keyCode: 13}));
                 assert.ok(true, "*** REACHED ldapLookup form submitted");
                 cannedTests.ajaxCallInitiated(assert);
                 done();
             }, 1000);
-            // allow a full two seconds for the LDAP call to go through
             setTimeout(function () {
-                var theStack;
-                console.log("in development");
-                var htmlbuf = $("#result").html();
-                assert.ok(htmlbuf, "#result html: " + htmlbuf);
-                theStack = stack.getStack();
-                assert.ok(theStack.length, "Stack length: " + theStack.length);
-                assert.ok(
-                    theStack[theStack.length - 1],
-                    "Top of stack: " + QUnit.dump.parse(theStack[theStack.length - 1])
-                );
+                var focusedItem;
                 cannedTests.stack(
                     assert,
                     4,
                     'Displaying LDAP employee after successful LDAP lookup',
                     'dform',
-                    'ldapDisplayEmployee'
+                    'ldapDisplayEmployee',
                 );
+                cannedTests.contains(
+                    assert,
+                    $("#result").html(),
+                    "#result html",
+                    "Employee ncutler found via LDAP",
+                );
+                assert.ok(true, "*** REACHED Employee LDAP lookup success");
+                $('input[name="sel"]').val('x');
+                $('input[name="sel"]').focus();
+                start.mmKeyListener($.Event("keydown", {keyCode: 13}));
+                cannedTests.stack(
+                    assert,
+                    3,
+                    'After selecting X in ldapDisplayEmployee',
+                    'dform',
+                    'ldapLookup',
+                );
+                assert.ok(true, "*** REACHED ldapLookup dform via X from ldapDisplayEmployee");
+                assert.strictEqual(
+                    coreLib.focusedItem().name,
+                    'sel',
+                    'Focus is on selection field',
+                );
+                $('input[name="sel"]').val('x');
+                $('input[name="sel"]').focus();
+                start.mmKeyListener($.Event("keydown", {keyCode: 13}));
+                cannedTests.stack(
+                    assert,
+                    2,
+                    'After selecting X in ldapLookup',
+                    'dmenu',
+                    'mainEmpl'
+                );
+                assert.ok(true, "*** REACHED mainEmpl dmenu via X from ldapLookup");
                 loggout();
                 done();
             }, 3000);
             setTimeout(function () {
                 cannedTests.loggout(assert);
                 done();
-            }, 3500);
+            }, 5000);
         });
 
     };

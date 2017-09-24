@@ -61,8 +61,7 @@ define ([
             var done = assert.async(2),
                 mainarea,
                 htmlbuf,
-                cu,
-                theStack;
+                cu;
             login({"nam": "root", "pwd": "immutable"});
             setTimeout(function () {
                 cannedTests.login(assert, "root", "admin");

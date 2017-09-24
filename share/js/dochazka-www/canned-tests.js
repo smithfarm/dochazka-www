@@ -39,11 +39,13 @@
 define ([
     "jquery",
     "current-user",
+    "lib",
     "root",
     "stack",
 ], function (
     $,
     currentUser,
+    coreLib,
     root,
     stack,
 ) {
@@ -153,14 +155,18 @@ define ([
                 $('#ldapLookup input[name="entry0"]'),
                 "The ldapLookup form contains a data entry field"
             );
+            assert.strictEqual(
+                coreLib.focusedItem().name,
+                'entry0',
+                'Focus is on data entry field'
+            );
             assert.ok(true, "*** REACHED ldapLookup dform");
         },
 
         "mainMenuToMainEmpl": function (assert) {
             var htmlbuf,
                 mainmarea,
-                sel,
-                theStack;
+                sel;
             mainareaFormFunc(assert, 'mainMenu');
             sel = $('input[name="sel"]').val();
             assert.strictEqual(sel, '', "Selection form field is empty");
