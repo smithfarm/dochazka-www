@@ -133,11 +133,16 @@ define ([
                     'dform',
                     'ldapDisplayEmployee',
                 );
-                cannedTests.contains(
-                    assert,
-                    $("#result").html(),
-                    "#result html",
-                    "Employee ncutler found via LDAP",
+                cannedTests.mainareaForm(assert, 'ldapDisplayEmployee');
+                assert.strictEqual(
+                    $('#ePfullname').text(),
+                    "Nathan Cutler",
+                    "Successful LDAP lookup displayed full name Nathan Cutler",
+                );
+                assert.strictEqual(
+                    $('#ePnick').text(),
+                    "ncutler",
+                    "Successful LDAP lookup displayed nick ncutler",
                 );
                 assert.ok(true, "*** REACHED Employee LDAP lookup success");
                 $('input[name="sel"]').val('x');
