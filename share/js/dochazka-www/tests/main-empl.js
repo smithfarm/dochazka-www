@@ -281,15 +281,48 @@ define ([
         test_desc = 'Search Dochazka employees - success no wildcard';
         QUnit.test(test_desc, function (assert) {
             console.log('***TEST*** ' + prefix + test_desc);
-            var done = assert.async(1);
+            var done = assert.async(2);
             login({"nam": "root", "pwd": "immutable"});
             setTimeout(function () {
                 cannedTests.login(assert, "root", "admin");
                 cannedTests.mainMenuToMainEmpl(assert);
                 cannedTests.mainEmplToSearchEmployee(assert);
                 $('#searchEmployee input[name="entry0"]').val('ncutler');
+                // choose '0' to start search
+                $('input[name="sel"]').val('0');
+                $('input[name="sel"]').focus();
+                start.mmKeyListener($.Event("keydown", {keyCode: 13}));
+                assert.ok(true, "*** REACHED pressed 0 to initiate search for Dochazka employee ncutler");
                 done();
             }, 1000);
+            setTimeout(function () {
+                var htmlbuf = $("#mainarea").html();
+                cannedTests.stack(
+                    assert,
+                    4,
+                    'Reached simpleEmployeeBrowser dbrowser',
+                    'dbrowser',
+                    'simpleEmployeeBrowser'
+                );
+                cannedTests.contains(
+                    assert,
+                    htmlbuf,
+                    "#mainarea html",
+                    "Employee search results",
+                );
+                cannedTests.mainareaForm(assert, "simpleEmployeeBrowser");
+                assert.strictEqual(
+                    $('#ePfullname').text(),
+                    "Nathan Cutler",
+                    "Successful Dochazka employee search displayed full name Nathan Cutler",
+                );
+                assert.strictEqual(
+                    $('#ePnick').text(),
+                    "ncutler",
+                    "Successful Dochazka employee displayed nick ncutler",
+                );
+                done();
+            }, 1500);
         });
 
     };
