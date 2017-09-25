@@ -279,14 +279,17 @@ define ([
         });
 
         test_desc = 'Search Dochazka employees - success no wildcard';
+        // searches for an exact match - the resulting dbrowser will
+        // contain only one object
         QUnit.test(test_desc, function (assert) {
             console.log('***TEST*** ' + prefix + test_desc);
-            var done = assert.async(2);
+            var done = assert.async(3);
             login({"nam": "root", "pwd": "immutable"});
             setTimeout(function () {
                 cannedTests.login(assert, "root", "admin");
                 cannedTests.mainMenuToMainEmpl(assert);
                 cannedTests.mainEmplToSearchEmployee(assert);
+                // enter search term into form
                 $('#searchEmployee input[name="entry0"]').val('ncutler');
                 // choose '0' to start search
                 $('input[name="sel"]').val('0');
@@ -314,15 +317,36 @@ define ([
                 assert.strictEqual(
                     $('#ePfullname').text(),
                     "Nathan Cutler",
-                    "Successful Dochazka employee search displayed full name Nathan Cutler",
+                    "Dochazka employee search succeeded - full name Nathan Cutler displayed",
                 );
                 assert.strictEqual(
                     $('#ePnick').text(),
                     "ncutler",
-                    "Successful Dochazka employee displayed nick ncutler",
+                    "Dochazka employee search succeeded - nick ncutler displayed",
+                );
+                cannedTests.contains(
+                    assert,
+                    $('#mainarea').html(),
+                    "#mainarea html",
+                    "0. LDAP sync",
+                );
+                assert.ok(true, "*** REACHED miniMenu contains 0. LDAP sync");
+                // choose '0' for ldapSync
+                $('input[name="sel"]').val('0');
+                $('input[name="sel"]').focus();
+                start.mmKeyListener($.Event("keydown", {keyCode: 13}));
+                assert.ok(true, "*** REACHED pressed 0 for LDAP sync");
+                done();
+            }, 2000);
+            setTimeout(function () {
+                cannedTests.contains(
+                    assert,
+                    $('#result').html(),
+                    "#result html",
+                    "Employee profile updated from LDAP",
                 );
                 done();
-            }, 1500);
+            }, 3500);
         });
 
     };

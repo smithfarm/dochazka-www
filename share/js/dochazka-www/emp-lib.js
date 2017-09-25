@@ -325,7 +325,7 @@ define ([
                         var obj = coreLib.dbrowserState.set[coreLib.dbrowserState.pos];
                         $.extend(coreLib.dbrowserState.obj, ldapEmployeeObject);
                         $.extend(obj, ldapEmployeeObject);
-                        start.dbrowserListen();
+                        start.dbrowserListen("Employee profile updated from LDAP");
                     }
                     if (document.getElementById('empProfile')) {
                         console.log("empProfile DOM element is present");
