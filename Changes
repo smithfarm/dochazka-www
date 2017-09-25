@@ -294,3 +294,19 @@ Revision history for App-Dochazka-WWW
 - tests/main-menu.js: use current user object correctly
 - js: tests: refactor all three existing tests
 
+0.150 2017-09-25 17:36 CEST
+- js: emp-lib: migrate ldapLookupSubmit() to target stack
+- js: tests: add LDAP lookup test case
+- js: tests: put focus on selection field when populating it
+- canned-tests.js: use stack methods instead of examining stack itself
+- emp-lib.js: use stack to display employee in ldapEmployeeLink
+- tests: main-empl.js: return to dmenu from LDAP test before logging out
+- tests: main-empl.js: implement LDAP lookup - failure test case
+- js: emp-lib: light refactor of ldapEmployeeObject handling
+- js: tests: main-empl: change how LDAP lookup success is determined
+- js: tests: main-empl: after ncutler LDAP lookup, add him to Dochazka
+- js: tests: implement Search Dochazka employees - success test case
+- js: emp-lib: refrain from pushing duplicate ldapDisplayEmployee targets
+- js: add test case for LDAP sync from simpleEmployeeBrowser
+- js: emp-lib: update dbrowser dataset after successful empProfile edit
+
