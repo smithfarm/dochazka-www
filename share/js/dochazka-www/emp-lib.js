@@ -144,10 +144,11 @@ define ([
                             count = rs.length;
         
                         console.log("Search found " + count + " employees");
-                        stack.push('simpleEmployeeBrowser', {
-                            'set': rs,
-                            'pos': 0
-                        });
+                        stack.push(
+                            "simpleEmployeeBrowser",
+                            {"set": rs, "pos": 0},
+                            {"flag": true},
+                        );
                     } else {
                         coreLib.displayError("Unexpected status code " + st.code);
                     }
@@ -351,7 +352,8 @@ define ([
 
         empProfileEditSave = function (emp) {
             var protoEmp = Object.create(prototypes.empProfile),
-                employeeProfile;
+                employeeProfile,
+                parentTarget;
             console.log("Entering empProfileEditSave with object", emp);
             $.extend(protoEmp, emp);
             var rest = {
@@ -360,14 +362,31 @@ define ([
                     "body": protoEmp.sanitize()
                 },
                 sc = function (st) {
-                    // st stands for "status", i.e. AJAX return value/object
-                    console.log("Saved new employee object to database: ", protoEmp);
+                    console.log("POST employee/nick returned status", st);
+                    // what we do now depends on what targets are on the stack
+                    // the target on the top of the stack will be "empProfileEdit"
+                    // but the one below that can be either "empProfile" or
+                    // "simpleEmployeeBrowser"
+                    parentTarget = stack.getTarget(-1);
+                    console.log("parentTarget", parentTarget);
                     employeeProfile = Object.create(prototypes.empProfile);
                     $.extend(employeeProfile, st.payload);
-                    console.log("Profile object is", employeeProfile);
-                    currentUser('obj', employeeProfile);
-                    stack.unwindToFlag(); // return to most recent dmenu
-                    coreLib.displayResult("Employee profile updated");
+                    if (parentTarget.name === 'empProfile') {
+                        console.log("Profile object is", employeeProfile);
+                        currentUser('obj', employeeProfile);
+                        stack.pop(employeeProfile, {"resultLine": "Employee profile updated"});
+                    } else if (parentTarget.name === 'simpleEmployeeBrowser') {
+                        console.log("Parent target is " + parentTarget.name);
+                        console.log("current object in dbrowerState set",
+                                    coreLib.dbrowserState.set[coreLib.dbrowserState.pos]);
+                        $.extend(
+                            coreLib.dbrowserState.set[coreLib.dbrowserState.pos],
+                            employeeProfile
+                        );
+                        stack.pop(undefined, {"resultLine": "Employee profile updated"});
+                    } else {
+                        console.log("FATAL ERROR: unexpected parent target", parentTarget);
+                    }
                 },
                 fc = function (st) {
                     console.log("AJAX: " + rest["path"] + " failed with", st);
