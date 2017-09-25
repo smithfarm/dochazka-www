@@ -283,7 +283,7 @@ define ([
         // contain only one object
         QUnit.test(test_desc, function (assert) {
             console.log('***TEST*** ' + prefix + test_desc);
-            var done = assert.async(3);
+            var done = assert.async(4);
             login({"nam": "root", "pwd": "immutable"});
             setTimeout(function () {
                 cannedTests.login(assert, "root", "admin");
@@ -337,7 +337,7 @@ define ([
                 start.mmKeyListener($.Event("keydown", {keyCode: 13}));
                 assert.ok(true, "*** REACHED pressed 0 for LDAP sync");
                 done();
-            }, 2000);
+            }, 2500);
             setTimeout(function () {
                 cannedTests.contains(
                     assert,
@@ -345,8 +345,47 @@ define ([
                     "#result html",
                     "Employee profile updated from LDAP",
                 );
+                cannedTests.stack(
+                    assert,
+                    4,
+                    'in simpleEmployeeBrowser dbrowser',
+                    'dbrowser',
+                    'simpleEmployeeBrowser'
+                );
+                $('input[name="sel"]').val('x');
+                $('input[name="sel"]').focus();
+                start.mmKeyListener($.Event("keydown", {keyCode: 13}));
+                cannedTests.stack(
+                    assert,
+                    3,
+                    'After selecting X in simpleEmployeeBrowser',
+                    'dform',
+                    'searchEmployee',
+                );
+                assert.ok(true, "*** REACHED searchEmployee dform via X from simpleEmployeeBrowser");
+                assert.strictEqual(
+                    coreLib.focusedItem().name,
+                    'sel',
+                    'Focus is on selection field',
+                );
+                $('input[name="sel"]').val('x');
+                $('input[name="sel"]').focus();
+                start.mmKeyListener($.Event("keydown", {keyCode: 13}));
+                cannedTests.stack(
+                    assert,
+                    2,
+                    'After selecting X in ldapLookup',
+                    'dmenu',
+                    'mainEmpl'
+                );
+                assert.ok(true, "*** REACHED mainEmpl dmenu via X from ldapLookup");
+                loggout();
                 done();
-            }, 3500);
+            }, 4000);
+            setTimeout(function () {
+                cannedTests.loggout(assert);
+                done();
+            }, 5000);
         });
 
     };
