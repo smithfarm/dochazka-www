@@ -303,7 +303,9 @@ define ([
             //     Object.create(prototypes.ldapEmpObject),
             //     ldapEmp
             // );
-            var nick = ldapEmp.nick,
+            var bo,
+                nick = ldapEmp.nick,
+                stackTarget,
                 rest = {
                     method: 'PUT',
                     path: 'employee/nick/' + nick + '/ldap'
@@ -316,22 +318,21 @@ define ([
                         ldapEmployeeObject = $.extend(ldapEmployeeObject, st.payload);
                         ldapEmployeeObject.dochazka = true;
                     }
-                    if (document.getElementById('ldapDisplayEmployee')) {
-                        console.log("ldapDisplayEmployee DOM element is present");
+                    stackTarget = stack.getTarget().name;
+                    console.log("Detected target ' + stackTarget + ' on top of stack");
+                    if (stackTarget === 'ldapDisplayEmployee') {
                         ldapEmployeeLink();
-                    }
-                    if (document.getElementById('simpleEmployeeBrowser')) {
-                        console.log("simpleEmployeeBrowser DOM element is present");
+                    } else if (stackTarget === 'simpleEmployeeBrowser') {
                         // FIXME: this code belongs in App::MFILE::WWW
-                        var obj = coreLib.dbrowserState.set[coreLib.dbrowserState.pos];
+                        bo = coreLib.dbrowserState.set[coreLib.dbrowserState.pos];
                         $.extend(coreLib.dbrowserState.obj, ldapEmployeeObject);
-                        $.extend(obj, ldapEmployeeObject);
+                        $.extend(bo, ldapEmployeeObject);
                         start.dbrowserListen("Employee profile updated from LDAP");
-                    }
-                    if (document.getElementById('empProfile')) {
-                        console.log("empProfile DOM element is present");
-                        coreLib.displayResult("Employee profile updated from LDAP");
-                        stack.unwindToFlag(); // return to most recent dmenu
+                    } else if (stackTarget === 'empProfile') {
+                        stack.restart(
+                            ldapEmployeeObject,
+                            {"resultLine": "Employee profile updated from LDAP"},
+                        );
                     }
                 },
                 // failure callback -- employee doesn't exist
