@@ -92,7 +92,6 @@ define ([
                     coreLib.displayError(st.payload.message);
                 };
             ajax(rest, sc, fc);
-            coreLib.ajaxMessage();
         },
 
         empProfileEditSave = function (emp) {

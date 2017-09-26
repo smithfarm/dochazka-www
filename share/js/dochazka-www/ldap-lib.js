@@ -130,7 +130,6 @@ define ([
                     coreLib.displayError(st.payload.message);
                 };
             ajax(rest, sc, fc);
-            coreLib.ajaxMessage();
         },
 
         ldapSync = function (ldapEmp) {
@@ -186,7 +185,6 @@ define ([
                     coreLib.displayError(msg);
                 }
             ajax(rest, sc, fc);
-            coreLib.ajaxMessage();
         },
 
         ldapSyncFromBrowser = function (obj) {
