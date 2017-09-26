@@ -25,6 +25,7 @@ share/js/dochazka-www/dnotice-hooks.js
 share/js/dochazka-www/drowselect-init.js
 share/js/dochazka-www/dtable-init.js
 share/js/dochazka-www/emp-lib.js
+share/js/dochazka-www/ldap-lib.js
 share/js/dochazka-www/priv-lib.js
 share/js/dochazka-www/sched-history-lib.js
 share/js/dochazka-www/sched-lib.js

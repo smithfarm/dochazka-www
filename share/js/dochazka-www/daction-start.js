@@ -44,6 +44,7 @@ define ([
     "jquery",
     "current-user",
     "app/emp-lib",
+    "app/ldap-lib",
     "app/priv-lib",
     "app/sched-history-lib",
     "app/sched-lib",
@@ -56,6 +57,7 @@ define ([
     $,
     currentUser,
     empLib,
+    ldapLib,
     privLib,
     schedHistLib,
     schedLib,
@@ -79,14 +81,16 @@ define ([
             start.dbrowserListen();
         },
 
-        // actions triggered from Employee menu
+        // Employee, non-LDAP actions
         "myProfileAction": empLib.myProfileAction,
         "empProfileEditSave": empLib.empProfileEditSave,
-        "ldapLookupSubmit": empLib.ldapLookupSubmit,
-        "ldapSync": empLib.ldapSync,
-        "ldapSyncFromBrowser": empLib.ldapSyncFromBrowser,
         "actionEmplSearch": empLib.actionEmplSearch,
         "masqEmployee": empLib.masqEmployee,
+
+        // Employee LDAP actions
+        "ldapLookupSubmit": ldapLib.ldapLookupSubmit,
+        "ldapSync": ldapLib.ldapSync,
+        "ldapSyncFromBrowser": ldapLib.ldapSyncFromBrowser,
 
         // actions triggered from Priv (status) menu
         "actionPrivHistory": privLib.actionPrivHistory,
