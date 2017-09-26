@@ -175,14 +175,6 @@ define ([
             'aclProfile': 'admin',
             'entriesRead': [entries.ePnick],
             'entriesWrite': [entries.pHeffective, entries.sDid, entries.sDcode],
-            'hook': function () {
-                    return {
-                        'nick': currentUser('obj').nick,
-                        'effective': null,
-                        'sid': null,
-                        'scode': null
-                    };
-                },
             'miniMenu': {
                 entries: ['schedHistorySaveAction']
             }
@@ -198,12 +190,6 @@ define ([
             'entriesRead': null,
             'entriesWrite': [entries.sScode, entries.sSid],
             'rememberState': false,
-            'hook': function () {
-                return {
-                    searchKeySchedCode: null,
-                    searchKeySchedID: null
-                };
-            },
             'miniMenu': {
                 entries: ['actionSchedLookup']
             }
@@ -227,7 +213,6 @@ define ([
         }); // target.push('schedDisplay'
 
         var schedEditObj = {
-                'name': 'schedEdit',
                 'type': 'dform',
                 'menuText': 'Edit',
                 'title': 'Schedule edit',
@@ -244,16 +229,13 @@ define ([
                 }
             },
             schedEditFromBrowserObj = coreLib.shallowCopy(schedEditObj);
-        schedEditFromBrowserObj.name = 'schedEditFromBrowser';
-        // schedEditFromBrowserObj.miniMenu.back = ['Back', 'returnToBrowser'];
-        schedEditFromBrowserObj.hook = function () {
-            return coreLib.dbrowserState.set[coreLib.dbrowserState.pos];
-        };
+
+        schedEditObj['name'] = 'schedEdit';
         target.push('schedEdit', schedEditObj);
+        schedEditFromBrowserObj['name'] = 'schedEditFromBrowser';
         target.push('schedEditFromBrowser', schedEditFromBrowserObj);
 
         var schedDeleteObj = {
-                'name': 'schedDelete',
                 'type': 'dform',
                 'menuText': 'Delete',
                 'title': 'Schedule delete',
@@ -271,12 +253,10 @@ define ([
                 }
             },
             schedDeleteFromBrowserObj = coreLib.shallowCopy(schedDeleteObj);
-        schedDeleteFromBrowserObj.name = 'schedDeleteFromBrowser';
-        schedDeleteFromBrowserObj.miniMenu.back = ['Back', 'returnToBrowser'];
-        schedDeleteFromBrowserObj.hook = function () {
-            return coreLib.dbrowserState.set[coreLib.dbrowserState.pos];
-        };
+
+        schedDeleteObj.name = 'schedDelete';
         target.push('schedDelete', schedDeleteObj);
+        schedDeleteFromBrowserObj['name'] = 'schedDeleteFromBrowser';
         target.push('schedDeleteFromBrowser', schedDeleteFromBrowserObj);
 
         target.push('schedNewBoilerplate', {
@@ -291,12 +271,6 @@ define ([
             'aclProfile': 'admin',
             'entriesRead': null,
             'entriesWrite': [entries.sCboiler, entries.sDcode],
-            'hook': function () {
-                 return {
-                     'scode': null,
-                     'boilerplate': null,
-                 };
-            },
             'miniMenu': {
                 entries: ['createSchedule']
             }
@@ -315,18 +289,6 @@ define ([
             'entriesWrite': [entries.sDmon, entries.sDtue,
                              entries.sDwed, entries.sDthu, entries.sDfri,
                              entries.sDsat, entries.sDsun, entries.sDcode],
-            'hook': function () {
-                 return {
-                     'scode': null,
-                     'mon': null,
-                     'tue': null,
-                     'wed': null,
-                     'thu': null,
-                     'fri': null,
-                     'sat': null,
-                     'sun': null,
-                 };
-            },
             'miniMenu': {
                 entries: ['createSchedule']
             }
