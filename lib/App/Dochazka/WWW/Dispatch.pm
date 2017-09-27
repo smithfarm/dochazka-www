@@ -119,9 +119,23 @@ sub process_post {
         return 0;
     }
 
-    my $method = $ajax->{'method'};
-    my $path = $ajax->{'path'};
-    my $body = $ajax->{'body'} || {};
+    my ( $method, $path, $body );
+
+    if ( exists $ajax->{'method'} ) {
+        $method = $ajax->{'method'};
+    } else {
+        $log->crit( 'POST request received, but missing mandatory attribute "method" - ' .
+                    'here is the entire request body: ' . Dumper( $ajax ) );
+        return 0;
+    }
+    if ( exists $ajax->{'path'} and $ajax->{'path'} ) {
+        $path = $ajax->{'path'};
+    } else {
+        $log->crit( 'POST request received, but missing mandatory attribute "path" - ' .
+                    'here is the entire request body: ' . Dumper( $ajax ) );
+        return 0;
+    }
+    $body = $ajax->{'body'} || {};
 
     $log->debug( "process_post: method $method, path $path, body " . Dumper $body );
 
