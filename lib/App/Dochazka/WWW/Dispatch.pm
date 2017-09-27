@@ -41,7 +41,7 @@ use strict;
 use warnings;
 
 use App::CELL qw( $CELL $log $meta $site );
-use App::MFILE::HTTP qw( rest_req );
+use App::MFILE::HTTP qw( rest_req _is_authorized );
 use Data::Dumper;
 use File::Temp qw( tempfile );
 use JSON;
@@ -95,53 +95,7 @@ leverage it to validate the session.
 sub is_authorized {
     my ( $self ) = @_;
 
-    $log->debug( "Entering " . __PACKAGE__ . "::is_authorized()" );
-
-    my $r = $self->request;
-    my $session = $self->session;
-    my $remote_addr = $r->{'env'}->{'REMOTE_ADDR'};
-    my $ce;
-
-    #$log->debug( "Environment is " . Dumper( $r->{'env'} ) );
-    $log->debug( "Session is " . Dumper( $session ) );
-
-    # authorized session
-    if ( $ce = $session->{'currentUser'} and
-         $session->{'ip_addr'} and
-         $session->{'ip_addr'} eq $remote_addr and
-         _is_fresh( $session ) )
-    {
-        $log->debug( "is_authorized: Authorized session, employee " . $ce->{'nick'} );
-        $session->{'last_seen'} = time;
-        return 1;
-    }
-
-    # login attempt
-    if ( $r->method eq 'POST' and 
-         $self->context->{'request_body'} and 
-         $self->context->{'request_body'}->{'method'} and
-         $self->context->{'request_body'}->{'method'} =~ m/^LOGIN/i ) {
-        $log->debug( "is_authorized: Login attempt - pass it on" );
-        return 1;
-    }
-
-    # login bypass
-    $meta->set('META_LOGIN_BYPASS_STATE', 0) if not defined $meta->META_LOGIN_BYPASS_STATE;
-    if ( $site->MFILE_WWW_BYPASS_LOGIN_DIALOG and not $meta->META_LOGIN_BYPASS_STATE ) {
-        $log->notice("Bypassing login dialog! Using default credentials");
-        $session->{'ip_addr'} = $remote_addr;
-        $session->{'last_seen'} = time;
-        my $bypass_result = $self->_login_dialog( {
-            'nam' => $site->MFILE_WWW_DEFAULT_LOGIN_CREDENTIALS->{'nam'},
-            'pwd' => $site->MFILE_WWW_DEFAULT_LOGIN_CREDENTIALS->{'pwd'},
-        } );
-        $meta->set('META_LOGIN_BYPASS_STATE', 1);
-        return $bypass_result;
-    }
-
-    # unauthorized session
-    $log->debug( "is_authorized fall-through: " . $r->method . " " . $self->request->path_info );
-    return 1;
+    return _is_authorized( $self );
 }
 
 
@@ -196,7 +150,7 @@ back to the JavaScript side.
 
 There is one special case: the POST request from the login dialog looks like this:
 
-    { method: "LOGIN", path: "login", body: { nam: 'nick', pwd: 'kcin" } }
+    { method: "LOGIN", path: "login", body: { nam: "foo", pwd: "bar" } }
 
 Login requests receive special handling.
 
@@ -349,10 +303,6 @@ sub _prep_ajax_response {
     return 1;
 }
 
-=head3 _is_fresh
-
-=cut
-
 sub _is_fresh {
     my ( $session ) = validate_pos( @_, { type => HASHREF } );
 
@@ -362,6 +312,5 @@ sub _is_fresh {
         ? 0
         : 1;
 }
-
 
 1;
