@@ -41,25 +41,19 @@ use strict;
 use warnings;
 
 use App::CELL qw( $CELL $log $meta $site );
-use App::MFILE::HTTP qw( rest_req _is_authorized );
 use Data::Dumper;
-use File::Temp qw( tempfile );
 use JSON;
-use LWP::UserAgent;
 use Params::Validate qw(:all);
 use Try::Tiny;
 
 # methods/attributes not defined in this module will be inherited from:
 use parent 'App::MFILE::WWW::Resource';
 
-our $ualt = {};  # user agent lookup table
-
 
 
 =head1 NAME
 
 App::MFILE::WWW::Dispatch - app dispatch stub
-
 
 
 
@@ -81,51 +75,7 @@ application's dispatch module will be used, instead.
 
 
 
-
 =head1 METHODS
-
-
-=head2 is_authorized
-
-Since all requests go through this function at a fairly early stage, we 
-leverage it to validate the session. 
-
-=cut
-
-sub is_authorized {
-    my ( $self ) = @_;
-
-    return _is_authorized( $self );
-}
-
-
-=head2 ua
-
-Returns the LWP::UserAgent object obtained from the lookup table.
-Creates it first if necessary.
-
-=cut
-
-sub ua {
-    my $self = shift;
-    $log->debug( "Entering " . __PACKAGE__ . "::ua()" );
-    my $id = $self->session_id;
-    $log->debug( "ua: session_id is $id" );
-
-    # already in lookup table
-    if ( exists $ualt->{$id} ) {
-         $log->debug( "Session $id already has a LWP::UserAgent object" );
-         return $ualt->{$id};
-    }
-
-    # not in lookup table yet
-    my $tf = "";
-    ( undef, $tf ) = tempfile();
-    $ualt->{$id} = LWP::UserAgent->new;
-    $ualt->{$id}->cookie_jar({ file => $tf });
-    $log->info("New user agent created with cookies in $tf");
-    return $ualt->{$id};
-}
 
 
 =head2 process_post
@@ -194,7 +144,7 @@ sub process_post {
     # - normal AJAX call
     $log->debug( "Calling rest_req $method $path on session ID " . $self->session_id );
     $session->{'last_seen'} = time;
-    my $rr = rest_req( $self->ua(), {
+    my $rr = $self->rest_req( {
         server => $site->DOCHAZKA_WWW_BACKEND_URI,
         method => $method,
         path => $path,
@@ -220,7 +170,7 @@ sub _login_dialog {
     $log->debug( "DOCHAZKA_WWW_BACKEND_URI is " .  $site->DOCHAZKA_WWW_BACKEND_URI );
 
     my ( $code, $message, $body_json );
-    my $rr = rest_req( $self->ua(), {
+    my $rr = $self->rest_req( {
         server => $site->DOCHAZKA_WWW_BACKEND_URI,
         nick => $nick,
         password => $password,
@@ -230,42 +180,20 @@ sub _login_dialog {
     $message = $rr->{'hr'}->message;
     $body_json = $rr->{'body'};
 
-    my $status;
-    if ( $code == 200 ) {
-        $session->{'ip_addr'} = $r->{'env'}->{'REMOTE_ADDR'};
-        my $cu = $body_json->{'payload'}->{'emp'};
-        delete $cu->{'passhash'};
-        delete $cu->{'salt'};
-        $session->{'currentUser'} = $cu;
-        $session->{'currentUserPriv'} = $body_json->{'payload'}->{'priv'};
-        $session->{'last_seen'} = time;
-        $log->debug( 
-            "Login successful, currentUser is now " . 
-            Dumper( $body_json->{'payload'}->{'emp'} ) .
-            " and privilege level is " . $body_json->{'payload'}->{'priv'}
-        );
-        return 1 if $site->MFILE_WWW_BYPASS_LOGIN_DIALOG and ! $meta->META_LOGIN_BYPASS_STATE;
-        $status = $CELL->status_ok( 'MFILE_WWW_LOGIN_OK', payload => $body_json->{'payload'} );
-    } else {
-        $session = {};
-        $log->debug( "Login unsuccessful, reset session" );
-        return 0 if $site->MFILE_WWW_BYPASS_LOGIN_DIALOG and ! $meta->META_LOGIN_BYPASS_STATE;
-        $status = $CELL->status_not_ok( 
-            'MFILE_WWW_LOGIN_FAIL: %s', 
-            args => [ $code ],
-            payload => { code => $code, message => $message },
-        );
+    if ( $site->MFILE_WWW_BYPASS_LOGIN_DIALOG and ! $meta->META_LOGIN_BYPASS_STATE ) {
+        return ( $code == 200 ) ? 1 : 0;
     }
-    $self->response->header( 'Content-Type' => 'application/json' );
-    $self->response->body( to_json( $status->expurgate ) );
-    return 1;
+
+    my $status = $self->login_status( $code, $message, $body_json );
+    return $status;
 }
          
+
 sub _logout {
     my ( $self ) = @_;
     $log->debug( "Entering " . __PACKAGE__ . "::_logout()" );
 
-    my $rr = rest_req( $self->ua(), {
+    my $rr = $self->rest_req( {
         server => $site->DOCHAZKA_WWW_BACKEND_URI,
         method => 'POST',
         path => 'session/terminate',
@@ -284,6 +212,7 @@ sub _logout {
     return $self->_prep_ajax_response( $hr, $rr->{'body'} );
 }
 
+
 sub _prep_ajax_response {
     my ( $self, $hr, $body ) = @_;
     $log->debug( "Entering " . __PACKAGE__ . "::_prep_ajax_response()" );
@@ -301,16 +230,6 @@ sub _prep_ajax_response {
     $self->response->header('Content-Encoding' => 'UTF-8' );
     $self->response->body( JSON->new->encode( $expurgated_status ) );
     return 1;
-}
-
-sub _is_fresh {
-    my ( $session ) = validate_pos( @_, { type => HASHREF } );
-
-    return 0 unless my $last_seen = $session->{'last_seen'};
-
-    return ( time - $last_seen > $site->MFILE_WWW_SESSION_EXPIRATION_TIME )
-        ? 0
-        : 1;
 }
 
 1;
