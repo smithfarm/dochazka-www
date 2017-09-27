@@ -75,7 +75,7 @@ define ([
             'miniMenu': {
                 entries: ['empProfileEdit', 'ldapSync']
             }
-        }); // target.push('empProfile'
+        }); // empProfile
 
         target.push('empProfileEdit', {
             'name': 'empProfileEdit',
@@ -91,7 +91,7 @@ define ([
             'miniMenu': {
                 entries: ['empProfileEditSave']
             }
-        }); // target.push('empProfileEdit'
+        }); // empProfileEdit
 
         target.push('ldapLookup', {
             'name': 'ldapLookup',
@@ -105,7 +105,7 @@ define ([
             'miniMenu': {
                 entries: ['ldapLookupSubmit']
             }
-        }); // target.push('ldapLookup'
+        }); // ldapLookup
 
         target.push('ldapDisplayEmployee', {
             'name': 'ldapDisplayEmployee',
@@ -119,7 +119,7 @@ define ([
             'miniMenu': {
                 entries: ['ldapSync']
             }
-        }); // target.push('ldapDisplayEmployee'
+        }); // ldapDisplayEmployee
 
         target.push('searchEmployee', {
             'name': 'searchEmployee',
@@ -133,7 +133,7 @@ define ([
             'miniMenu': {
                 entries: ['actionEmplSearch']
             }
-        }); // target.push('searchEmployee'
+        }); // searchEmployee
 
         target.push('restServerDetails', {
             'name': 'restServerDetails',
@@ -148,7 +148,7 @@ define ([
             'miniMenu': {
                 entries: []
             }
-        }); // target.push('restServerDetails'
+        }); // restServerDetails
 
         target.push('privHistoryAddRecord', {
             'name': 'privHistoryAddRecord',
@@ -163,7 +163,7 @@ define ([
             'miniMenu': {
                 entries: ['privHistorySaveAction']
             }
-        }); // target.push('privHistoryAddRecord'
+        }); // privHistoryAddRecord
 
         target.push('schedHistoryAddRecord', {
             'name': 'schedHistoryAddRecord',
@@ -178,14 +178,14 @@ define ([
             'miniMenu': {
                 entries: ['schedHistorySaveAction']
             }
-        }); // target.push('schedHistoryAddRecord'
+        }); // schedHistoryAddRecord
 
         target.push('schedLookup', {
             'name': 'schedLookup',
             'type': 'dform',
             'menuText': 'Look up schedule by code or ID',
             'title': 'Look up schedule by code or ID',
-            'preamble': 'Enter a schedule code or ID',
+            'preamble': 'Enter a schedule code or ID (must be an exact match)',
             'aclProfile': 'passerby',
             'entriesRead': null,
             'entriesWrite': [entries.sScode, entries.sSid],
@@ -193,7 +193,7 @@ define ([
             'miniMenu': {
                 entries: ['actionSchedLookup']
             }
-        }); // target.push('schedLookup'
+        }); // schedLookup
 
         target.push('schedDisplay', {
             'name': 'schedDisplay',
@@ -210,7 +210,7 @@ define ([
             'miniMenu': {
                 entries: ['schedEdit', 'schedDelete']
             }
-        }); // target.push('schedDisplay'
+        }); // schedDisplay
 
         var schedEditObj = {
                 'type': 'dform',
@@ -269,12 +269,12 @@ define ([
                         '<b>Schedule intervals will be replicated for Monday-Friday</b><br>' +
                         'Note: schedule code is optional',
             'aclProfile': 'admin',
-            'entriesRead': null,
+            'entriesRead': [entries.sDid],
             'entriesWrite': [entries.sCboiler, entries.sDcode],
             'miniMenu': {
                 entries: ['createSchedule']
             }
-        }); // target.push('schedDisplay'
+        }); // schedNewBoilerPlate
 
         target.push('schedNewCustom', {
             'name': 'schedNewCustom',
@@ -285,14 +285,14 @@ define ([
                         'Example: 8:00-12:00; 12:30-16:30<br>' +
                         'Note: schedule code is optional',
             'aclProfile': 'admin',
-            'entriesRead': null,
+            'entriesRead': [entries.sDid],
             'entriesWrite': [entries.sDmon, entries.sDtue,
                              entries.sDwed, entries.sDthu, entries.sDfri,
                              entries.sDsat, entries.sDsun, entries.sDcode],
             'miniMenu': {
                 entries: ['createSchedule']
             }
-        }); // target.push('schedDisplay'
+        }); // schedNewCustom
 
     }; // return function ()
     

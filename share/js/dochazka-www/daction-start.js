@@ -108,6 +108,7 @@ define ([
         "browseAllSchedules": schedLib.browseAllSchedules,
         "actionSchedLookup": schedLib.actionSchedLookup,
         "createSchedule": schedLib.createSchedule,
+        "actionDisplaySchedule": schedLib.actionDisplaySchedule,
         "schedEditSave": schedLib.schedEditSave,
         "schedReallyDelete": schedLib.schedReallyDelete,
 

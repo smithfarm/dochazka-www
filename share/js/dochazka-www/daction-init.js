@@ -231,6 +231,14 @@ define ([
             'start': dactionStart('createSchedule'),
             'pushable': false
         });
+        target.push('actionDisplaySchedule', {
+            'name': 'actionDisplaySchedule',
+            'type': 'daction',
+            'menuText': 'Display',
+            'aclProfile': 'inactive',
+            'start': dactionStart('actionDisplaySchedule'),
+            'pushable': false
+        });
         target.push('schedEditSave', {
             'name': 'schedEditSave',
             'type': 'daction',
