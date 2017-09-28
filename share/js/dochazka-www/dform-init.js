@@ -102,6 +102,7 @@ define ([
             'aclProfile': 'active',
             'entriesRead': null,
             'entriesWrite': [entries.ePnick],
+            'rememberState': true,
             'miniMenu': {
                 entries: ['ldapLookupSubmit']
             }
@@ -189,7 +190,7 @@ define ([
             'aclProfile': 'passerby',
             'entriesRead': null,
             'entriesWrite': [entries.sScode, entries.sSid],
-            'rememberState': false,
+            'rememberState': true,
             'miniMenu': {
                 entries: ['actionSchedLookup']
             }
