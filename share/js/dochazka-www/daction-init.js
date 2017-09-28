@@ -71,7 +71,7 @@ define ([
             'menuText': 'My profile',
             'aclProfile': 'passerby',
             'start': dactionStart('myProfileAction'),
-            'pushable': true
+            'pushable': false
         });
         target.push('empProfileEditSave', {
             'name': 'empProfileEditSave',
@@ -221,7 +221,7 @@ define ([
             'menuText': 'Lookup',
             'aclProfile': 'admin',
             'start': dactionStart('actionSchedLookup'),
-            'pushable': true
+            'pushable': false
         });
         target.push('createSchedule', {
             'name': 'createSchedule',
