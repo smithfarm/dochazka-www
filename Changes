@@ -310,3 +310,16 @@ Revision history for App-Dochazka-WWW
 - js: add test case for LDAP sync from simpleEmployeeBrowser
 - js: emp-lib: update dbrowser dataset after successful empProfile edit
 
+0.151 2017-09-28 11:43 CEST
+- js: emp-lib: rely on stack in LDAPsync AJAX success callback
+- js: emp-lib: refactor, split off LDAP functions into ldap-lib.js
+- js: cleanup: remove last vestiges of (dform, dbrowser) "hook"
+- js: cleanup: refrain from calling ajaxMessage() twice
+- Dispatch.pm: migrate is_authorized to App::MFILE::HTTP
+- Eliminate dependency on App::MFILE distro
+- Dispatch.pm: improve process_post error handling
+- js: immediately display schedules upon creation
+- js: daction-init: some action targets were still pushable
+- js: dform-init: activate rememberState for some dforms
+- js: tests: add "bogus schedule lookup" test case
+
