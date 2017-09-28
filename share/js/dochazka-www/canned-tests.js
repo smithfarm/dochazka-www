@@ -238,6 +238,46 @@ define ([
             assert.ok(true, "*** REACHED mainEmpl dmenu");
         },
 
+        "mainMenuToMainSched": function (assert) {
+            var htmlbuf,
+                mainmarea,
+                sel;
+            mainareaFormFunc(assert, 'mainMenu');
+            sel = $('input[name="sel"]').val();
+            assert.strictEqual(sel, '', "Selection form field is empty");
+            // press '0' key in sel, but value does not change?
+            $('input[name="sel"]').trigger($.Event("keydown", {keyCode: 48})); // press '0' key
+            sel = $('input[name="sel"]').val();
+            assert.strictEqual(sel, '', "Selection form field is empty even after simulating 0 keypress");
+            // simulating keypress doesn't work, so just set the value to "0"
+            $('input[name="sel"]').val('2');
+            $('input[name="sel"]').focus();
+            // press ENTER -> submit the form
+            $('input[name="sel"]').trigger($.Event("keydown", {keyCode: 13}));
+            stackFunc(assert, 2, 'navigating from mainMenu to mainSched', 'dmenu', 'mainSched');
+            mainareaFormFunc(assert, 'mainSched');
+            containsFunc(assert, $('#mainarea').html(), "#mainarea", "Schedule menu");
+            assert.ok(true, "*** REACHED mainSched dmenu");
+        },
+
+        "mainSchedToSchedLookup": function (assert) {
+            var entry0,
+                entry1;
+            assert.ok(true, 'select 1 ("Look up schedule by code or ID") in mainSched as root');
+            $('input[name="sel"]').val('1');
+            $('input[name="sel"]').focus();
+            $('input[name="sel"]').trigger($.Event("keydown", {keyCode: 13}));
+            stackFunc(assert, 3, 'navigating from mainSched to schedLookup', 'dform', 'schedLookup');
+            mainareaFormFunc(assert, 'schedLookup');
+            containsFunc(assert, $('#mainarea').html(), "#mainarea",
+                "Look up schedule by code or ID");
+            entry0 = $('form#schedLookup input[name="entry0"]');
+            entry1 = $('form#schedLookup input[name="entry1"]');
+            assert.ok(entry0, "There is an entry0 in the schedLookup form");
+            assert.ok(entry1, "There is an entry1 in the schedLookup form");
+            assert.ok(true, "*** REACHED schedLookup dform");
+        },
+
         "stack": stackFunc,
 
         "submitLdapLookup": submitLdapLookupFunc,

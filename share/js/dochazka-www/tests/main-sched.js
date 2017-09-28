@@ -30,9 +30,9 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // *************************************************************************
 //
-// app/tests/main-menu.js
+// app/tests/main-sched.js
 //
-// Tests exercising the "mainMenu" dmenu
+// Tests exercising the "mainSched" dmenu and targets under it
 //
 "use strict";
 
@@ -40,14 +40,20 @@ define ([
   'QUnit',
   'jquery',
   'app/canned-tests',
+  'lib',
   'login',
   'loggout',
+  'stack',
+  'start',
 ], function (
   QUnit,
   $,
   ct,
+  coreLib,
   login,
   loggout,
+  stack,
+  start,
 ) {
 
     var prefix = "dochazka-www: ",
@@ -55,26 +61,67 @@ define ([
 
     return function () {
 
-        test_desc = 'main menu appears';
+        test_desc = 'schedule menu appears';
         QUnit.test(test_desc, function (assert) {
             console.log('***TEST*** ' + prefix + test_desc);
-            var done = assert.async(2),
-                mainarea,
-                htmlbuf,
-                cu;
-            login({"nam": "root", "pwd": "immutable"});
+            var done = assert.async(3);
+            login({"nam": "demo", "pwd": "demo"});
             setTimeout(function () {
-                ct.login(assert, "root", "admin");
-                loggout();
+                ct.login(assert, "demo", "passerby");
                 done();
             }, 500);
             setTimeout(function () {
-                ct.loggout(assert);
+                ct.mainMenuToMainSched(assert);
+                loggout();
                 done();
             }, 1000);
+            setTimeout(function () {
+                ct.loggout(assert);
+                done();
+            }, 1500);
+        });
+
+        test_desc = 'schedule lookup - bogus ID';
+        QUnit.test(test_desc, function (assert) {
+            console.log('***TEST*** ' + prefix + test_desc);
+            var done = assert.async(4);
+            login({"nam": "root", "pwd": "immutable"});
+            setTimeout(function () {
+                ct.login(assert, "root", "admin");
+                done();
+            }, 500);
+            setTimeout(function () {
+                var entry1;
+                ct.mainMenuToMainSched(assert);
+                ct.mainSchedToSchedLookup(assert);
+                entry1 = $('form#schedLookup input[name="entry1"]');
+                entry1.val('BOGOSITYWHELP');
+                assert.strictEqual(entry1.val(), 'BOGOSITYWHELP', "Form filled out with bogus data");
+                $('input[name="sel"]').val('0');
+                $('input[name="sel"]').focus();
+                start.mmKeyListener($.Event("keydown", {keyCode: 13}));
+                assert.ok(true, "*** REACHED schedLookup form submitted");
+                ct.ajaxCallInitiated(assert);
+                done();
+            }, 1000);
+            setTimeout(function () {
+                var htmlbuf = $("#result").html();
+                ct.stack(assert, 3, 'submitting bogus schedLookup form', 'dform', 'schedLookup');
+                assert.ok(htmlbuf, "#result html: " + htmlbuf);
+                ct.contains(assert, htmlbuf, "#result", 'URI does not match a known resource');
+                $('input[name="sel"]').val('x');
+                $('input[name="sel"]').focus();
+                start.mmKeyListener($.Event("keydown", {keyCode: 13}));
+                ct.stack(assert, 2, 'selecting "x" in schedLookup form', 'dmenu', 'mainSched');
+                loggout();
+                done();
+            }, 2000);
+            setTimeout(function () {
+                ct.loggout(assert);
+                done();
+            }, 2500);
         });
 
     };
-
 });
 

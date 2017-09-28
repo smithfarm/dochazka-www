@@ -48,7 +48,7 @@ define ([
 ], function (
   QUnit,
   $,
-  cannedTests,
+  ct,
   coreLib,
   login,
   loggout,
@@ -67,16 +67,16 @@ define ([
             var done = assert.async(3);
             login({"nam": "demo", "pwd": "demo"});
             setTimeout(function () {
-                cannedTests.login(assert, "demo", "passerby");
+                ct.login(assert, "demo", "passerby");
                 done();
             }, 500);
             setTimeout(function () {
-                cannedTests.mainMenuToMainEmpl(assert);
+                ct.mainMenuToMainEmpl(assert);
                 loggout();
                 done();
             }, 1000);
             setTimeout(function () {
-                cannedTests.loggout(assert);
+                ct.loggout(assert);
                 done();
             }, 1500);
         });
@@ -89,25 +89,25 @@ define ([
             setTimeout(function() {
                 var htmlbuf,
                     result;
-                cannedTests.login(assert, "demo", "passerby");
-                cannedTests.mainMenuToMainEmpl(assert);
+                ct.login(assert, "demo", "passerby");
+                ct.mainMenuToMainEmpl(assert);
                 assert.ok(true, 'select 0 ("My profile") in mainEmpl as demo');
                 $('input[name="sel"]').val('0');
                 $('input[name="sel"]').focus();
                 $('input[name="sel"]').trigger($.Event("keydown", {keyCode: 13}));
-                cannedTests.ajaxCallInitiated(assert);
+                ct.ajaxCallInitiated(assert);
                 done();
             }, 500);
             setTimeout(function() {
                 var result = $("#result"),
                     htmlbuf = result.html();
                 assert.ok(htmlbuf, "#result html: " + htmlbuf);
-                cannedTests.contains(assert, htmlbuf, "#result", 'ACL check failed for resource');
+                ct.contains(assert, htmlbuf, "#result", 'ACL check failed for resource');
                 loggout();
                 done();
             }, 1000);
             setTimeout(function () {
-                cannedTests.loggout(assert);
+                ct.loggout(assert);
                 done();
             }, 1500);
         });
@@ -118,22 +118,22 @@ define ([
             var done = assert.async(4);
             login({"nam": "root", "pwd": "immutable"});
             setTimeout(function () {
-                cannedTests.login(assert, "root", "admin");
-                cannedTests.mainMenuToMainEmpl(assert);
-                cannedTests.mainEmplToLdapLookup(assert);
-                cannedTests.submitLdapLookup(assert, 'ncutler');
+                ct.login(assert, "root", "admin");
+                ct.mainMenuToMainEmpl(assert);
+                ct.mainEmplToLdapLookup(assert);
+                ct.submitLdapLookup(assert, 'ncutler');
                 done();
             }, 1000);
             setTimeout(function () {
                 var ldapDochazka;
-                cannedTests.stack(
+                ct.stack(
                     assert,
                     4,
                     'Displaying LDAP employee after successful LDAP lookup',
                     'dform',
                     'ldapDisplayEmployee',
                 );
-                cannedTests.mainareaForm(assert, 'ldapDisplayEmployee');
+                ct.mainareaForm(assert, 'ldapDisplayEmployee');
                 assert.strictEqual(
                     $('#ePfullname').text(),
                     "Nathan Cutler",
@@ -151,7 +151,7 @@ define ([
                     "Answer to whether ncutler is in Dochazka (" + ldapDochazka + ") makes sense",
                 );
                 assert.ok(true, "*** REACHED Employee LDAP lookup success");
-                cannedTests.contains(
+                ct.contains(
                     assert,
                     $('#mainarea').html(),
                     "#mainarea html",
@@ -167,14 +167,14 @@ define ([
             }, 3000);
             setTimeout(function () {
                 var ldapDochazka = $('#LDAPdochazka').text();
-                cannedTests.stack(
+                ct.stack(
                     assert,
                     4,
                     'Displaying LDAP employee after successful LDAP lookup',
                     'dform',
                     'ldapDisplayEmployee',
                 );
-                cannedTests.mainareaForm(assert, 'ldapDisplayEmployee');
+                ct.mainareaForm(assert, 'ldapDisplayEmployee');
                 assert.ok(ldapDochazka, "ncutler is in Dochazka already? " + ldapDochazka);
                 assert.ok(
                     ldapDochazka === "YES",
@@ -183,7 +183,7 @@ define ([
                 $('input[name="sel"]').val('x');
                 $('input[name="sel"]').focus();
                 start.mmKeyListener($.Event("keydown", {keyCode: 13}));
-                cannedTests.stack(
+                ct.stack(
                     assert,
                     3,
                     'After selecting X in ldapDisplayEmployee',
@@ -199,7 +199,7 @@ define ([
                 $('input[name="sel"]').val('x');
                 $('input[name="sel"]').focus();
                 start.mmKeyListener($.Event("keydown", {keyCode: 13}));
-                cannedTests.stack(
+                ct.stack(
                     assert,
                     2,
                     'After selecting X in ldapLookup',
@@ -211,7 +211,7 @@ define ([
                 done();
             }, 4000);
             setTimeout(function () {
-                cannedTests.loggout(assert);
+                ct.loggout(assert);
                 done();
             }, 5000);
         });
@@ -222,21 +222,21 @@ define ([
             var done = assert.async(4);
             login({"nam": "root", "pwd": "immutable"});
             setTimeout(function () {
-                cannedTests.login(assert, "root", "admin");
-                cannedTests.mainMenuToMainEmpl(assert);
-                cannedTests.mainEmplToLdapLookup(assert);
-                cannedTests.submitLdapLookup(assert, 'NONEXISTENTfoobarbazblatFISHBEAR');
+                ct.login(assert, "root", "admin");
+                ct.mainMenuToMainEmpl(assert);
+                ct.mainEmplToLdapLookup(assert);
+                ct.submitLdapLookup(assert, 'NONEXISTENTfoobarbazblatFISHBEAR');
                 done();
             }, 1000);
             setTimeout(function () {
-                cannedTests.stack(
+                ct.stack(
                     assert,
                     3,
                     'failed LDAP lookup',
                     'dform',
                     'ldapLookup',
                 );
-                cannedTests.contains(
+                ct.contains(
                     assert,
                     $("#result").html(),
                     "#result html",
@@ -247,18 +247,18 @@ define ([
                     'entry0',
                     'Focus is on data entry field',
                 );
-                cannedTests.submitLdapLookup(assert, 'NONEXISTENTpseudoDataEntered');
+                ct.submitLdapLookup(assert, 'NONEXISTENTpseudoDataEntered');
                 done();
             }, 3000);
             setTimeout(function () {
-                cannedTests.stack(
+                ct.stack(
                     assert,
                     3,
                     'failed LDAP lookup',
                     'dform',
                     'ldapLookup',
                 );
-                cannedTests.contains(
+                ct.contains(
                     assert,
                     $("#result").html(),
                     "#result html",
@@ -273,7 +273,7 @@ define ([
                 done();
             }, 4000);
             setTimeout(function () {
-                cannedTests.loggout(assert);
+                ct.loggout(assert);
                 done();
             }, 5000);
         });
@@ -286,9 +286,9 @@ define ([
             var done = assert.async(4);
             login({"nam": "root", "pwd": "immutable"});
             setTimeout(function () {
-                cannedTests.login(assert, "root", "admin");
-                cannedTests.mainMenuToMainEmpl(assert);
-                cannedTests.mainEmplToSearchEmployee(assert);
+                ct.login(assert, "root", "admin");
+                ct.mainMenuToMainEmpl(assert);
+                ct.mainEmplToSearchEmployee(assert);
                 // enter search term into form
                 $('#searchEmployee input[name="entry0"]').val('ncutler');
                 // choose '0' to start search
@@ -300,20 +300,20 @@ define ([
             }, 1000);
             setTimeout(function () {
                 var htmlbuf = $("#mainarea").html();
-                cannedTests.stack(
+                ct.stack(
                     assert,
                     4,
                     'Reached simpleEmployeeBrowser dbrowser',
                     'dbrowser',
                     'simpleEmployeeBrowser'
                 );
-                cannedTests.contains(
+                ct.contains(
                     assert,
                     htmlbuf,
                     "#mainarea html",
                     "Employee search results",
                 );
-                cannedTests.mainareaForm(assert, "simpleEmployeeBrowser");
+                ct.mainareaForm(assert, "simpleEmployeeBrowser");
                 assert.strictEqual(
                     $('#ePfullname').text(),
                     "Nathan Cutler",
@@ -324,7 +324,7 @@ define ([
                     "ncutler",
                     "Dochazka employee search succeeded - nick ncutler displayed",
                 );
-                cannedTests.contains(
+                ct.contains(
                     assert,
                     $('#mainarea').html(),
                     "#mainarea html",
@@ -339,13 +339,13 @@ define ([
                 done();
             }, 2500);
             setTimeout(function () {
-                cannedTests.contains(
+                ct.contains(
                     assert,
                     $('#result').html(),
                     "#result html",
                     "Employee profile updated from LDAP",
                 );
-                cannedTests.stack(
+                ct.stack(
                     assert,
                     4,
                     'in simpleEmployeeBrowser dbrowser',
@@ -355,7 +355,7 @@ define ([
                 $('input[name="sel"]').val('x');
                 $('input[name="sel"]').focus();
                 start.mmKeyListener($.Event("keydown", {keyCode: 13}));
-                cannedTests.stack(
+                ct.stack(
                     assert,
                     3,
                     'After selecting X in simpleEmployeeBrowser',
@@ -371,7 +371,7 @@ define ([
                 $('input[name="sel"]').val('x');
                 $('input[name="sel"]').focus();
                 start.mmKeyListener($.Event("keydown", {keyCode: 13}));
-                cannedTests.stack(
+                ct.stack(
                     assert,
                     2,
                     'After selecting X in ldapLookup',
@@ -383,7 +383,7 @@ define ([
                 done();
             }, 4000);
             setTimeout(function () {
-                cannedTests.loggout(assert);
+                ct.loggout(assert);
                 done();
             }, 5000);
         });

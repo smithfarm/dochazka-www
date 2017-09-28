@@ -36,6 +36,7 @@ share/js/dochazka-www/test.js
 share/js/dochazka-www/tests/dummy.js
 share/js/dochazka-www/tests/main-empl.js
 share/js/dochazka-www/tests/main-menu.js
+share/js/dochazka-www/tests/main-sched.js
 t/00-load.t
 t/manifest.t
 t/pod-coverage.t
