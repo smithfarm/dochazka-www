@@ -69,7 +69,9 @@ define ([
             'aclProfile': 'passerby',
             'entriesRead': [entries.ePfullname, entries.ePnick,
                 entries.ePsec_id, entries.ePemail, entries.ePremark,
+                coreLib.emptyLineEntry,
                 entries.ePpriv, entries.ePprivEffective,
+                coreLib.emptyLineEntry,
                 entries.ePsched, entries.ePschedEffective],
             'entriesWrite': [],
             'miniMenu': {
