@@ -33,6 +33,7 @@ share/js/dochazka-www/prototypes.js
 share/js/dochazka-www/rest-lib.js
 share/js/dochazka-www/target-init.js
 share/js/dochazka-www/test.js
+share/js/dochazka-www/tests/01-users.js
 share/js/dochazka-www/tests/dummy.js
 share/js/dochazka-www/tests/main-empl.js
 share/js/dochazka-www/tests/main-menu.js

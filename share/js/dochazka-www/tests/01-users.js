@@ -30,32 +30,66 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // *************************************************************************
 //
-// test.js
+// tests/01-users.js
 //
-// runs routines in tests/ directory to declare unit tests. Each js file in
-// tests/ needs to be mentioned here.
+// create "active" and "inactive" users
 //
 "use strict";
 
-require ([
+define ([
     'QUnit',
-    'app/tests/dummy',
-    'app/tests/01-users',
-    'app/tests/main-menu',
-    'app/tests/main-empl',
-    'app/tests/main-sched',
+    'ajax',
+    'app/canned-tests',
+    'login',
+    'loggout',
 ], function (
     QUnit,
-    dummyTests,
-    createTestingUsers,
-    mainMenuTests,
-    mainEmplTests,
-    mainSchedTests,
+    ajax,
+    ct,
+    login,
+    loggout,
 ) {
-    QUnit.module("dochazka-www");
-    dummyTests();
-    createTestingUsers();
-    mainMenuTests();
-    mainEmplTests();
-    mainSchedTests();
+
+    var prefix = "dochazka-www: ",
+        test_desc;
+
+    return function () {
+
+        test_desc = 'create "active" and "inactive" users if necessary';
+        QUnit.test(test_desc, function (assert) {
+            console.log('***TEST*** ' + prefix + test_desc);
+            var done = assert.async(5);
+            assert.expect(24);
+            login({"nam": "root", "pwd": "immutable"});
+            setTimeout(function () {
+                ct.login(assert, "root", "admin");
+                done();
+            }, 400);
+            setTimeout(function () {
+                // create the employees
+                ct.employeeCreate(assert, "active");
+                ct.employeeCreate(assert, "inactive");
+                done();
+            }, 800);
+            setTimeout(function () {
+                // add privhistory records
+                ct.employeePriv(assert, "active", "active");
+                ct.employeePriv(assert, "inactive", "inactive");
+                done();
+            }, 1200);
+            setTimeout(function () {
+                // assert that employees have expected privlevels
+                ct.employeeHasPriv(assert, "active", "active");
+                ct.employeeHasPriv(assert, "inactive", "inactive");
+                loggout();
+                done();
+            }, 1600);
+            setTimeout(function () {
+                ct.loggout(assert);
+                done();
+            }, 2000);
+        });
+
+    };
+
 });
