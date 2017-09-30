@@ -74,6 +74,9 @@ define ([
     var act = {
 
         // general actions
+        "actionNoop": function () {
+            console.log("actionNoop: a daction that does nothing at all");
+        },
         "drowselectListen": function () {
             start.drowselectListen();
         },

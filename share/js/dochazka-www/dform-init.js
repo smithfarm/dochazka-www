@@ -297,6 +297,29 @@ define ([
             }
         }); // schedNewCustom
 
+        target.push('createIntForm', {
+            'name': 'createIntForm',
+            'type': 'dform',
+            'menuText': 'Single interval',
+            'title': 'Create a single interval',
+            'aclProfile': 'active',
+            'entriesRead': [coreLib.emptyLineEntry,],
+            'miniMenu': {
+                entries: []
+            }
+        }); // createIntForm
+        target.push('fillupForm', {
+            'name': 'fillupForm',
+            'type': 'dform',
+            'menuText': 'Multiple intervals',
+            'title': 'Fill up a period with intervals',
+            'aclProfile': 'active',
+            'entriesRead': [coreLib.emptyLineEntry,],
+            'miniMenu': {
+                entries: []
+            }
+        }); // fillupForm
+
     }; // return function ()
     
 });
