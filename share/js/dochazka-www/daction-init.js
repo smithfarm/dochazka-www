@@ -338,6 +338,16 @@ define ([
             'pushable': false
         });
 
+        // Interval actions - create
+        target.push('createSingleIntSave', {
+            'name': 'createSingleIntSave',
+            'type': 'daction',
+            'menuText': 'Save',
+            'aclProfile': 'active',
+            'start': dactionStart('createSingleIntSave'),
+            'pushable': false
+        });
+
         // Adminitrivia actions
         target.push('restServerDetailsAction', {
             'name': 'restServerDetailsAction',

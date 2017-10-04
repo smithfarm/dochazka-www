@@ -48,6 +48,7 @@ define ([
     "app/priv-lib",
     "app/sched-history-lib",
     "app/sched-lib",
+    "app/int-lib",
     "app/rest-lib",
     "html",
     "loggout",
@@ -61,6 +62,7 @@ define ([
     privLib,
     schedHistLib,
     schedLib,
+    intLib,
     restLib,
     html,
     loggout,
@@ -114,6 +116,9 @@ define ([
         "actionDisplaySchedule": schedLib.actionDisplaySchedule,
         "schedEditSave": schedLib.schedEditSave,
         "schedReallyDelete": schedLib.schedReallyDelete,
+
+        // create interval actions
+        "createSingleIntSave": intLib.createSingleIntSave,
 
         // actions triggered from Adminitrivia menu
         "restServerDetailsAction": restLib.restServerDetailsAction,

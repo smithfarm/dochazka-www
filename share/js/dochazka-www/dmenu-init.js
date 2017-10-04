@@ -83,7 +83,7 @@ define ([
             'menuText': 'Create',
             'title': 'Create interval(s)',
             'aclProfile': 'active',
-            'entries': ['createIntForm', 'fillupForm',],
+            'entries': ['createSingleInt', 'createMultipleInt',],
         });
 
         target.push('mainAdmin', {

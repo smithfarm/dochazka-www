@@ -1,22 +1,22 @@
-// ************************************************************************* 
+// *************************************************************************
 // Copyright (c) 2014-2017, SUSE LLC
-// 
+//
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are met:
-// 
+//
 // 1. Redistributions of source code must retain the above copyright notice,
 // this list of conditions and the following disclaimer.
-// 
+//
 // 2. Redistributions in binary form must reproduce the above copyright
 // notice, this list of conditions and the following disclaimer in the
 // documentation and/or other materials provided with the distribution.
-// 
+//
 // 3. Neither the name of SUSE LLC nor the names of its contributors may be
 // used to endorse or promote products derived from this software without
 // specific prior written permission.
-// 
+//
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
 // AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 // IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -28,7 +28,7 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
-// ************************************************************************* 
+// *************************************************************************
 //
 // app/dform-init.js
 //
@@ -297,28 +297,42 @@ define ([
             }
         }); // schedNewCustom
 
-        target.push('createIntForm', {
-            'name': 'createIntForm',
+        target.push('createSingleInt', {
+            'name': 'createSingleInt',
             'type': 'dform',
             'menuText': 'Single interval',
             'title': 'Create a single interval',
+            'preamble': 'Enter date in format YYYY-MM-DD<br>' +
+                        'Enter time range using 24hr format, example 11:30-15:00<br>' +
+                        'Description is optional',
             'aclProfile': 'active',
-            'entriesRead': [coreLib.emptyLineEntry,],
+            'entriesWrite': [entries.iNdate, entries.iNtimerange, entries.iNact, entries.iNdesc,],
             'miniMenu': {
-                entries: []
+                entries: ['createSingleIntSave']
             }
-        }); // createIntForm
-        target.push('fillupForm', {
-            'name': 'fillupForm',
+        }); // createSingleInt
+        target.push('createMultipleInt', {
+            'name': 'createMultipleInt',
             'type': 'dform',
             'menuText': 'Multiple intervals',
             'title': 'Fill up a period with intervals',
             'aclProfile': 'active',
-            'entriesRead': [coreLib.emptyLineEntry,],
+            'entriesRead': [entries.iNdate, entries.iNtimerange, entries.iNact, entries.iNdesc,],
             'miniMenu': {
                 entries: []
             }
-        }); // fillupForm
+        }); // createMultipleInt
+        target.push('displaySingleInt', {
+            'name': 'displaySingleInt',
+            'type': 'dform',
+            'menuText': 'Single interval',
+            'title': 'Display a single interval',
+            'aclProfile': 'active',
+            'entriesRead': [entries.iNdate, entries.iNtimerange, entries.iNact, entries.iNdesc,],
+            'miniMenu': {
+                entries: []
+            }
+        }); // displaySingleInt
 
     }; // return function ()
     
