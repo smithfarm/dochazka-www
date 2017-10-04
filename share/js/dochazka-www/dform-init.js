@@ -39,8 +39,8 @@
 define ([
     'current-user',
     'lib',
-    'app/lib',
     'app/emp-lib',
+    'app/entries',
     'app/rest-lib',
     'app/sched-lib',
     'app/prototypes',
@@ -48,16 +48,14 @@ define ([
 ], function (
     currentUser,
     coreLib,
-    appLib,
     empLib,
+    entries,
     restLib,
     schedLib,
     prototypes,
     target
 ) {
 
-    var entries = appLib.entries;
-    
     return function () {
 
         target.push('empProfile', {
@@ -319,7 +317,7 @@ define ([
             'aclProfile': 'active',
             'entriesRead': [entries.iNdate, entries.iNtimerange, entries.iNact, entries.iNdesc,],
             'miniMenu': {
-                entries: []
+                entries: ['fillUpAction']
             }
         }); // createMultipleInt
         target.push('displaySingleInt', {
@@ -328,7 +326,7 @@ define ([
             'menuText': 'Single interval',
             'title': 'Display a single interval',
             'aclProfile': 'active',
-            'entriesRead': [entries.iNdate, entries.iNtimerange, entries.iNact, entries.iNdesc,],
+            'entriesRead': [entries.iNdaterange, entries.iNtimerange, entries.iNact, entries.iNdesc,],
             'miniMenu': {
                 entries: []
             }

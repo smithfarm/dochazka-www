@@ -38,16 +38,14 @@
 
 define ([
     'lib',
-    'app/lib',
+    'app/entries',
     'target'
 ], function (
     coreLib,
-    lib,
+    entries,
     target
 ) {
 
-    var entries = lib.entries;
-    
     return function () {
 
         target.push('simpleEmployeeBrowser', {

@@ -46,8 +46,10 @@ define ([
     stack,
 ) {
 
-    var 
-        createSingleIntSave = function (obj) {
+    // here is where we define methods implementing the various
+    // interval-related actions (see daction-start.js)
+    return {
+        createSingleIntSave: function (obj) {
             // obj will look like this:
             // {
             //     iNdate: "foo bar in a box",
@@ -58,25 +60,6 @@ define ([
             // }
             console.log("createSingleIntSave called with obj", obj);
         },
-        vetDate = function (d) {
-            // should at least support YYYY-MM-DD, YYYYMMDD, YYYY-MMM-DD
-            // should trim all whitespace (leading, trailing, internal)
-            // on success, returns canonicalized date
-            // on failure, returns null
-            // TBD
-        },
-        vetTimeRange = function (tr) {
-            // should trim all whitespace (leading, trailing, internal)
-            // on success, returns e.g. { "06:00", "07:30" }
-            // on failure, returns null
-            // TBD
-        }
-        ;
-
-    // here is where we define methods implementing the various
-    // schedule-related actions (see daction-start.js)
-    return {
-        "createSingleIntSave": createSingleIntSave,
     };
 
 });

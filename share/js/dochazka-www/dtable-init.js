@@ -37,14 +37,12 @@
 "use strict";
 
 define ([
-    'app/lib',
-    'target'
+    'app/entries',
+    'target',
 ], function (
-    appLib,
-    target
+    entries,
+    target,
 ) {
-
-    var entries = appLib.entries;
 
     return function () {
 
@@ -75,4 +73,5 @@ define ([
         });
 
     };
+
 });
