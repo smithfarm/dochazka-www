@@ -53,7 +53,7 @@ define ([
             'title': 'Privilege (status) history - edit',
             'preamble': null,
             'aclProfile': 'admin',
-            'entries': [entries.ePnick, entries.pHeffective, entries.pHpriv],
+            'entriesRead': [entries.ePnick, entries.pHeffective, entries.pHpriv],
             'miniMenu': {
                 entries: ['privHistoryAddRecordAction', 'privHistoryDeleteAction']
             }
@@ -66,7 +66,7 @@ define ([
             'title': 'Schedule history - edit',
             'preamble': null,
             'aclProfile': 'admin',
-            'entries': [entries.pHeffective, entries.sDid, entries.sDcode],
+            'entriesRead': [entries.pHeffective, entries.sDid, entries.sDcode],
             'miniMenu': {
                 entries: ['schedHistoryAddRecordAction', 'schedHistoryDeleteAction'],
             }

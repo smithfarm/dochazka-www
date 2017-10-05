@@ -55,7 +55,7 @@ define ([
             'title': 'Employee search results',
             'preamble': null,
             'aclProfile': 'admin',
-            'entries': [entries.ePnick, entries.ePsec_id, entries.ePfullname,
+            'entriesRead': [entries.ePnick, entries.ePsec_id, entries.ePfullname,
                         entries.ePemail, entries.ePremark],
             'miniMenu': {
                 entries: ['ldapSync', 'empProfileEdit', 'masqEmployee']
@@ -69,7 +69,7 @@ define ([
             'title': 'All schedules',
             'preamble': null,
             'aclProfile': 'admin',
-            'entries': [entries.sDid, entries.sDcode,
+            'entriesRead': [entries.sDid, entries.sDcode,
                         coreLib.emptyLineEntry, entries.sDmon,
                         entries.sDtue, entries.sDwed, entries.sDthu,
                         entries.sDfri, entries.sDsat, entries.sDsun,

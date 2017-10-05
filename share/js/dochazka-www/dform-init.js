@@ -71,7 +71,6 @@ define ([
                 entries.ePpriv, entries.ePprivEffective,
                 coreLib.emptyLineEntry,
                 entries.ePsched, entries.ePschedEffective],
-            'entriesWrite': [],
             'miniMenu': {
                 entries: ['empProfileEdit', 'ldapSync']
             }
@@ -100,7 +99,6 @@ define ([
             'title': 'Look up an LDAP employee',
             'preamble': 'Enter employee nick for exact (case insensitive) match',
             'aclProfile': 'active',
-            'entriesRead': null,
             'entriesWrite': [entries.ePnick],
             'rememberState': true,
             'miniMenu': {
@@ -116,7 +114,6 @@ define ([
             'aclProfile': 'active',
             'entriesRead': [entries.ePfullname, entries.ePnick,
                 entries.ePsec_id, entries.ePemail, entries.LDAPdochazka],
-            'entriesWrite': [],
             'miniMenu': {
                 entries: ['ldapSync']
             }
@@ -129,7 +126,6 @@ define ([
             'title': 'Search Dochazka employees',
             'preamble': 'Enter search key, % is wildcard',
             'aclProfile': 'admin',
-            'entriesRead': null,
             'entriesWrite': [entries.sEnick],
             'miniMenu': {
                 entries: ['actionEmplSearch']
@@ -188,7 +184,6 @@ define ([
             'title': 'Look up schedule by code or ID',
             'preamble': 'Enter a schedule code or ID (must be an exact match)',
             'aclProfile': 'passerby',
-            'entriesRead': null,
             'entriesWrite': [entries.sScode, entries.sSid],
             'rememberState': true,
             'miniMenu': {
@@ -207,7 +202,6 @@ define ([
                             entries.sDtue, entries.sDwed, entries.sDthu,
                             entries.sDfri, entries.sDsat, entries.sDsun,
                             coreLib.emptyLineEntry, entries.ePremark],
-            'entriesWrite': null,
             'miniMenu': {
                 entries: ['schedEdit', 'schedDelete']
             }
@@ -248,7 +242,6 @@ define ([
                                 entries.sDtue, entries.sDwed, entries.sDthu,
                                 entries.sDfri, entries.sDsat, entries.sDsun,
                                 coreLib.emptyLineEntry, entries.ePremark],
-                'entriesWrite': null,
                 'miniMenu': {
                     entries: ['schedReallyDelete']
                 }
