@@ -38,6 +38,7 @@ define ([
     'jquery',
     'ajax',
     'current-user',
+    'datetime',
     'lib',
     'app/lib',
     'app/prototypes',
@@ -46,6 +47,7 @@ define ([
     $,
     ajax,
     currentUser,
+    datetime,
     coreLib,
     appLib,
     prototypes,
@@ -201,7 +203,7 @@ define ([
                             schedEffective = null;
                         if (st.payload.privhistory !== null) {
                             priv = st.payload.privhistory.priv;
-                            privEffective = coreLib.readableDate(
+                            privEffective = datetime.readableDate(
                                 st.payload.privhistory.effective
                             );
                         }
@@ -211,7 +213,7 @@ define ([
                             } else {
                                 sched = '(Schedule ID ' + st.payload.schedhistory.sid + ')';
                             }
-                            schedEffective = coreLib.readableDate(
+                            schedEffective = datetime.readableDate(
                                 st.payload.schedhistory.effective
                             );
                         }

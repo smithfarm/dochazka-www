@@ -37,9 +37,9 @@
 "use strict";
 
 define ([
-    'lib',
+    'datetime',
 ], function (
-    coreLib,
+    datetime,
 ) {
 
     return {
@@ -289,7 +289,7 @@ define ([
             text: 'Interval date',
             prop: 'iNdate',
             maxlen: 20,
-            vetter: coreLib.vetDate,
+            vetter: datetime.vetDate,
         },
         iNdaterange: {
             name: 'iNdaterange',
@@ -298,7 +298,7 @@ define ([
             text: 'Date range',
             prop: 'iNdaterange',
             maxlen: 30,
-            vetter: coreLib.vetDateRange,
+            vetter: datetime.vetDateRange,
         },
         iNtimerange: {
             name: 'iNtimerange',
@@ -307,7 +307,7 @@ define ([
             text: 'Time range',
             prop: 'iNtimerange',
             maxlen: 20,
-            vetter: coreLib.vetTimeRange,
+            vetter: dates.vetTimeRange,
         },
         iNact: {
             name: 'iNact',
