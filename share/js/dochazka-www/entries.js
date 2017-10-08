@@ -155,6 +155,7 @@ define ([
             text: 'Effective date',
             prop: 'effective',
             maxlen: 30,
+            vetter: datetime.vetDate,
         },
         rSDurl: {
             name: 'rSDurl',
@@ -307,7 +308,7 @@ define ([
             text: 'Time range',
             prop: 'iNtimerange',
             maxlen: 20,
-            vetter: dates.vetTimeRange,
+            vetter: datetime.vetTimeRange,
         },
         iNact: {
             name: 'iNact',
