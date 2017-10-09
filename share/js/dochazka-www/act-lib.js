@@ -85,7 +85,20 @@ define ([
        },
 
        selectActivityGo: function (obj) {
-           // called from selectActivity drowselect
+           // called from selectActivity drowselect; obj is the selected activity
+           // strip off the selectActivity target from top of stack
+           var state;
+           console.log("Entered selectActivityGo()");
+           console.log("Top of stack: ", stack.getTarget());
+           if (stack.getTarget().name === 'selectActivity') {
+               console.log("Top of stack is selectActivity, as expected");
+               stack.popWithoutStart();
+           }
+           state = stack.getState();
+           // replace activity code with the one from obj (selected by user)
+           state['iNact'] = obj.code;
+           state['acTaid'] = obj.aid;
+           stack.restart(state);
        },
 
     };

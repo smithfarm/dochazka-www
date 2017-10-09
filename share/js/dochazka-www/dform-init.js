@@ -298,6 +298,7 @@ define ([
                         'Description is optional',
             'aclProfile': 'active',
             'entriesWrite': [entries.iNdate, entries.iNtimerange, entries.iNact, entries.iNdesc,],
+            'rememberState': true,
             'miniMenu': {
                 entries: ['selectActivityAction', 'createSingleIntSave']
             }

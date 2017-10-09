@@ -80,8 +80,9 @@ define ([
             'preamble': null,
             'aclProfile': 'active',
             'entriesRead': [entries.acTcode, entries.acTaid, entries.acTdesc],
+            'submitAction': 'selectActivityGo',
             'miniMenu': {
-                entries: ['selectActivityGo'],
+                entries: [],
             }
         });
 
