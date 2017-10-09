@@ -209,11 +209,11 @@ define ([
                 assert.ok(true, "*** REACHED mainEmpl dmenu via X from ldapLookup");
                 loggout();
                 done();
-            }, 4000);
+            }, 4500);
             setTimeout(function () {
                 ct.loggout(assert);
                 done();
-            }, 5000);
+            }, 5500);
         });
 
         test_desc = 'LDAP lookup - failure';
