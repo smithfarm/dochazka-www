@@ -348,6 +348,24 @@ define ([
             'pushable': false
         });
 
+        // Activity actions - select
+        target.push('selectActivityAction', {
+            'name': 'selectActivityAction',
+            'type': 'daction',
+            'menuText': 'Select activity',
+            'aclProfile': 'active',
+            'start': dactionStart('selectActivityAction'),
+            'pushable': false
+        });
+        target.push('selectActivityGo', {
+            'name': 'selectActivityGo',
+            'type': 'daction',
+            'menuText': 'Select',
+            'aclProfile': 'active',
+            'start': dactionStart('selectActivityGo'),
+            'pushable': false
+        });
+
         // Adminitrivia actions
         target.push('restServerDetailsAction', {
             'name': 'restServerDetailsAction',

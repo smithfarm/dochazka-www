@@ -299,7 +299,7 @@ define ([
             'aclProfile': 'active',
             'entriesWrite': [entries.iNdate, entries.iNtimerange, entries.iNact, entries.iNdesc,],
             'miniMenu': {
-                entries: ['createSingleIntSave']
+                entries: ['selectActivityAction', 'createSingleIntSave']
             }
         }); // createSingleInt
         target.push('createMultipleInt', {

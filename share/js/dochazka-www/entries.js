@@ -326,6 +326,30 @@ define ([
             prop: 'iNdesc',
             maxlen: 60,
         },
+        acTcode: {
+            name: 'acTcode',
+            aclProfileRead: 'active',
+            aclProfileWrite: 'active',
+            text: 'Code',
+            prop: 'code',
+            maxlen: 10,
+        },
+        acTaid: {
+            name: 'acTaid',
+            aclProfileRead: 'active',
+            aclProfileWrite: 'active',
+            text: 'ID',
+            prop: 'aid',
+            maxlen: 6,
+        },
+        acTdesc: {
+            name: 'acTdesc',
+            aclProfileRead: 'active',
+            aclProfileWrite: 'active',
+            text: 'Description',
+            prop: 'long_desc',
+            maxlen: 40,
+        },
 
     };
 

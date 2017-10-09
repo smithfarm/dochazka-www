@@ -30,60 +30,64 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // *************************************************************************
 //
-// app/drowselect-init.js
+// app/lib.js
 //
-// Round one of drowselect initialization (called from app/target-init)
+// application-specific routines
 //
 "use strict";
 
 define ([
-    'app/entries',
-    'target',
+    'jquery',
+    'ajax',
+    'current-user',
+    'stack',
 ], function (
-    entries,
-    target,
+    $,
+    ajax,
+    currentUser,
+    stack,
 ) {
 
-    return function () {
+    var cache = [],
+        byAID = {},
+        byCode = {},
+        rest = {
+            "method": 'GET',
+            "path": 'activity/all'
+        },
+        // success callback
+        sc = function (st) {
+            console.log("AJAX: " + rest["method"] + " " + rest["path"] + " returned", st);
+            stack.push('selectActivity', {
+                'pos': 0,
+                'set': st.payload,
+            });
+        },
+        fc = function (st) {
+            console.log("AJAX: " + rest["method"] + " " + rest["path"] + " failed", st);
+            coreLib.displayError(st.payload.message);
+        };
 
-        target.push('privHistoryDrowselect', {
-            'name': 'privHistoryDrowselect',
-            'type': 'drowselect',
-            'menuText': 'Privilege (status) history - edit',
-            'title': 'Privilege (status) history - edit',
-            'preamble': null,
-            'aclProfile': 'admin',
-            'entriesRead': [entries.ePnick, entries.pHeffective, entries.pHpriv],
-            'miniMenu': {
-                entries: ['privHistoryAddRecordAction', 'privHistoryDeleteAction']
-            }
-        });
+    return {
 
-        target.push('schedHistoryDrowselect', {
-            'name': 'schedHistoryDrowselect',
-            'type': 'drowselect',
-            'menuText': 'Schedule history - edit',
-            'title': 'Schedule history - edit',
-            'preamble': null,
-            'aclProfile': 'admin',
-            'entriesRead': [entries.pHeffective, entries.sDid, entries.sDcode],
-            'miniMenu': {
-                entries: ['schedHistoryAddRecordAction', 'schedHistoryDeleteAction'],
+        populateActivitiesCaches: function () {
+            // run upon successful login
+            if (cache.length === 0) {
+                ajax(rest, sc, fc);
+            } else {
+                console.log("populateActivitiesCaches(): noop, caches already populated");
             }
-        });
+       },
 
-        target.push('selectActivity', {
-            'name': 'selectActivity',
-            'type': 'drowselect',
-            'menuText': 'Select activity',
-            'title': 'Select activity',
-            'preamble': null,
-            'aclProfile': 'active',
-            'entriesRead': [entries.acTcode, entries.acTaid, entries.acTdesc],
-            'miniMenu': {
-                entries: ['selectActivityGo'],
-            }
-        });
+       selectActivityAction: function (obj) {
+           // start selectActivity drowselect target
+           ajax(rest, sc, fc);
+       },
+
+       selectActivityGo: function (obj) {
+           // called from selectActivity drowselect
+       },
 
     };
+
 });

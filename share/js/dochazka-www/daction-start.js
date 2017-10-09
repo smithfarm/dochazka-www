@@ -43,6 +43,7 @@
 define ([
     "jquery",
     "current-user",
+    "app/act-lib",
     "app/emp-lib",
     "app/ldap-lib",
     "app/priv-lib",
@@ -57,6 +58,7 @@ define ([
 ], function (
     $,
     currentUser,
+    actLib,
     empLib,
     ldapLib,
     privLib,
@@ -119,6 +121,10 @@ define ([
 
         // create interval actions
         "createSingleIntSave": intLib.createSingleIntSave,
+        
+        // activity select actions
+        "selectActivityAction": actLib.selectActivityAction,
+        "selectActivityGo": actLib.selectActivityGo,
 
         // actions triggered from Adminitrivia menu
         "restServerDetailsAction": restLib.restServerDetailsAction,
