@@ -37,8 +37,10 @@
 "use strict";
 
 define ([
+    'app/act-lib',
     'datetime',
 ], function (
+    actLib,
     datetime,
 ) {
 
@@ -317,6 +319,7 @@ define ([
             text: 'Activity',
             prop: 'iNact',
             maxlen: 20,
+            vetter: actLib.vetActivity,
         },
         iNdesc: {
             name: 'iNdesc',
