@@ -81,8 +81,13 @@ define ([
         },
         sc = function (st) {
             console.log("AJAX: " + rest["method"] + " " + rest["path"] + " returned", st);
-            coreLib.displayResult("Interval " + st.payload.iid + " created");
-            stack.restart(emptyObj);
+            stack.restart(
+                emptyObj,
+                {
+                    "resultLine": "Interval " + st.payload.iid + " created",
+                    "inputId": "iNdate",
+                }
+            );
         },
         fc = function (st) {
             console.log("AJAX: " + rest["method"] + " " + rest["path"] + " failed", st);
