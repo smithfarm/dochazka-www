@@ -218,7 +218,8 @@ define ([
                             );
                         }
                         employeeProfile = $.extend(
-                            Object.create(prototypes.empProfile), {
+                            Object.create(prototypes.empProfile),
+                            {
                                 'eid': st.payload.emp.eid,
                                 'nick': st.payload.emp.nick,
                                 'fullname': st.payload.emp.fullname,
@@ -232,9 +233,7 @@ define ([
                             }
                         );
                         currentUser('obj', employeeProfile);
-                        stack.push('empProfile', employeeProfile, {
-                            "xtarget": "mainEmpl"
-                        });
+                        stack.push('empProfile', employeeProfile, {"xtarget": "mainEmpl"});
                     } else {
                         coreLib.displayError("Unexpected status code " + st.code);
                     }

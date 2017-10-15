@@ -54,7 +54,10 @@ define ([
     target
 ) {
 
-    var 
+    var cache = [],
+        bySID = {},
+        bySCode = {},
+
         actionDisplaySchedule = function (obj) {
             stack.push(
                 'schedDisplay',
@@ -138,55 +141,6 @@ define ([
             ajax(rest, sc, fc);
         },
 
-        mungeScheduleForDisplay = function (obj) {
-            var schedule = JSON.parse(obj.schedule),
-                slen = schedule.length,
-                daysOfWeek = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'],
-                mungedObj = Object.create(prototypes.schedObjectForDisplay);
-            console.log("mungeScheduleForDisplay: schedule has " + slen + " intervals");
-            mungedObj['sid'] = obj.sid;
-            mungedObj['scode'] = obj.scode;
-            mungedObj['remark'] = obj.remark;
-            mungedObj['disabled'] = obj.disabled;
-            mungedObj['mon'] = null;
-            mungedObj['tue'] = null;
-            mungedObj['wed'] = null;
-            mungedObj['thu'] = null;
-            mungedObj['fri'] = null;
-            mungedObj['sat'] = null;
-            mungedObj['sun'] = null;
-            for (var i = 0; i < slen; i++) {  // loop over schedule intervals
-                var dow = schedule[i]['low_dow'].toLowerCase();
-                // console.log("Schedule interval #" + i + " starts on " + dow);
-                if (mungedObj[dow] === null) {
-                    mungedObj[dow] = '';
-                } else {
-                    mungedObj[dow] += '; ';
-                }
-                mungedObj[dow] += schedule[i]['low_time'] + '-' + schedule[i]['high_time'];
-            }
-            // console.log("mungemungedObjectForDisplay: mungedObj", mungedObj);
-            return mungedObj;
-        },
-
-        prepSchedIntvl = function (dow, uint) {
-            // given schedule interval entered by user (e.g. "8-12:30"),
-            // convert it into a string suitable for passing to the
-            // 'schedule/new' REST API resource
-            var dow_map = {
-                    'mon': '2015-03-23',
-                    'tue': '2015-03-24',
-                    'wed': '2015-03-25',
-                    'thu': '2015-03-26',
-                    'fri': '2015-03-27',
-                    'sat': '2015-03-28',
-                    'sun': '2015-03-29',
-                },
-                tsr = uint.split('-');
-            return "["  + dow_map[dow.toLowerCase()] + " " + tsr[0] +
-                   ", " + dow_map[dow.toLowerCase()] + " " + tsr[1] + ")";
-        },
-
         createScheduleAjax = function (obj) {
             console.log("Entering target 'createScheduleAjax' with argument", obj);
             var rest = {
@@ -262,6 +216,102 @@ define ([
             createScheduleAjax(obj);
         },
 
+        lookupScheduleBySCode = function (scode, successCallback) {
+            var rest = {
+                    "path": 'schedule/scode/' + scode,
+                },
+                sc = function (st) {
+                    cache.push(st.payload);
+                    bySID[st.payload.sid] = st.payload;
+                    bySCode[st.payload.scode] = st.payload;
+                    if (successCallback) {
+                        successCallback(st.payload);
+                    }
+                },
+                fc = function (st) {
+                    coreLib.displayError("Schedule code " + scode + " not found");
+                };
+            if (bySCode[scode]) {
+                if (successCallback) {
+                    successCallback(bySCode[scode]);
+                }
+            }
+            ajax(rest, sc, fc);
+        },
+
+        lookupScheduleBySID = function (sid, successCallback) {
+            var cached = getBySID(sid),
+                rest = {
+                    "path": 'schedule/sid/' + sid,
+                },
+                sc = function (st) {
+                    cache.push(st.payload);
+                    bySID[st.payload.sid] = st.payload;
+                    byCode[st.payload.code] = st.payload;
+                    if (successCallback) {
+                        successCallback(st.payload);
+                    }
+                },
+                fc = function (st) {
+                    coreLib.displayError("Schedule SID " + sid + " not found");
+                };
+            if (bySID[sid]) {
+                if (successCallback) {
+                    successCallback(bySID[sid]);
+                }
+            }
+            ajax(rest, sc, fc);
+        },
+
+        mungeScheduleForDisplay = function (obj) {
+            var schedule = JSON.parse(obj.schedule),
+                slen = schedule.length,
+                daysOfWeek = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'],
+                mungedObj = Object.create(prototypes.schedObjectForDisplay);
+            console.log("mungeScheduleForDisplay: schedule has " + slen + " intervals");
+            mungedObj['sid'] = obj.sid;
+            mungedObj['scode'] = obj.scode;
+            mungedObj['remark'] = obj.remark;
+            mungedObj['disabled'] = obj.disabled;
+            mungedObj['mon'] = null;
+            mungedObj['tue'] = null;
+            mungedObj['wed'] = null;
+            mungedObj['thu'] = null;
+            mungedObj['fri'] = null;
+            mungedObj['sat'] = null;
+            mungedObj['sun'] = null;
+            for (var i = 0; i < slen; i++) {  // loop over schedule intervals
+                var dow = schedule[i]['low_dow'].toLowerCase();
+                // console.log("Schedule interval #" + i + " starts on " + dow);
+                if (mungedObj[dow] === null) {
+                    mungedObj[dow] = '';
+                } else {
+                    mungedObj[dow] += '; ';
+                }
+                mungedObj[dow] += schedule[i]['low_time'] + '-' + schedule[i]['high_time'];
+            }
+            // console.log("mungemungedObjectForDisplay: mungedObj", mungedObj);
+            return mungedObj;
+        },
+
+        prepSchedIntvl = function (dow, uint) {
+            // given schedule interval entered by user (e.g. "8-12:30"),
+            // convert it into a string suitable for passing to the
+            // 'schedule/new' REST API resource
+            var dow_map = {
+                    'mon': '2015-03-23',
+                    'tue': '2015-03-24',
+                    'wed': '2015-03-25',
+                    'thu': '2015-03-26',
+                    'fri': '2015-03-27',
+                    'sat': '2015-03-28',
+                    'sun': '2015-03-29',
+                },
+                tsr = uint.split('-');
+            return "["  + dow_map[dow.toLowerCase()] + " " + tsr[0] +
+                   ", " + dow_map[dow.toLowerCase()] + " " + tsr[1] + ")";
+        },
+
         schedGen = function (mode, schedObj) {
             var rest = {
                     "path": 'schedule/sid/' + schedObj.sid,
@@ -319,6 +369,9 @@ define ([
         actionSchedLookup: actionSchedLookup,
         browseAllSchedules: browseAllSchedules,
         createSchedule: createSchedule,
+        lookupScheduleBySCode: lookupScheduleBySCode,
+        lookupScheduleBySID: lookupScheduleBySID,
+        prepSchedIntvl: prepSchedIntvl,
         schedEditSave: function (obj) {
             schedGen('edit', obj);
         },
