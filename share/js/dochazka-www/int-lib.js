@@ -52,12 +52,14 @@ define ([
     stack,
 ) {
 
-    var emptyObj = {
+    var
+        emptyObj = {
             "iNdate": "",
             "iNtimerange": "",
             "iNact": "",
             "iNdesc": ""
         },
+
         genIntvl = function (date, timerange) {
             var ctr = datetime.canonicalizeTimeRange(timerange);
             if (ctr === null) {
@@ -75,28 +77,21 @@ define ([
                        '" )';
             }
         },
-        rest = {
+
+        intervalNewREST = {
             "method": 'POST',
             "path": 'interval/new'
-        },
-        sc = function (st) {
-            console.log("AJAX: " + rest["method"] + " " + rest["path"] + " returned", st);
-            stack.restart(
-                emptyObj,
-                {
-                    "resultLine": "Interval " + st.payload.iid + " created",
-                    "inputId": "iNdate",
-                }
-            );
-        },
-        fc = function (st) {
-            console.log("AJAX: " + rest["method"] + " " + rest["path"] + " failed", st);
-            stack.restart(undefined, { "resultLine": st.payload.message });
         };
 
     // here is where we define methods implementing the various
     // interval-related actions (see daction-start.js)
     return {
+
+        createLastIntervalPlusOffsetSave: function (obj) {
+        },
+
+        createNextScheduledIntervalSave: function (obj) {
+        },
 
         createSingleIntSave: function (obj) {
             // obj will look like this:
@@ -111,7 +106,21 @@ define ([
             // also, there may or may not be an acTaid property with the AID of
             // the chosen activity
             console.log("createSingleIntSave called with obj", obj);
-            var cu = currentUser('obj');
+            var cu = currentUser('obj'),
+                sc = function (st) {
+                    console.log("AJAX: " + rest["method"] + " " + rest["path"] + " returned", st);
+                    stack.restart(
+                        emptyObj,
+                        {
+                            "resultLine": "Interval " + st.payload.iid + " created",
+                            "inputId": "iNdate",
+                        }
+                    );
+                },
+                fc = function (st) {
+                    console.log("AJAX: " + rest["method"] + " " + rest["path"] + " failed", st);
+                    stack.restart(undefined, { "resultLine": st.payload.message });
+                };
 
             // check that all mandatory properties are present
             if (! obj.hasOwnProperty('iNdate')) {
@@ -142,14 +151,20 @@ define ([
                 }
             }
 
-            rest.body = {
+            intervalNewREST.body = {
                 "eid": cu.eid,
                 "aid": obj.acTaid,
-                "intvl": genIntvl(obj.iNdate, obj.iNtimerange),
                 "long_desc": obj.iNdesc,
                 "remark": null,
             }
-            ajax(rest, sc, fc);
+            if (obj.iNtimerange === '+') {
+                stack.push('createNextScheduledInterval', obj);
+            } else if (obj.iNtimerange.match(/\+/)) {
+                stack.push('createLastIntervalPlusOffset', obj);
+            } else {
+                intervalNewREST.body["intvl"] = genIntvl(obj.iNdate, obj.iNtimerange);
+                ajax(intervalNewREST, sc, fc);
+            }
         },
 
     };

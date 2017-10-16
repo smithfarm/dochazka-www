@@ -339,6 +339,22 @@ define ([
         });
 
         // Interval actions - create
+        target.push('createLastIntervalPlusOffsetSave', {
+            'name': 'createLastIntervalPlusOffsetSave',
+            'type': 'daction',
+            'menuText': 'Save',
+            'aclProfile': 'active',
+            'start': dactionStart('createLastIntervalPlusOffsetSave'),
+            'pushable': false
+        });
+        target.push('createNextScheduledIntervalSave', {
+            'name': 'createNextScheduledIntervalSave',
+            'type': 'daction',
+            'menuText': 'Save',
+            'aclProfile': 'active',
+            'start': dactionStart('createNextScheduledIntervalSave'),
+            'pushable': false
+        });
         target.push('createSingleIntSave', {
             'name': 'createSingleIntSave',
             'type': 'daction',
