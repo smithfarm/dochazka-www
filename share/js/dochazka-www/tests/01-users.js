@@ -64,30 +64,30 @@ define ([
             setTimeout(function () {
                 ct.login(assert, "root", "admin");
                 done();
-            }, 400);
+            }, 1600);
             setTimeout(function () {
                 // create the employees
                 ct.employeeCreate(assert, "active");
                 ct.employeeCreate(assert, "inactive");
                 done();
-            }, 800);
+            }, 2000);
             setTimeout(function () {
                 // add privhistory records
                 ct.employeePriv(assert, "active", "active");
                 ct.employeePriv(assert, "inactive", "inactive");
                 done();
-            }, 1200);
+            }, 2400);
             setTimeout(function () {
                 // assert that employees have expected privlevels
                 ct.employeeHasPriv(assert, "active", "active");
                 ct.employeeHasPriv(assert, "inactive", "inactive");
                 loggout();
                 done();
-            }, 1600);
+            }, 2800);
             setTimeout(function () {
                 ct.loggout(assert);
                 done();
-            }, 2000);
+            }, 3200);
         });
 
     };
