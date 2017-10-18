@@ -38,9 +38,11 @@
 
 define ([
     'app/act-lib',
+    'app/sched-lib',
     'datetime',
 ], function (
     actLib,
+    schedLib,
     datetime,
 ) {
 
@@ -329,6 +331,15 @@ define ([
             prop: 'iNdesc',
             maxlen: 60,
         },
+        iNsid: {
+            name: 'iNsid',
+            aclProfileRead: 'inactive',
+            aclProfileWrite: 'admin',
+            text: 'Schedule ID',
+            prop: 'iNsid',
+            maxlen: 20,
+            populate: schedLib.populateSID,
+        },
         acTcode: {
             name: 'acTcode',
             aclProfileRead: 'active',
@@ -352,6 +363,48 @@ define ([
             text: 'Description',
             prop: 'long_desc',
             maxlen: 40,
+        },
+        iNschedintvls: {
+            name: 'iNschedintvls',
+            aclProfileRead: 'inactive',
+            aclProfileWrite: 'admin',
+            text: 'Scheduled',
+            prop: 'iNschedintvls',
+            maxlen: 50,
+            populate: schedLib.populateSchedIntvlsForDate,
+        },
+        iNlastexistintvl: {
+            name: 'iNlastexistintvl',
+            aclProfileRead: 'inactive',
+            aclProfileWrite: 'admin',
+            text: 'Last existing',
+            prop: 'iNlastexistintvl',
+            maxlen: 50,
+            populate: function () {
+                // TBD
+            },
+        },
+        iNlastplusoffset: {
+            name: 'iNlastplusoffset',
+            aclProfileRead: 'inactive',
+            aclProfileWrite: 'admin',
+            text: 'To be created',
+            prop: 'iNlastplusoffset',
+            maxlen: 50,
+            populate: function () {
+                // TBD
+            },
+        },
+        iNnextscheduled: {
+            name: 'iNnextscheduled',
+            aclProfileRead: 'inactive',
+            aclProfileWrite: 'admin',
+            text: 'To be created',
+            prop: 'iNnextscheduled',
+            maxlen: 50,
+            populate: function () {
+                // TBD
+            },
         },
 
     };

@@ -304,7 +304,7 @@ define ([
             }
         }); // createSingleInt
 
-        target.push('createLastIntervalPlusOffset', {
+        target.push('createLastPlusOffset', {
             // before doing any calculations, look up:
             // - employee's schedule
             // - schedule intervals on date
@@ -314,36 +314,36 @@ define ([
             // - start of first schedule interval, if there are schedule intervals
             // - 00:00 otherwise
             // timerange end will be timerange start plus offset
-            'name': 'createLastIntervalPlusOffset',
+            'name': 'createLastPlusOffset',
             'type': 'dform',
-            'menuText': "Create interval from last interval plus offset",
-            'title': "Create interval from last interval plus offset",
+            'menuText': "Last plus offset",
+            'title': "Create interval \"last plus offset\"",
             'aclProfile': 'active',
             'entriesRead': [entries.iNdate, entries.iNact, entries.iNdesc,
-                            entries.iNschedintvls, entries.iNexistintvls, entries.iNlastintvlplusoffset,],
+                            entries.iNschedintvls, entries.iNlastexistintvl, entries.iNlastplusoffset,],
             'miniMenu': {
-                entries: ['createLastIntervalPlusOffsetSave'],
+                entries: ['createLastPlusOffsetSave'],
             }
-        }); // createLastIntervalPlusOffset
+        }); // createLastPlusOffset
 
-        target.push('createNextScheduledInterval', {
+        target.push('createNextScheduled', {
             // before doing any calculations, look up/calculate:
             // - employee's schedule
             // - existing intervals on date
             // - schedule intervals on date
             // timerange will be:
             // - first schedule interval that does not conflict/overlap with an existing interval
-            'name': 'createNextScheduledInterval',
+            'name': 'createNextScheduled',
             'type': 'dform',
-            'menuText': "Create next scheduled interval",
-            'title': "Create next scheduled interval",
+            'menuText': "Next scheduled",
+            'title': "Create interval \"next scheduled\"",
             'aclProfile': 'active',
             'entriesRead': [entries.iNdate, entries.iNact, entries.iNdesc,
-                            entries.iNschedintvls, entries.iNexistintvls, entries.iNnextscheduledintvl,],
+                            entries.iNschedintvls, entries.iNlastexistintvl, entries.iNnextscheduled,],
             'miniMenu': {
-                entries: ['createNextScheduledIntervalSave'],
+                entries: ['createNextScheduledSave'],
             }
-        }); // createNextScheduledInterval
+        }); // createNextScheduled
 
         target.push('createMultipleInt', {
             'name': 'createMultipleInt',

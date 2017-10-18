@@ -55,6 +55,9 @@ define ([
 ) {
 
     var 
+        profileCache = [],
+        byEID = {},
+
         currentEmployeeStashed = null,
         currentEmplPrivStashed = null,
         backgroundColorStashed = null,

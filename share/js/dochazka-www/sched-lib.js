@@ -290,8 +290,46 @@ define ([
                 }
                 mungedObj[dow] += schedule[i]['low_time'] + '-' + schedule[i]['high_time'];
             }
-            // console.log("mungemungedObjectForDisplay: mungedObj", mungedObj);
             return mungedObj;
+        },
+
+        populateSchedIntvlsForDate = function (populateArray) {
+            var date, aid, i, rest, sc, fc, fnToCall;
+            console.log("Entering populateSchedIntvlsForDate()");
+            date = $("input[id=iNdate]").val();
+            aid = $("input[id=acTaid]").val();
+            if (populateArray.length === 0) {
+                fnToCall = function (populateArray) {};
+            } else {
+                fnToCall = populateArray.shift();
+            }
+            rest = {
+                "method": 'GET',
+                "path": 'schedule/eid/' + eid + '/',
+            };
+            sc = function (st) {
+                console.log("GET " + rest.path + " returned", st);
+                $('input[id=iNschedintvls]').val('FIXME');
+                fnToCall(populateArray);
+            };
+            fc = function (st) {
+                console.log("GET " + rest.path + " returned", st);
+                coreLib.displayError(st.payload.message);
+                fnToCall(populateArray);
+            };
+            console.log("Date entry is " + date);
+            rest.path += '"' + date + ' 12:00"';
+            ajax(rest, sc, fc);
+        },
+
+        populateSID = function (populateArray) {
+            var eid, sid, fnToCall;
+            console.log("Entering populateSID()");
+            if (populateArray.length === 0) {
+                fnToCall = function (populateArray) {};
+            } else {
+                fnToCall = populateArray.shift();
+            }
         },
 
         prepSchedIntvl = function (dow, uint) {
@@ -371,6 +409,7 @@ define ([
         createSchedule: createSchedule,
         lookupScheduleBySCode: lookupScheduleBySCode,
         lookupScheduleBySID: lookupScheduleBySID,
+        populateSchedIntvlsForDate: populateSchedIntvlsForDate,
         prepSchedIntvl: prepSchedIntvl,
         schedEditSave: function (obj) {
             schedGen('edit', obj);

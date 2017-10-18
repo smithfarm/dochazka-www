@@ -87,10 +87,10 @@ define ([
     // interval-related actions (see daction-start.js)
     return {
 
-        createLastIntervalPlusOffsetSave: function (obj) {
+        createLastPlusOffsetSave: function (obj) {
         },
 
-        createNextScheduledIntervalSave: function (obj) {
+        createNextScheduledSave: function (obj) {
         },
 
         createSingleIntSave: function (obj) {
@@ -158,9 +158,9 @@ define ([
                 "remark": null,
             }
             if (obj.iNtimerange === '+') {
-                stack.push('createNextScheduledInterval', obj);
+                stack.push('createNextScheduled', obj);
             } else if (obj.iNtimerange.match(/\+/)) {
-                stack.push('createLastIntervalPlusOffset', obj);
+                stack.push('createLastPlusOffset', obj);
             } else {
                 intervalNewREST.body["intvl"] = genIntvl(obj.iNdate, obj.iNtimerange);
                 ajax(intervalNewREST, sc, fc);
