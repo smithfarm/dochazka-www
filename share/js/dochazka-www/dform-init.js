@@ -293,8 +293,9 @@ define ([
             'type': 'dform',
             'menuText': 'Single interval',
             'title': 'Create a single interval',
-            'preamble': 'Enter date in format YYYY-MM-DD<br>' +
-                        'Enter time range using 24hr format, example 11:30-15:00<br>' +
+            'preamble': 'Enter date like, e.g.: 2017-JAN-5, 2017-1-5, 1-5, 1 5, today, tomorrow, etc.<br>' +
+                        'Enter time range e.g.: 11:30-15:00, 11:30-15, 11:30+3:30<br>' +
+                        'For validation, use <ENTER> to move to next field<br>' +
                         'Description is optional',
             'aclProfile': 'active',
             'entriesWrite': [entries.iNdate, entries.iNtimerange, entries.iNact, entries.iNdesc,],
