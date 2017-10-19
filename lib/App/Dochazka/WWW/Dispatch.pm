@@ -202,11 +202,11 @@ sub _login_dialog {
     $message = $rr->{'hr'}->message;
     $body_json = $rr->{'body'};
 
+    my $status = $self->login_status( $code, $message, $body_json );
+
     if ( $site->MFILE_WWW_BYPASS_LOGIN_DIALOG and ! $meta->META_LOGIN_BYPASS_STATE ) {
         return ( $code == 200 ) ? 1 : 0;
     }
-
-    my $status = $self->login_status( $code, $message, $body_json );
     return $status;
 }
          
