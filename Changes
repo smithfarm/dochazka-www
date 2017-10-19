@@ -335,3 +335,9 @@ Revision history for App-Dochazka-WWW
 - js: implement "Create a single interval" dialog
 - js: populate activities cache upon successful login
 
+0.153 2017-10-19 09:36 CEST
+- js: sched-lib: implement schedule caching
+- js: create interval: start async population feature
+- js: tests: pad more time for AJAX calls (slow LDAP server)
+- js: poke at "create interval by offset with populate" feature
+
