@@ -190,7 +190,8 @@ define ([
         },
 
         myProfileAction = function () {
-            var eid = currentUser('obj').eid,
+            var cu = currentUser('obj'),
+                eid = cu.eid,
                 rest = {
                     "method": 'GET',
                     "path": 'employee/eid/' + eid + '/full'
@@ -222,6 +223,10 @@ define ([
                         }
                         employeeProfile = $.extend(
                             Object.create(prototypes.empProfile),
+                            cu
+                        );
+                        employeeProfile = $.extend(
+                            employeeProfile,
                             {
                                 'eid': st.payload.emp.eid,
                                 'nick': st.payload.emp.nick,
@@ -246,6 +251,42 @@ define ([
                     coreLib.displayError(st.payload.message);
                 };
             ajax(rest, sc, fc);
+        },
+
+        populateSupervisorNick = function (populateArray) {
+            var cu = currentUser('obj'),
+                eid = cu.supervisor,
+                nick,
+                fnToCall,
+                rest, sc, fc;
+            console.log("Entering populateSupervisorNick(), supervisor EID is", eid);
+            if (populateArray.length === 0) {
+                fnToCall = function (populateArray) {};
+            } else {
+                fnToCall = populateArray.shift();
+            }
+            // we assume the supervisor EID is in the current user object
+            // which was populated when we logged in or started masquerade
+            rest = {
+                "method": 'GET',
+                "path": 'employee/eid/' + eid
+            };
+            sc = function (st) {
+                nick = st.payload.nick,
+                $('#ePsuperNick').html(nick);
+                coreLib.clearResult();
+                fnToCall(populateArray);
+            },
+            fc = function (st) {
+                console.log("AJAX: GET " + rest["path"] + " failed with", st);
+                coreLib.displayError(st.payload.message);
+                $('#ePsuperNick').html('(ERR)');
+                fnToCall(populateArray);
+            };
+            if (eid) {
+                ajax(rest, sc, fc);
+            };
+
         };
 
     return {
@@ -254,6 +295,7 @@ define ([
         endTheMasquerade: endTheMasquerade,
         masqEmployee: masqEmp,
         myProfileAction: myProfileAction,
+        populateSupervisorNick: populateSupervisorNick,
     };
 
 });

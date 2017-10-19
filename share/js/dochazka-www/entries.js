@@ -38,10 +38,12 @@
 
 define ([
     'app/act-lib',
+    'app/emp-lib',
     'app/sched-lib',
     'datetime',
 ], function (
     actLib,
+    empLib,
     schedLib,
     datetime,
 ) {
@@ -127,6 +129,15 @@ define ([
             text: 'Schedule since',
             prop: 'schedEffective',
             maxlen: 30,
+        },
+        ePsuperNick: {
+            name: 'ePsuperNick',
+            aclProfileRead: 'inactive',
+            aclProfileWrite: 'admin',
+            text: 'Supervisor',
+            prop: 'ePsuperNick',
+            maxlen: 30,
+            populate: empLib.populateSupervisorNick,
         },
         LDAPdochazka: {
             name: 'LDAPdochazka',
@@ -340,11 +351,19 @@ define ([
             maxlen: 20,
             // populate: schedLib.populateSID,
         },
+        iNoffset: {
+            name: 'iNoffset',
+            aclProfileRead: 'inactive',
+            aclProfileWrite: 'admin',
+            text: 'Offset',
+            prop: 'iNoffset',
+            maxlen: 20,
+        },
         acTcode: {
             name: 'acTcode',
             aclProfileRead: 'active',
             aclProfileWrite: 'active',
-            text: 'Code',
+            text: 'Activity Code',
             prop: 'code',
             maxlen: 10,
         },
@@ -352,7 +371,7 @@ define ([
             name: 'acTaid',
             aclProfileRead: 'active',
             aclProfileWrite: 'active',
-            text: 'ID',
+            text: 'Activity ID',
             prop: 'aid',
             maxlen: 6,
             populate: actLib.populateAIDfromCode,

@@ -166,6 +166,8 @@ define ([
             if (obj.iNtimerange === '+') {
                 stack.push('createNextScheduled', obj);
             } else if (obj.iNtimerange.match(/\+/)) {
+                obj.iNoffset = obj.iNtimerange;
+                console.log("Current user object", cu);
                 stack.push('createLastPlusOffset', obj);
             } else {
                 intervalNewREST.body["intvl"] = genIntvl(obj.iNdate, obj.iNtimerange);
