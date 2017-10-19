@@ -108,7 +108,10 @@ define ([
             console.log("createSingleIntSave called with obj", obj);
             var cu = currentUser('obj'),
                 sc = function (st) {
-                    console.log("AJAX: " + rest["method"] + " " + rest["path"] + " returned", st);
+                    console.log(
+                        "AJAX: " + intervalNewREST["method"] + " " + intervalNewREST["path"] + " returned",
+                        st
+                    );
                     stack.restart(
                         emptyObj,
                         {
@@ -118,7 +121,10 @@ define ([
                     );
                 },
                 fc = function (st) {
-                    console.log("AJAX: " + rest["method"] + " " + rest["path"] + " failed", st);
+                    console.log(
+                        "AJAX: " + intervalNewREST["method"] + " " + intervalNewREST["path"] + " returned",
+                        st
+                    );
                     stack.restart(undefined, { "resultLine": st.payload.message });
                 };
 
