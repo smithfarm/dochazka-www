@@ -269,7 +269,7 @@ define ([
             // which was populated when we logged in or started masquerade
             rest = {
                 "method": 'GET',
-                "path": 'employee/eid/' + eid
+                "path": 'employee/eid/' + eid + "/minimal"
             };
             sc = function (st) {
                 nick = st.payload.nick,
