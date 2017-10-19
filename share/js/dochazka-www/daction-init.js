@@ -339,20 +339,20 @@ define ([
         });
 
         // Interval actions - create
-        target.push('createLastIntervalPlusOffsetSave', {
-            'name': 'createLastIntervalPlusOffsetSave',
+        target.push('createLastPlusOffsetSave', {
+            'name': 'createLastPlusOffsetSave',
             'type': 'daction',
             'menuText': 'Save',
             'aclProfile': 'active',
-            'start': dactionStart('createLastIntervalPlusOffsetSave'),
+            'start': dactionStart('createLastPlusOffsetSave'),
             'pushable': false
         });
-        target.push('createNextScheduledIntervalSave', {
-            'name': 'createNextScheduledIntervalSave',
+        target.push('createNextScheduledSave', {
+            'name': 'createNextScheduledSave',
             'type': 'daction',
             'menuText': 'Save',
             'aclProfile': 'active',
-            'start': dactionStart('createNextScheduledIntervalSave'),
+            'start': dactionStart('createNextScheduledSave'),
             'pushable': false
         });
         target.push('createSingleIntSave', {

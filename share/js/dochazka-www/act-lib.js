@@ -56,6 +56,23 @@ define ([
 
         byCode = {},
 
+        getActByAID = function (aid) {
+            if (cache.length > 0) {
+                return byAID[aid];
+            }
+            console.log('CRITICAL ERROR: activities cache not populated');
+            return null;
+        },
+
+        getActByCode = function (code) {
+            console.log("Entering getActByCode() with code " + code);
+            if (cache.length > 0) {
+                return byCode[code];
+            }
+            console.log('CRITICAL ERROR: activities cache not populated');
+            return null;
+        },
+
         populateActivitiesCache = function () {
             console.log("Entering populateActivitiesCache()");
             // idempotent
@@ -64,6 +81,22 @@ define ([
             } else {
                 console.log("populateActivitiesCaches(): noop, caches already populated");
             }
+        },
+
+        populateAIDfromCode = function (populateArray) {
+            var aid, code, fnToCall;
+            console.log("Entering populateAIDfromCode()");
+            if (populateArray.length === 0) {
+                fnToCall = function (populateArray) {};
+            } else {
+                fnToCall = populateArray.shift();
+            }
+            // assume there is a form with the code in it
+            code = $('#iNact').text();
+            console.log("Activity code is " + code);
+            aid = getActByCode(code).aid;
+            $('#acTaid').html(String(aid));
+            fnToCall(populateArray);
         },
 
         rest = {
@@ -89,23 +122,13 @@ define ([
 
     return {
 
-        getActByAID: function (aid) {
-            if (cache.length > 0) {
-                return byAID[aid];
-            }
-            console.log('CRITICAL ERROR: activities cache not populated');
-            return null;
-        },
+        getActByAID: getActByAID,
 
-        getActByCode: function (code) {
-            if (cache.length > 0) {
-                return byCode[code];
-            }
-            console.log('CRITICAL ERROR: activities cache not populated');
-            return null;
-        },
+        getActByCode: getActByCode,
 
         populateActivitiesCache: populateActivitiesCache,
+
+        populateAIDfromCode: populateAIDfromCode,
 
         selectActivityAction: function (obj) {
             if (cache.length > 0) {

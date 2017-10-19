@@ -320,7 +320,7 @@ define ([
             'menuText': "Last plus offset",
             'title': "Create interval \"last plus offset\"",
             'aclProfile': 'active',
-            'entriesRead': [entries.iNdate, entries.iNact, entries.iNdesc,
+            'entriesRead': [entries.iNdate, entries.iNact, entries.acTaid, entries.iNdesc, entries.iNsid,
                             entries.iNschedintvls, entries.iNlastexistintvl, entries.iNlastplusoffset,],
             'miniMenu': {
                 entries: ['createLastPlusOffsetSave'],

@@ -338,7 +338,7 @@ define ([
             text: 'Schedule ID',
             prop: 'iNsid',
             maxlen: 20,
-            populate: schedLib.populateSID,
+            // populate: schedLib.populateSID,
         },
         acTcode: {
             name: 'acTcode',
@@ -355,6 +355,7 @@ define ([
             text: 'ID',
             prop: 'aid',
             maxlen: 6,
+            populate: actLib.populateAIDfromCode,
         },
         acTdesc: {
             name: 'acTdesc',
@@ -371,7 +372,7 @@ define ([
             text: 'Scheduled',
             prop: 'iNschedintvls',
             maxlen: 50,
-            populate: schedLib.populateSchedIntvlsForDate,
+            // populate: schedLib.populateSchedIntvlsForDate,
         },
         iNlastexistintvl: {
             name: 'iNlastexistintvl',
