@@ -37,7 +37,6 @@
 "use strict";
 
 define ([
-    'jquery',
     'target',
     'app/act-lib',
     'app/daction-init',
@@ -50,7 +49,6 @@ define ([
     'init2',
     'stack'
 ], function (
-    $,
     target,
     actLib,
     dactionInitRoundOne,
@@ -68,35 +66,22 @@ define ([
 
         // round one - set up the targets
         console.log("dochazka-www/target-init.js: round one");
-        $('#mainarea').html("Loading dactions");
         dactionInitRoundOne();
-        $('#mainarea').html("Loading dforms");
         dformInitRoundOne();
-        $('#mainarea').html("Loading dmenus");
         dmenuInitRoundOne();
-        $('#mainarea').html("Loading dbrowsers");
         dbrowserInitRoundOne();
-        $('#mainarea').html("Loading dnotices");
         dnoticeInitRoundOne();
-        $('#mainarea').html("Loading dtables");
         dtableInitRoundOne();
-        $('#mainarea').html("Loading drowselects");
         drowselectInitRoundOne();
 
         // round two - add 'source' and 'start' properties
         // (widget targets only)
         console.log("dochazka-www/target-init.js: round two");
-        $('#mainarea').html("Initializing dforms");
         initRoundTwo('dform');
-        $('#mainarea').html("Initializing dmenus");
         initRoundTwo('dmenu');
-        $('#mainarea').html("Initializing dbrowsers");
         initRoundTwo('dbrowser');
-        $('#mainarea').html("Initializing dnotices");
         initRoundTwo('dnotice');
-        $('#mainarea').html("Initializing dtables");
         initRoundTwo('dtable');
-        $('#mainarea').html("Initializing drowselects");
         initRoundTwo('drowselect');
 
         // populate activities cache
