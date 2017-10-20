@@ -41,6 +41,7 @@ define ([
     'app/lib',
     'ajax',
     'current-user',
+    'datetime',
     'lib',
     'populate',
     'stack',
@@ -49,6 +50,7 @@ define ([
     appLib,
     ajax,
     currentUser,
+    datetime,
     coreLib,
     populate,
     stack,
@@ -275,6 +277,69 @@ define ([
             }
         },
 
+        populateSchedIntvlsForDate = function (populateArray) {
+            var cu = currentUser('obj'),
+                eid = cu.eid,
+                sid, date, tsr, intvlCount, i, rest, sc, fc, fnToCall;
+            date = $("#iNdate").text();
+            console.log("Entering populateSchedIntvlsForDate() with date " + date);
+            if (populateArray.length === 0) {
+                fnToCall = function (populateArray) {};
+            } else {
+                fnToCall = populateArray.shift();
+            }
+            sid = parseInt($("#iNsid").text(), 10);
+            if (coreLib.isInteger(sid) && sid > 0) {
+                console.log("SID: " + sid);
+            } else {
+                console.log("The user has no schedule for this date");
+                $("#iNschedintvls").html("(none)");
+                fnToCall(populateArray);
+                return null;
+            }
+            tsr = "[ \"" + date + " 00:00\", \"" + date + " 24:00\" )";
+            rest = {
+                "method": "POST",
+                "path": "interval/fillup",
+                "body": {
+                    'clobber': '1',
+                    'tsrange': tsr,
+                    'dry_run': '1',
+                    'eid': String(eid),
+                },
+            };
+            sc = function (st) {
+                console.log("AJAX: POST " + rest["path"] + " succeeded", st);
+                if (st.code === "DISPATCH_FILLUP_INTERVALS_CREATED") {
+                    intvlCount = parseInt(st.payload.success.count, 10);
+                    if (intvlCount === 0) {
+                        // do nothing - the entry already says "(none)"
+                    } else if (intvlCount === 1) {
+                        $('#iNschedintvls').html(st.payload.success.intervals[0].intvl);
+                    } else {
+                        $('#iNschedintvls').html('');
+                        for (i = 0; i < intvlCount - 1; i += 1) {
+                            $('#iNschedintvls').append(
+                                datetime.tsrangeToTimeRange(st.payload.success.intervals[i].intvl)
+                            );
+                            $('#iNschedintvls').append('; ');
+                        }
+                        $('#iNschedintvls').append(
+                            datetime.tsrangeToTimeRange(st.payload.success.intervals[i].intvl)
+                        );
+                    }
+                }
+                coreLib.clearResult();
+                fnToCall(populateArray);
+            };
+            fc = function (st) {
+                console.log("AJAX: POST " + rest["path"] + " failed", st);
+                coreLib.displayError(st.payload.message);
+                fnToCall(populateArray);
+            };
+            ajax(rest, sc, fc);
+        },
+
         populateScheduleBySID = function (populateArray) {
             var cu = currentUser('obj'),
                 fullProfile = getProfileByEID(parseInt(cu.eid, 10)),
@@ -303,7 +368,9 @@ define ([
                 console.log("AJAX GET " + rest.path + " succeeded", st);
                 scheduleCache.push(st.payload);
                 scheduleBySID[st.payload.sid] = $.extend({}, st.payload);
-                scheduleByScode[st.payload.scode] = $.extend({}, st.payload);
+                if (st.payload.scode && st.payload.scode.length > 0) {
+                    scheduleByScode[st.payload.scode] = $.extend({}, st.payload);
+                }
                 m = "Schedule ID " + sid + " loaded into cache";
                 console.log(m);
                 coreLib.displayResult(m);
@@ -316,6 +383,47 @@ define ([
             };
             ajax(rest, sc, fc);
             coreLib.clearResult();
+        },
+
+        populateSIDByDate = function (populateArray) {
+            var cu = currentUser('obj'),
+                date = $('#iNdate').text(),
+                eid = parseInt(cu.eid, 10),
+                schedObj,
+                sid,
+                fnToCall,
+                rest, sc, fc;
+            console.log("Entering populateSIDByDate(); EID is " + eid + " and date " + date);
+            if (populateArray.length === 0) {
+                fnToCall = function (populateArray) {};
+            } else {
+                fnToCall = populateArray.shift();
+            }
+            // the date can be anything - there's no point in caching anything
+            rest = {
+                "method": 'GET',
+                "path": 'schedule/eid/' + eid + '/',
+            };
+            sc = function (st) {
+                console.log("GET " + rest.path + " returned", st);
+                sid = st.payload.schedule.sid;
+                $('#iNsid').html(sid);
+                schedObj = getScheduleBySID(sid);
+                if (! schedObj) {
+                    scheduleBySID[st.payload.sid] = $.extend({}, st.payload);
+                    if (st.payload.scode && st.payload.scode.length > 0) {
+                        scheduleByScode[st.payload.scode] = $.extend({}, st.payload);
+                    }
+                }
+                fnToCall(populateArray);
+            };
+            fc = function (st) {
+                console.log("GET " + rest.path + " returned", st);
+                coreLib.displayError(st.payload.message);
+                fnToCall(populateArray);
+            };
+            rest.path += '"' + date + ' 12:00"';
+            ajax(rest, sc, fc);
         },
 
         populateSupervisorNick = function (populateArray) {
@@ -365,6 +473,7 @@ define ([
         };
 
     return {
+        activityCache: activityCache,
         getActivityByAID: getActivityByAID,
         getActivityByCode: getActivityByCode,
         getProfileByEID: getProfileByEID,
@@ -375,7 +484,9 @@ define ([
         populateActivityCache: populateActivityCache,
         populateAIDfromCode: populateAIDfromCode,
         populateFullEmployeeProfileCache: populateFullEmployeeProfileCache,
+        populateSchedIntvlsForDate: populateSchedIntvlsForDate,
         populateScheduleBySID: populateScheduleBySID,
+        populateSIDByDate: populateSIDByDate,
         populateSupervisorNick: populateSupervisorNick,
         profileCacheLength: function () {
             return profileCache.length

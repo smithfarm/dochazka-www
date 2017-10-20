@@ -38,10 +38,12 @@
 
 define ([
     'jquery',
+    'app/caches',
     'ajax',
     'stack',
 ], function (
     $,
+    appCaches,
     ajax,
     stack,
 ) {
@@ -67,10 +69,12 @@ define ([
 
         vetActivity: function (code) {
             // exact match
-            var i,
+            var cache = appCaches.activityCache,
+                exactMatch = appCaches.getActivityByCode(code),
+                i,
                 re;
-            if (byCode.hasOwnProperty(code)) {
-                return byCode[code].code;
+            if (exactMatch) {
+                return exactMatch.code;
             }
             // partial match
             re = new RegExp('^' + code, "i");

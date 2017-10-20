@@ -168,7 +168,6 @@ define ([
                 stack.push('createNextScheduled', obj);
             } else if (obj.iNtimerange.match(/\+/)) {
                 obj.iNoffset = obj.iNtimerange;
-                obj.iNsid = fullProfile.schedule;
                 stack.push('createLastPlusOffset', obj);
             } else {
                 intervalNewREST.body["intvl"] = genIntvl(obj.iNdate, obj.iNtimerange);

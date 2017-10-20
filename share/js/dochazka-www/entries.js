@@ -39,12 +39,10 @@
 define ([
     'app/caches',
     'app/act-lib',
-    'app/sched-lib',
     'datetime',
 ], function (
     appCaches,
     actLib,
-    schedLib,
     datetime,
 ) {
 
@@ -357,6 +355,7 @@ define ([
             text: 'Schedule ID',
             prop: 'iNsid',
             maxlen: 20,
+            populate: appCaches.populateSIDByDate,
         },
         iNoffset: {
             name: 'iNoffset',
@@ -398,7 +397,7 @@ define ([
             text: 'Scheduled',
             prop: 'iNschedintvls',
             maxlen: 50,
-            // populate: schedLib.populateSchedIntvlsForDate,
+            populate: appCaches.populateSchedIntvlsForDate,
         },
         iNlastexistintvl: {
             name: 'iNlastexistintvl',

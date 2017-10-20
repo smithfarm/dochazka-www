@@ -243,35 +243,6 @@ define ([
             return mungedObj;
         },
 
-        populateSchedIntvlsForDate = function (populateArray) {
-            var date, aid, i, rest, sc, fc, fnToCall;
-            console.log("Entering populateSchedIntvlsForDate()");
-            date = $("input[id=iNdate]").val();
-            aid = $("input[id=acTaid]").val();
-            if (populateArray.length === 0) {
-                fnToCall = function (populateArray) {};
-            } else {
-                fnToCall = populateArray.shift();
-            }
-            rest = {
-                "method": 'GET',
-                "path": 'schedule/eid/' + eid + '/',
-            };
-            sc = function (st) {
-                console.log("GET " + rest.path + " returned", st);
-                $('#iNschedintvls').html('FIXME');
-                fnToCall(populateArray);
-            };
-            fc = function (st) {
-                console.log("GET " + rest.path + " returned", st);
-                coreLib.displayError(st.payload.message);
-                fnToCall(populateArray);
-            };
-            console.log("Date entry is " + date);
-            rest.path += '"' + date + ' 12:00"';
-            ajax(rest, sc, fc);
-        },
-
         prepSchedIntvl = function (dow, uint) {
             // given schedule interval entered by user (e.g. "8-12:30"),
             // convert it into a string suitable for passing to the
@@ -347,7 +318,6 @@ define ([
         actionSchedLookup: actionSchedLookup,
         browseAllSchedules: browseAllSchedules,
         createSchedule: createSchedule,
-        populateSchedIntvlsForDate: populateSchedIntvlsForDate,
         prepSchedIntvl: prepSchedIntvl,
         schedEditSave: function (obj) {
             schedGen('edit', obj);
