@@ -37,7 +37,7 @@
 define ([
     'jquery',
     'ajax',
-    'app/act-lib',
+    'app/caches',
     'current-user',
     'datetime',
     'lib',
@@ -45,7 +45,7 @@ define ([
 ], function (
     $,
     ajax,
-    actLib,
+    appCaches,
     currentUser,
     datetime,
     coreLib,
@@ -107,6 +107,7 @@ define ([
             // the chosen activity
             console.log("createSingleIntSave called with obj", obj);
             var cu = currentUser('obj'),
+                fullProfile = appCaches.getProfileByEID(cu.eid),
                 sc = function (st) {
                     console.log(
                         "AJAX: " + intervalNewREST["method"] + " " + intervalNewREST["path"] + " returned",
@@ -151,7 +152,7 @@ define ([
             }
             if (! obj.hasOwnProperty('acTaid')) {
                 console.log("Looking up activity " + obj.iNact + " in cache");
-                obj.acTaid = actLib.getActByCode(obj.iNact).aid;
+                obj.acTaid = appCaches.getActivityByCode(obj.iNact).aid;
                 if (! obj.acTaid) {
                     stack.restart(undefined, { "resultLine": 'Activity ' + obj.iNact + ' not found' });
                 }
@@ -167,7 +168,7 @@ define ([
                 stack.push('createNextScheduled', obj);
             } else if (obj.iNtimerange.match(/\+/)) {
                 obj.iNoffset = obj.iNtimerange;
-                console.log("Current user object", cu);
+                obj.iNsid = fullProfile.schedule;
                 stack.push('createLastPlusOffset', obj);
             } else {
                 intervalNewREST.body["intvl"] = genIntvl(obj.iNdate, obj.iNtimerange);

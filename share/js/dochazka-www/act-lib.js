@@ -39,114 +39,14 @@
 define ([
     'jquery',
     'ajax',
-    'current-user',
-    'lib',
     'stack',
 ], function (
     $,
     ajax,
-    currentUser,
-    coreLib,
     stack,
 ) {
 
-    var cache = [],
-
-        byAID = {},
-
-        byCode = {},
-
-        getActByAID = function (aid) {
-            if (cache.length > 0) {
-                return byAID[aid];
-            }
-            console.log('CRITICAL ERROR: activities cache not populated');
-            return null;
-        },
-
-        getActByCode = function (code) {
-            console.log("Entering getActByCode() with code " + code);
-            if (cache.length > 0) {
-                return byCode[code];
-            }
-            console.log('CRITICAL ERROR: activities cache not populated');
-            return null;
-        },
-
-        populateActivitiesCache = function (populateArray) {
-            var rest, sc, fc, fnToCall;
-            console.log("Entering populateActivitiesCache()");
-            if (populateArray.length === 0) {
-                fnToCall = function (populateArray) {};
-            } else {
-                fnToCall = populateArray.shift();
-            }
-            if (cache.length === 0) {
-                rest = {
-                    "method": 'GET',
-                    "path": 'activity/all'
-                };
-                sc = function (st) {
-                    var i;
-                    console.log("AJAX: " + rest["method"] + " " + rest["path"] + " returned", st);
-                    cache = [];
-                    for (i = 0; i < st.payload.length; i += 1) {
-                        cache.push(st.payload[i]);
-                        byAID[st.payload[i].aid] = st.payload[i];
-                        byCode[st.payload[i].code] = st.payload[i];
-                    }
-                    coreLib.displayResult(i + 1 + " activity objects loaded into cache");
-                    fnToCall();
-                };
-                fc = function (st) {
-                    console.log("AJAX: " + rest["method"] + " " + rest["path"] + " failed", st);
-                    coreLib.displayError(st.payload.message);
-                    fnToCall();
-                };
-                ajax(rest, sc, fc);
-            } else {
-                console.log("populateActivitiesCaches(): noop, caches already populated");
-                fnToCall();
-            }
-        },
-
-        populateAIDfromCode = function (populateArray) {
-            var aid, code, fnToCall;
-            console.log("Entering populateAIDfromCode()");
-            if (populateArray.length === 0) {
-                fnToCall = function (populateArray) {};
-            } else {
-                fnToCall = populateArray.shift();
-            }
-            // assume there is a form with the code in it
-            code = $('#iNact').text();
-            console.log("Activity code is " + code);
-            aid = getActByCode(code).aid;
-            $('#acTaid').html(String(aid));
-            fnToCall(populateArray);
-        };
-
     return {
-
-        getActByAID: getActByAID,
-
-        getActByCode: getActByCode,
-
-        populateActivitiesCache: populateActivitiesCache,
-
-        populateAIDfromCode: populateAIDfromCode,
-
-        selectActivityAction: function (obj) {
-            if (cache.length > 0) {
-                stack.push('selectActivity', {
-                    'pos': 0,
-                    'set': cache,
-                });
-            } else {
-                // start selectActivity drowselect target
-                ajax(rest, sc, fc);
-            }
-        },
 
         selectActivityGo: function (obj) {
             // called from selectActivity drowselect; obj is the selected activity

@@ -38,6 +38,7 @@
 
 define ([
     'app/act-lib',
+    'app/caches',
     'app/emp-lib',
     'app/daction-init',
     'app/dform-init',
@@ -51,6 +52,7 @@ define ([
     'stack',
 ], function (
     actLib,
+    appCaches,
     empLib,
     dactionInitRoundOne,
     dformInitRoundOne,
@@ -89,8 +91,9 @@ define ([
         // use "populate" pattern to populate caches
         // (activities, full employee profile)
         populate([
-            empLib.populateFullEmployeeProfileCache,
-            actLib.populateActivitiesCache,
+            appCaches.populateFullEmployeeProfileCache,
+            appCaches.populateScheduleBySID,
+            appCaches.populateActivityCache,
         ]);
 
         // fire up the main menu

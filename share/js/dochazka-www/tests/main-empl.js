@@ -40,7 +40,7 @@ define ([
   'QUnit',
   'jquery',
   'app/canned-tests',
-  'app/emp-lib',
+  'app/caches',
   'lib',
   'login',
   'loggout',
@@ -50,7 +50,7 @@ define ([
   QUnit,
   $,
   ct,
-  empLib,
+  appCaches,
   coreLib,
   login,
   loggout,
@@ -96,9 +96,9 @@ define ([
                 done();
             }, 1500);
             setTimeout(function () {
-                // assert.ok(true, "Employee profile cache: " + QUnit.dump.parse(empLib.profileCache));
-                assert.ok(empLib.profileCache.length > 0, "Employee profile cache populated");
-                fullProfile = empLib.getEmpByNick('demo');
+                // assert.ok(true, "Employee profile cache: " + QUnit.dump.parse(appCaches.profileCache));
+                assert.ok(appCaches.profileCacheLength() > 0, "Employee profile cache populated");
+                fullProfile = appCaches.getProfileByNick('demo');
                 assert.ok("emp" in fullProfile, "Employee profile cache populated with an employee");
                 assert.strictEqual(
                     fullProfile.emp.nick,

@@ -37,13 +37,13 @@
 "use strict";
 
 define ([
+    'app/caches',
     'app/act-lib',
-    'app/emp-lib',
     'app/sched-lib',
     'datetime',
 ], function (
+    appCaches,
     actLib,
-    empLib,
     schedLib,
     datetime,
 ) {
@@ -145,7 +145,7 @@ define ([
             text: 'Supervisor',
             prop: 'ePsuperNick',
             maxlen: 30,
-            populate: empLib.populateSupervisorNick,
+            populate: appCaches.populateSupervisorNick,
         },
         LDAPdochazka: {
             name: 'LDAPdochazka',
@@ -357,7 +357,6 @@ define ([
             text: 'Schedule ID',
             prop: 'iNsid',
             maxlen: 20,
-            // populate: schedLib.populateSID,
         },
         iNoffset: {
             name: 'iNoffset',
@@ -382,7 +381,7 @@ define ([
             text: 'Activity ID',
             prop: 'aid',
             maxlen: 6,
-            populate: actLib.populateAIDfromCode,
+            populate: appCaches.populateAIDfromCode,
         },
         acTdesc: {
             name: 'acTdesc',

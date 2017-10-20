@@ -37,9 +37,9 @@
 "use strict";
 
 define ([
-    'current-user'
+    "current-user",
 ], function (
-    currentUser
+    currentUser,
 ) {
 
     return {

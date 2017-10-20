@@ -36,7 +36,9 @@
 
 define ([
     'jquery',
+    'app/caches',
     'app/lib',
+    'app/sched-lib',
     'app/prototypes',
     'ajax',
     'current-user',
@@ -46,7 +48,9 @@ define ([
     'stack',
 ], function (
     $,
+    appCaches,
     appLib,
+    schedLib,
     prototypes,
     ajax,
     currentUser,
@@ -57,14 +61,6 @@ define ([
 ) {
 
     var 
-        profileCache = [],
-        byEID = {},
-        byNick = {},
-
-        currentEmployeeStashed = null,
-        currentEmplPrivStashed = null,
-        backgroundColorStashed = null,
-    
         actionEmplSearch = function (obj) {
             // obj is searchKeyNick from the form
             if (! obj) {
@@ -147,125 +143,9 @@ define ([
             ajax(rest, sc, fc);
         },
 
-        endTheMasquerade = function () {
-            currentUser('flag1', 0); // turn off masquerade flag
-            console.log('flag1 === ', currentUser('flag1'));
-            currentUser('obj', currentEmployeeStashed);
-            currentEmployeeStashed = null;
-            $('#userbox').html(appLib.fillUserBox()); // reset userbox
-            $('#mainarea').css("background-color", backgroundColorStashed);
-            coreLib.displayResult('Masquerade is finished');
-            $('input[name="sel"]').val('');
-        },
-
-        getEmpByEID = function (eid) {
-            console.log("Entering getEmpByEID() with eid " + eid);
-            if (profileCache.length > 0) {
-                return byEID[eid];
-            }
-            console.log('Employee profile cache not populated yet');
-            return null;
-        },
-
-        getEmpByNick = function (nick) {
-            console.log("Entering getEmpByNick() with nick " + nick);
-            if (profileCache.length > 0) {
-                return byNick[nick];
-            }
-            console.log('Employee profile cache not populated yet');
-            return null;
-        },
-
-        masqEmployee = function (obj) {
-            console.log("Entering masqEmployee() with object", obj);
-            // if obj is empty, dA was selected from menu
-            // if obj is full, it contains the employee to masquerade as
-        
-            if (currentEmployeeStashed) {
-                endTheMasquerade();
-                return;
-            }
-
-            var cu = currentUser('obj');
-
-            if (! coreLib.isObjEmpty(obj)) {
-                if (obj.nick === cu.nick) {
-                    coreLib.displayResult('Request to masquerade as self makes no sense');
-                    return;
-                }
-                // let the masquerade begin
-                currentEmployeeStashed = $.extend({}, cu);
-                backgroundColorStashed = $('#mainarea').css("background-color");
-                currentUser('obj', obj);
-                currentUser('flag1', 1); // turn on masquerade flag
-                populate([populateFullEmployeeProfileCache]);
-                $('#userbox').html(appLib.fillUserBox()); // reset userbox
-                $('#mainarea').css("background-color", "red");
-                stack.unwindToFlag(); // return to most recent dmenu
-                return;
-            }
-        
-            // let the admin pick which user to masquerade as
-            stack.push('searchEmployee', {}, {
-                "xtarget": "mainEmpl"
-            });
-        },
-
-        populateFullEmployeeProfileCache = function (populateArray) {
-            var cu = currentUser('obj'),
-                eid = cu.eid,
-                profileObj,
-                fnToCall,
-                rest, sc, fc, m;
-            console.log("Entering populateFullEmployeeProfileCache(); EID is", cu.eid);
-            console.log("populateArray.length is " + populateArray.length);
-            if (populateArray.length === 0) {
-                fnToCall = function (populateArray) {};
-            } else {
-                fnToCall = populateArray.shift();
-            }
-            profileObj = getEmpByEID(cu.eid);
-            if (profileObj) {
-                fnToCall(populateArray);
-            } else {
-                rest = {
-                    "method": 'GET',
-                };
-                if (currentUser('flag1') === 1) {
-                    // masquerade active; we are admin
-                    rest["path"] = 'employee/eid/' + eid + '/full';
-                } else {
-                    rest["path"] = 'employee/self/full';
-                }
-                sc = function (st) {
-                    console.log("AJAX GET " + rest.path + " succeeded", st);
-                    if (st.code === 'DISPATCH_EMPLOYEE_PROFILE_FULL') {
-                        profileObj = $.extend({}, st.payload);
-                        profileCache.push(profileObj);
-                        byEID[st.payload.emp.eid] = $.extend({}, profileObj);
-                        byNick[st.payload.emp.nick] = $.extend({}, profileObj);
-                        coreLib.displayResult("Profile of employee " + st.payload.emp.nick + " loaded into cache");
-                        console.log("byEID", byEID);
-                        console.log("byNick", byNick);
-                    } else {
-                        m = "Unexpected status code " + st.code;
-                        console.log("CRITICAL ERROR: " + m);
-                        coreLib.displayError(m);
-                    }
-                    fnToCall(populateArray);
-                };
-                fc = function (st) {
-                    console.log("AJAX: " + rest["path"] + " failed", st);
-                    coreLib.displayError(st.payload.message);
-                    fnToCall(populateArray);
-                };
-                ajax(rest, sc, fc);
-            }
-        },
-
         myProfileAction = function () {
             var cu = currentUser('obj'),
-                profileObj = getEmpByEID(cu.eid),
+                profileObj = appCaches.getProfileByEID(cu.eid),
                 obj = {},
                 m;
             // if the employee profile has not been loaded into the cache, we have a problem
@@ -306,55 +186,12 @@ define ([
             obj['remark'] = profileObj.emp.remark;
             obj['sec_id'] - profileObj.emp.sec_id;
             stack.push('empProfile', obj);
-        },
-
-        populateSupervisorNick = function (populateArray) {
-            var cu = currentUser('obj'),
-                eid = cu.supervisor,
-                nick,
-                fnToCall,
-                rest, sc, fc;
-            console.log("Entering populateSupervisorNick(), supervisor EID is", eid);
-            if (populateArray.length === 0) {
-                fnToCall = function (populateArray) {};
-            } else {
-                fnToCall = populateArray.shift();
-            }
-            // we assume the supervisor EID is in the current user object
-            // which was populated when we logged in or started masquerade
-            rest = {
-                "method": 'GET',
-                "path": 'employee/eid/' + eid + "/minimal"
-            };
-            sc = function (st) {
-                nick = st.payload.nick,
-                $('#ePsuperNick').html(nick);
-                coreLib.clearResult();
-                fnToCall(populateArray);
-            },
-            fc = function (st) {
-                console.log("AJAX: GET " + rest["path"] + " failed with", st);
-                coreLib.displayError(st.payload.message);
-                $('#ePsuperNick').html('(ERR)');
-                fnToCall(populateArray);
-            };
-            if (eid) {
-                ajax(rest, sc, fc);
-            };
-
         };
 
     return {
         actionEmplSearch: actionEmplSearch,
         empProfileEditSave: empProfileEditSave,
-        endTheMasquerade: endTheMasquerade,
-        getEmpByEID: getEmpByEID,
-        getEmpByNick: getEmpByNick,
-        masqEmployee: masqEmployee,
         myProfileAction: myProfileAction,
-        populateFullEmployeeProfileCache: populateFullEmployeeProfileCache,
-        populateSupervisorNick: populateSupervisorNick,
-        profileCache: profileCache,
     };
 
 });
