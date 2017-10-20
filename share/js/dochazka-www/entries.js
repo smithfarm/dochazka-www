@@ -226,7 +226,7 @@ define ([
         },
         sDmon: {
             name: 'sDmon',
-            aclProfileRead: 'admin',
+            aclProfileRead: 'inactive',
             aclProfileWrite: 'admin',
             text: 'Monday',
             prop: 'mon',
@@ -234,7 +234,7 @@ define ([
         },
         sDtue: {
             name: 'sDtue',
-            aclProfileRead: 'admin',
+            aclProfileRead: 'inactive',
             aclProfileWrite: 'admin',
             text: 'Tuesday',
             prop: 'tue',
@@ -242,7 +242,7 @@ define ([
         },
         sDwed: {
             name: 'sDwed',
-            aclProfileRead: 'admin',
+            aclProfileRead: 'inactive',
             aclProfileWrite: 'admin',
             text: 'Wednesday',
             prop: 'wed',
@@ -250,7 +250,7 @@ define ([
         },
         sDthu: {
             name: 'sDthu',
-            aclProfileRead: 'admin',
+            aclProfileRead: 'inactive',
             aclProfileWrite: 'admin',
             text: 'Thursday',
             prop: 'thu',
@@ -258,7 +258,7 @@ define ([
         },
         sDfri: {
             name: 'sDfri',
-            aclProfileRead: 'admin',
+            aclProfileRead: 'inactive',
             aclProfileWrite: 'admin',
             text: 'Friday',
             prop: 'fri',
@@ -266,7 +266,7 @@ define ([
         },
         sDsat: {
             name: 'sDsat',
-            aclProfileRead: 'admin',
+            aclProfileRead: 'inactive',
             aclProfileWrite: 'admin',
             text: 'Saturday',
             prop: 'sat',
@@ -274,7 +274,7 @@ define ([
         },
         sDsun: {
             name: 'sDsun',
-            aclProfileRead: 'admin',
+            aclProfileRead: 'inactive',
             aclProfileWrite: 'admin',
             text: 'Sunday',
             prop: 'sun',
