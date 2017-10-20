@@ -195,7 +195,7 @@ define ([
         sScode: {
             name: 'sScode',
             aclProfileRead: null,
-            aclProfileWrite: 'admin',
+            aclProfileWrite: 'inactive',
             text: 'Schedule code',
             prop: 'searchKeySchedCode',
             maxlen: 20,
@@ -203,7 +203,7 @@ define ([
         sSid: {
             name: 'sSid',
             aclProfileRead: null,
-            aclProfileWrite: 'admin',
+            aclProfileWrite: 'inactive',
             text: 'Schedule ID',
             prop: 'searchKeySchedID',
             maxlen: 20,
