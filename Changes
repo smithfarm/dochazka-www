@@ -351,3 +351,12 @@ Revision history for App-Dochazka-WWW
   dform population features
 - js: display supervisor nick in employee profile
 
+0.155 2017-10-20 22:43 CEST
+- Dispatch: rename _login_dialog method to validate_user_credentials
+- js: daction-init: fix pushable flag in one of the actions
+- js: act-lib: use populate pattern for populateActivitiesCache
+- js: implement employee profile caching
+- js: upon successful masquerade, load full employee profile into cache
+- js: move all cache-related code into a new caches.js module
+- js: implement populateSchedIntvlsForDate() and populateSIDByDate()
+
