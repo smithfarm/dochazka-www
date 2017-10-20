@@ -73,13 +73,40 @@ define ([
             return null;
         },
 
-        populateActivitiesCache = function () {
+        populateActivitiesCache = function (populateArray) {
+            var rest, sc, fc, fnToCall;
             console.log("Entering populateActivitiesCache()");
-            // idempotent
+            if (populateArray.length === 0) {
+                fnToCall = function (populateArray) {};
+            } else {
+                fnToCall = populateArray.shift();
+            }
             if (cache.length === 0) {
+                rest = {
+                    "method": 'GET',
+                    "path": 'activity/all'
+                };
+                sc = function (st) {
+                    var i;
+                    console.log("AJAX: " + rest["method"] + " " + rest["path"] + " returned", st);
+                    cache = [];
+                    for (i = 0; i < st.payload.length; i += 1) {
+                        cache.push(st.payload[i]);
+                        byAID[st.payload[i].aid] = st.payload[i];
+                        byCode[st.payload[i].code] = st.payload[i];
+                    }
+                    coreLib.displayResult(i + 1 + " activity objects loaded into cache");
+                    fnToCall();
+                };
+                fc = function (st) {
+                    console.log("AJAX: " + rest["method"] + " " + rest["path"] + " failed", st);
+                    coreLib.displayError(st.payload.message);
+                    fnToCall();
+                };
                 ajax(rest, sc, fc);
             } else {
                 console.log("populateActivitiesCaches(): noop, caches already populated");
+                fnToCall();
             }
         },
 
@@ -97,27 +124,6 @@ define ([
             aid = getActByCode(code).aid;
             $('#acTaid').html(String(aid));
             fnToCall(populateArray);
-        },
-
-        rest = {
-            "method": 'GET',
-            "path": 'activity/all'
-        },
-        // success callback
-        sc = function (st) {
-            var i;
-            console.log("AJAX: " + rest["method"] + " " + rest["path"] + " returned", st);
-            cache = [];
-            for (i = 0; i < st.payload.length; i += 1) {
-                cache.push(st.payload[i]);
-                byAID[st.payload[i].aid] = st.payload[i];
-                byCode[st.payload[i].code] = st.payload[i];
-            }
-            coreLib.displayResult(i + 1 + " activity objects loaded into cache");
-        },
-        fc = function (st) {
-            console.log("AJAX: " + rest["method"] + " " + rest["path"] + " failed", st);
-            coreLib.displayError(st.payload.message);
         };
 
     return {
