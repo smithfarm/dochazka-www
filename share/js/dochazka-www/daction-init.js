@@ -227,7 +227,7 @@ define ([
             'name': 'actionSchedLookup',
             'type': 'daction',
             'menuText': 'Lookup',
-            'aclProfile': 'admin',
+            'aclProfile': 'inactive',
             'start': dactionStart('actionSchedLookup'),
             'pushable': false
         });
