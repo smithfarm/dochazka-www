@@ -137,7 +137,7 @@ define ([
             'menuText': 'Privilege (status) history',
             'aclProfile': 'passerby',
             'start': dactionStart('actionPrivHistory'),
-            'pushable': false
+            'pushable': true
         });
         target.push('actionPrivHistoryEdit', { // read-write
             'name': 'actionPrivHistoryEdit',
