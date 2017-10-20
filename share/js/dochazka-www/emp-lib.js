@@ -36,22 +36,24 @@
 
 define ([
     'jquery',
+    'app/lib',
+    'app/prototypes',
     'ajax',
     'current-user',
     'datetime',
     'lib',
-    'app/lib',
-    'app/prototypes',
-    'stack'
+    'populate',
+    'stack',
 ], function (
     $,
+    appLib,
+    prototypes,
     ajax,
     currentUser,
     datetime,
     coreLib,
-    appLib,
-    prototypes,
-    stack
+    populate,
+    stack,
 ) {
 
     var 
@@ -174,8 +176,8 @@ define ([
             return null;
         },
 
-        masqEmp = function (obj) {
-            console.log("Entering masqEmp with object", obj);
+        masqEmployee = function (obj) {
+            console.log("Entering masqEmployee() with object", obj);
             // if obj is empty, dA was selected from menu
             // if obj is full, it contains the employee to masquerade as
         
@@ -196,6 +198,7 @@ define ([
                 backgroundColorStashed = $('#mainarea').css("background-color");
                 currentUser('obj', obj);
                 currentUser('flag1', 1); // turn on masquerade flag
+                populate([populateFullEmployeeProfileCache]);
                 $('#userbox').html(appLib.fillUserBox()); // reset userbox
                 $('#mainarea').css("background-color", "red");
                 stack.unwindToFlag(); // return to most recent dmenu
@@ -347,7 +350,7 @@ define ([
         endTheMasquerade: endTheMasquerade,
         getEmpByEID: getEmpByEID,
         getEmpByNick: getEmpByNick,
-        masqEmployee: masqEmp,
+        masqEmployee: masqEmployee,
         myProfileAction: myProfileAction,
         populateFullEmployeeProfileCache: populateFullEmployeeProfileCache,
         populateSupervisorNick: populateSupervisorNick,
