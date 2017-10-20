@@ -72,7 +72,7 @@ define ([
                 coreLib.emptyLineEntry,
                 entries.ePpriv, entries.ePprivEffective,
                 coreLib.emptyLineEntry,
-                entries.ePsched, entries.ePschedEffective
+                entries.ePscode, entries.ePsid, entries.ePschedEffective
             ],
             'miniMenu': {
                 entries: ['empProfileEdit', 'ldapSync']

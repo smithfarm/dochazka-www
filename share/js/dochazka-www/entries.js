@@ -114,12 +114,20 @@ define ([
             prop: 'privEffective',
             maxlen: 30,
         },
-        ePsched: {
-            name: 'ePsched',
+        ePscode: {
+            name: 'ePscode',
             aclProfileRead: 'inactive',
             aclProfileWrite: 'admin',
-            text: 'Schedule',
-            prop: 'sched',
+            text: 'Schedule code',
+            prop: 'scode',
+            maxlen: 20,
+        },
+        ePsid: {
+            name: 'ePsid',
+            aclProfileRead: 'inactive',
+            aclProfileWrite: 'admin',
+            text: 'Schedule ID',
+            prop: 'sid',
             maxlen: 20,
         },
         ePschedEffective: {

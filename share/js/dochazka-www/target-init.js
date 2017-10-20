@@ -39,6 +39,7 @@
 define ([
     'target',
     'app/act-lib',
+    'app/emp-lib',
     'app/daction-init',
     'app/dform-init',
     'app/dmenu-init',
@@ -51,6 +52,7 @@ define ([
 ], function (
     target,
     actLib,
+    empLib,
     dactionInitRoundOne,
     dformInitRoundOne,
     dmenuInitRoundOne,
@@ -63,6 +65,8 @@ define ([
 ) {
 
     return function () {
+
+        var populateArray = [];
 
         // round one - set up the targets
         console.log("dochazka-www/target-init.js: round one");
@@ -84,8 +88,13 @@ define ([
         initRoundTwo('dtable');
         initRoundTwo('drowselect');
 
-        // populate activities cache
-        actLib.populateActivitiesCache();
+        // use "populate" pattern to populate caches
+        // (activities, full employee profile)
+        populateArray = [
+            empLib.populateFullEmployeeProfileCache,
+            actLib.populateActivitiesCache,
+        ];
+        populateArray.shift()(populateArray);
 
         // fire up the main menu
         stack.push('mainMenu');

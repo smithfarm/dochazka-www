@@ -57,6 +57,7 @@ define ([
     var 
         profileCache = [],
         byEID = {},
+        byNick = {},
 
         currentEmployeeStashed = null,
         currentEmplPrivStashed = null,
@@ -155,6 +156,24 @@ define ([
             $('input[name="sel"]').val('');
         },
 
+        getEmpByEID = function (eid) {
+            console.log("Entering getEmpByEID() with eid " + eid);
+            if (profileCache.length > 0) {
+                return byEID[eid];
+            }
+            console.log('Employee profile cache not populated yet');
+            return null;
+        },
+
+        getEmpByNick = function (nick) {
+            console.log("Entering getEmpByNick() with nick " + nick);
+            if (profileCache.length > 0) {
+                return byNick[nick];
+            }
+            console.log('Employee profile cache not populated yet');
+            return null;
+        },
+
         masqEmp = function (obj) {
             console.log("Entering masqEmp with object", obj);
             // if obj is empty, dA was selected from menu
@@ -189,68 +208,101 @@ define ([
             });
         },
 
-        myProfileAction = function () {
+        populateFullEmployeeProfileCache = function (populateArray) {
             var cu = currentUser('obj'),
                 eid = cu.eid,
+                profileObj,
+                fnToCall,
+                rest, sc, fc, m;
+            console.log("Entering populateFullEmployeeProfileCache(); EID is", cu.eid);
+            console.log("populateArray.length is " + populateArray.length);
+            if (populateArray.length === 0) {
+                fnToCall = function (populateArray) {};
+            } else {
+                fnToCall = populateArray.shift();
+            }
+            profileObj = getEmpByEID(cu.eid);
+            if (profileObj) {
+                fnToCall(populateArray);
+            } else {
                 rest = {
                     "method": 'GET',
-                    "path": 'employee/eid/' + eid + '/full'
-                },
-                employeeProfile,
-                // success callback
-                sc = function (st) {
-                    if (st.code === 'DISPATCH_EMPLOYEE_PROFILE_FULL') {
-                        console.log("Payload is", st.payload);
-                        var priv = null,
-                            privEffective = null,
-                            sched = null,
-                            schedEffective = null;
-                        if (st.payload.privhistory !== null) {
-                            priv = st.payload.privhistory.priv;
-                            privEffective = datetime.readableDate(
-                                st.payload.privhistory.effective
-                            );
-                        }
-                        if (st.payload.schedhistory !== null) {
-                            if (st.payload.schedhistory.scode !== null) {
-                                sched = st.payload.schedhistory.scode;
-                            } else {
-                                sched = '(Schedule ID ' + st.payload.schedhistory.sid + ')';
-                            }
-                            schedEffective = datetime.readableDate(
-                                st.payload.schedhistory.effective
-                            );
-                        }
-                        employeeProfile = $.extend(
-                            Object.create(prototypes.empProfile),
-                            cu
-                        );
-                        employeeProfile = $.extend(
-                            employeeProfile,
-                            {
-                                'eid': st.payload.emp.eid,
-                                'nick': st.payload.emp.nick,
-                                'fullname': st.payload.emp.fullname,
-                                'email': st.payload.emp.email,
-                                'remark': st.payload.emp.remark,
-                                'sec_id': st.payload.emp.sec_id,
-                                'priv': priv,
-                                'privEffective': privEffective,
-                                'sched': sched,
-                                'schedEffective': schedEffective
-                            }
-                        );
-                        currentUser('obj', employeeProfile);
-                        stack.push('empProfile', employeeProfile, {"xtarget": "mainEmpl"});
-                    } else {
-                        coreLib.displayError("Unexpected status code " + st.code);
-                    }
-                },
-                fc = function (st) {
-                    console.log("AJAX: " + rest["path"] + " failed with", st);
-                    coreLib.displayError(st.payload.message);
                 };
-            ajax(rest, sc, fc);
+                if (currentUser('flag1') === 1) {
+                    // masquerade active; we are admin
+                    rest["path"] = 'employee/eid/' + eid + '/full';
+                } else {
+                    rest["path"] = 'employee/self/full';
+                }
+                sc = function (st) {
+                    console.log("AJAX GET " + rest.path + " succeeded", st);
+                    if (st.code === 'DISPATCH_EMPLOYEE_PROFILE_FULL') {
+                        profileObj = $.extend({}, st.payload);
+                        profileCache.push(profileObj);
+                        byEID[st.payload.emp.eid] = $.extend({}, profileObj);
+                        byNick[st.payload.emp.nick] = $.extend({}, profileObj);
+                        coreLib.displayResult("Profile of employee " + st.payload.emp.nick + " loaded into cache");
+                        console.log("byEID", byEID);
+                        console.log("byNick", byNick);
+                    } else {
+                        m = "Unexpected status code " + st.code;
+                        console.log("CRITICAL ERROR: " + m);
+                        coreLib.displayError(m);
+                    }
+                    fnToCall(populateArray);
+                };
+                fc = function (st) {
+                    console.log("AJAX: " + rest["path"] + " failed", st);
+                    coreLib.displayError(st.payload.message);
+                    fnToCall(populateArray);
+                };
+                ajax(rest, sc, fc);
+            }
+        },
+
+        myProfileAction = function () {
+            var cu = currentUser('obj'),
+                profileObj = getEmpByEID(cu.eid),
+                obj = {},
+                m;
+            // if the employee profile has not been loaded into the cache, we have a problem
+            if (! profileObj) {
+                m = "CRITICAL ERROR: the employee profile has not been loaded into the cache";
+                console.log(m);
+                coreLib.displayError(m);
+                return null;
+            }
+            if (profileObj.privhistory !== null) {
+                obj['priv'] = profileObj.privhistory.priv;
+                obj['privEffective'] = datetime.readableDate(
+                    profileObj.privhistory.effective
+                );
+            } else {
+                obj['priv'] = '(none)';
+                obj['privEffective'] = '(none)';
+            }
+            if (profileObj.schedhistory !== null) {
+                obj['sid'] = profileObj.schedhistory.sid;
+                if (profileObj.schedhistory.scode !== null) {
+                    obj['scode'] = profileObj.schedhistory.scode;
+                } else {
+                    obj['scode'] = '(none)';
+                }
+                obj['schedEffective'] = datetime.readableDate(
+                    profileObj.schedhistory.effective
+                );
+            } else {
+                obj['sid'] = '(none)';
+                obj['scode'] = '(none)';
+                obj['schedEffective'] = '(none)';
+            }
+            obj['eid'] = profileObj.emp.eid;
+            obj['nick'] = profileObj.emp.nick;
+            obj['fullname'] = profileObj.emp.fullname;
+            obj['email'] = profileObj.emp.email;
+            obj['remark'] = profileObj.emp.remark;
+            obj['sec_id'] - profileObj.emp.sec_id;
+            stack.push('empProfile', obj);
         },
 
         populateSupervisorNick = function (populateArray) {
@@ -293,9 +345,13 @@ define ([
         actionEmplSearch: actionEmplSearch,
         empProfileEditSave: empProfileEditSave,
         endTheMasquerade: endTheMasquerade,
+        getEmpByEID: getEmpByEID,
+        getEmpByNick: getEmpByNick,
         masqEmployee: masqEmp,
         myProfileAction: myProfileAction,
+        populateFullEmployeeProfileCache: populateFullEmployeeProfileCache,
         populateSupervisorNick: populateSupervisorNick,
+        profileCache: profileCache,
     };
 
 });
