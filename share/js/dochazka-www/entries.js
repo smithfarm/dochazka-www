@@ -406,9 +406,7 @@ define ([
             text: 'Last existing',
             prop: 'iNlastexistintvl',
             maxlen: 50,
-            populate: function () {
-                // TBD
-            },
+            populate: appCaches.populateLastExisting,
         },
         iNlastplusoffset: {
             name: 'iNlastplusoffset',

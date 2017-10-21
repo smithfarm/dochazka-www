@@ -38,11 +38,33 @@
 
 define ([
     "current-user",
+    "datetime",
 ], function (
     currentUser,
+    datetime,
 ) {
 
     return {
+
+        displayIntervals: function (intervals, formField) {
+            var i;
+            if (intervals.length === 1) {
+                formField.html(
+                    datetime.tsrangeToTimeRange(intervals[0].intvl)
+                );
+            } else {
+                formField.html('');
+                for (i = 0; i < intervals.length - 1; i += 1) {
+                    formField.append(
+                        datetime.tsrangeToTimeRange(intervals[i].intvl)
+                    );
+                    formField.append('; ');
+                }
+                formField.append(
+                    datetime.tsrangeToTimeRange(intervals[i].intvl)
+                );
+            }
+        },
 
         //
         // function returns string that will be displayed at the very

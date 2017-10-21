@@ -127,7 +127,7 @@ define ([
         "createSingleIntSave": intLib.createSingleIntSave,
         
         // activity select actions
-        "selectActivityAction": actLib.selectActivityAction,
+        "selectActivityAction": appCaches.selectActivityAction,
         "selectActivityGo": actLib.selectActivityGo,
 
         // actions triggered from Adminitrivia menu

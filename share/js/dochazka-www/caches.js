@@ -277,12 +277,55 @@ define ([
             }
         },
 
+        populateLastExisting = function (populateArray) {
+            var cu = currentUser('obj'),
+                eid = cu.eid,
+                date, tsr,
+                rest, sc, fc, fnToCall;
+            date = $("#iNdate").text();
+            console.log("Entering populateLastExisting() with date " + date);
+            if (populateArray.length === 0) {
+                fnToCall = function (populateArray) {};
+            } else {
+                fnToCall = populateArray.shift();
+            }
+            tsr = "[ \"" + date + " 00:00\", \"" + date + " 24:00\" )";
+            rest = {
+                "method": "GET",
+                "path": "interval/eid/" + eid + "/" + tsr,
+            };
+            sc = function (st) {
+                console.log("AJAX: POST " + rest["path"] + " succeeded", st);
+                if (st.code === "DISPATCH_RECORDS_FOUND") {
+                    // payload is an array of interval objects
+                    appLib.displayIntervals(
+                        st.payload,
+                        $('#iNlastexistintvl')
+                    );
+                }
+                coreLib.clearResult();
+                fnToCall(populateArray);
+            };
+            fc = function (st) {
+                console.log("AJAX: POST " + rest["path"] + " failed", st);
+                if (st.code === "DISPATCH_NOTHING_IN_TSRANGE") {
+                    // form field is pre-populated with "(none)"
+                    coreLib.clearResult();
+                } else {
+                    coreLib.displayError(st.payload.message);
+                }
+                fnToCall(populateArray);
+            };
+            ajax(rest, sc, fc);
+        },
+
         populateSchedIntvlsForDate = function (populateArray) {
             var cu = currentUser('obj'),
                 eid = cu.eid,
-                sid, date, tsr, intvlCount, i, rest, sc, fc, fnToCall;
+                sid, date, tsr, rest, sc, fc, fnToCall;
             date = $("#iNdate").text();
             console.log("Entering populateSchedIntvlsForDate() with date " + date);
+            console.log(populateArray);
             if (populateArray.length === 0) {
                 fnToCall = function (populateArray) {};
             } else {
@@ -311,23 +354,10 @@ define ([
             sc = function (st) {
                 console.log("AJAX: POST " + rest["path"] + " succeeded", st);
                 if (st.code === "DISPATCH_FILLUP_INTERVALS_CREATED") {
-                    intvlCount = parseInt(st.payload.success.count, 10);
-                    if (intvlCount === 0) {
-                        // do nothing - the entry already says "(none)"
-                    } else if (intvlCount === 1) {
-                        $('#iNschedintvls').html(st.payload.success.intervals[0].intvl);
-                    } else {
-                        $('#iNschedintvls').html('');
-                        for (i = 0; i < intvlCount - 1; i += 1) {
-                            $('#iNschedintvls').append(
-                                datetime.tsrangeToTimeRange(st.payload.success.intervals[i].intvl)
-                            );
-                            $('#iNschedintvls').append('; ');
-                        }
-                        $('#iNschedintvls').append(
-                            datetime.tsrangeToTimeRange(st.payload.success.intervals[i].intvl)
-                        );
-                    }
+                    appLib.displayIntervals(
+                        st.payload.success.intervals,
+                        $('#iNschedintvls')
+                    );
                 }
                 coreLib.clearResult();
                 fnToCall(populateArray);
@@ -484,6 +514,7 @@ define ([
         populateActivityCache: populateActivityCache,
         populateAIDfromCode: populateAIDfromCode,
         populateFullEmployeeProfileCache: populateFullEmployeeProfileCache,
+        populateLastExisting: populateLastExisting,
         populateSchedIntvlsForDate: populateSchedIntvlsForDate,
         populateScheduleBySID: populateScheduleBySID,
         populateSIDByDate: populateSIDByDate,
