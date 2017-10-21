@@ -90,7 +90,7 @@ define ([
 
         // use "populate" pattern to populate caches
         // (activities, full employee profile)
-        populate([
+        populate.bootstrap([
             appCaches.populateFullEmployeeProfileCache,
             appCaches.populateScheduleBySID,
             appCaches.populateActivityCache,

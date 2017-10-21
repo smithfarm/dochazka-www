@@ -415,9 +415,7 @@ define ([
             text: 'To be created',
             prop: 'iNlastplusoffset',
             maxlen: 50,
-            populate: function () {
-                // TBD
-            },
+            populate: appCaches.populateLastPlusOffset,
         },
         iNnextscheduled: {
             name: 'iNnextscheduled',

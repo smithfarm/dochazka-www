@@ -89,7 +89,6 @@ define ([
                 },
                 // failure callback
                 fc = function (st) {
-                    console.log("AJAX: " + rest["path"] + " failed with", st);
                     coreLib.displayError(st.payload.message);
                 };
             if (obj.searchKeySchedID) {
@@ -132,7 +131,6 @@ define ([
                 },
                 // failure callback
                 fc = function (st) {
-                    console.log("AJAX: schedule/all failed with", st);
                     coreLib.displayError(st.payload.message);
                 };
             ajax(rest, sc, fc);
@@ -169,7 +167,6 @@ define ([
                 },
                 // failure callback
                 fc = function (st) {
-                    console.log("AJAX: " + rest["path"] + " failed with", st);
                     coreLib.displayError(st.payload.message);
                 };
             ajax(rest, sc, fc);
@@ -300,7 +297,6 @@ define ([
                     coreLib.displayResult(dispMsg);
                 },
                 fc = function (st) {
-                    console.log("AJAX: " + rest["path"] + " failed with", st);
                     coreLib.displayError(st.payload.message);
                 };
             if (mode === 'edit') {

@@ -159,7 +159,7 @@ define ([
                 backgroundColorStashed = $('#mainarea').css("background-color");
                 currentUser('obj', obj);
                 currentUser('flag1', 1); // turn on masquerade flag
-                populate([
+                populate.bootstrap([
                     populateFullEmployeeProfileCache,
                     populateScheduleBySID,
                 ]);
@@ -176,13 +176,9 @@ define ([
         },
 
         populateActivityCache = function (populateArray) {
-            var rest, sc, fc, fnToCall;
+            var rest, sc, fc, populateContinue;
             console.log("Entering populateActivityCache()");
-            if (populateArray.length === 0) {
-                fnToCall = function (populateArray) {};
-            } else {
-                fnToCall = populateArray.shift();
-            }
+            populateContinue = populate.shift(populateArray);
             if (activityCache.length === 0) {
                 rest = {
                     "method": 'GET',
@@ -190,112 +186,96 @@ define ([
                 };
                 sc = function (st) {
                     var i;
-                    console.log("AJAX: " + rest["method"] + " " + rest["path"] + " returned", st);
                     for (i = 0; i < st.payload.length; i += 1) {
                         activityCache.push(st.payload[i]);
                         activityByAID[st.payload[i].aid] = st.payload[i];
                         activityByCode[st.payload[i].code] = st.payload[i];
                     }
                     coreLib.displayResult(i + 1 + " activity objects loaded into cache");
-                    fnToCall();
+                    populateContinue();
                 };
                 fc = function (st) {
-                    console.log("AJAX: " + rest["method"] + " " + rest["path"] + " failed", st);
                     coreLib.displayError(st.payload.message);
-                    fnToCall();
+                    populateContinue();
                 };
                 ajax(rest, sc, fc);
-            } else {
-                console.log("populateActivityCache(): noop, cache already populated");
-                fnToCall();
             }
+            console.log("populateActivityCache(): noop, cache already populated");
+            populateContinue();
         },
 
         populateAIDfromCode = function (populateArray) {
-            var aid, code, fnToCall;
+            var aid, code, populateContinue;
             console.log("Entering populateAIDfromCode()");
-            if (populateArray.length === 0) {
-                fnToCall = function (populateArray) {};
-            } else {
-                fnToCall = populateArray.shift();
-            }
+            populateContinue = populate.shift(populateArray);
             // assume there is a form with the code in it
             code = $('#iNact').text();
             console.log("Activity code is " + code);
             aid = getActivityByCode(code).aid;
             $('#acTaid').html(String(aid));
-            fnToCall(populateArray);
+            populateContinue(populateArray);
         },
 
         populateFullEmployeeProfileCache = function (populateArray) {
             var cu = currentUser('obj'),
                 eid = cu.eid,
                 profileObj,
-                fnToCall,
+                populateContinue,
                 rest, sc, fc, m;
             console.log("Entering populateFullEmployeeProfileCache(); EID is", cu.eid);
             console.log("populateArray.length is " + populateArray.length);
-            if (populateArray.length === 0) {
-                fnToCall = function (populateArray) {};
-            } else {
-                fnToCall = populateArray.shift();
-            }
+            populateContinue = populate.shift(populateArray);
             profileObj = getProfileByEID(parseInt(cu.eid, 10));
             if (profileObj) {
-                fnToCall(populateArray);
-            } else {
-                rest = {
-                    "method": 'GET',
-                };
-                if (currentUser('flag1') === 1) {
-                    // masquerade active; we are admin
-                    rest["path"] = 'employee/eid/' + eid + '/full';
-                } else {
-                    rest["path"] = 'employee/self/full';
-                }
-                sc = function (st) {
-                    console.log("AJAX GET " + rest.path + " succeeded", st);
-                    if (st.code === 'DISPATCH_EMPLOYEE_PROFILE_FULL') {
-                        profileObj = $.extend({}, st.payload);
-                        profileCache.push(profileObj);
-                        profileByEID[parseInt(st.payload.emp.eid, 10)] = $.extend({}, profileObj);
-                        profileByNick[String(st.payload.emp.nick)] = $.extend({}, profileObj);
-                        coreLib.displayResult("Profile of employee " + st.payload.emp.nick + " loaded into cache");
-                    } else {
-                        m = "Unexpected status code " + st.code;
-                        console.log("CRITICAL ERROR: " + m);
-                        coreLib.displayError(m);
-                    }
-                    fnToCall(populateArray);
-                };
-                fc = function (st) {
-                    console.log("AJAX: " + rest["path"] + " failed", st);
-                    coreLib.displayError(st.payload.message);
-                    fnToCall(populateArray);
-                };
-                ajax(rest, sc, fc);
+                // if our profile is already in the cache, nothing to do
+                populateContinue(populateArray);
+                return null;
             }
+            // load profile into cache
+            rest = {
+                "method": 'GET',
+            };
+            if (currentUser('flag1') === 1) {
+                // masquerade active; we are admin
+                rest["path"] = 'employee/eid/' + eid + '/full';
+            } else {
+                rest["path"] = 'employee/self/full';
+            }
+            sc = function (st) {
+                if (st.code === 'DISPATCH_EMPLOYEE_PROFILE_FULL') {
+                    profileObj = $.extend({}, st.payload);
+                    profileCache.push(profileObj);
+                    profileByEID[parseInt(st.payload.emp.eid, 10)] = $.extend({}, profileObj);
+                    profileByNick[String(st.payload.emp.nick)] = $.extend({}, profileObj);
+                    coreLib.displayResult("Profile of employee " + st.payload.emp.nick + " loaded into cache");
+                } else {
+                    m = "Unexpected status code " + st.code;
+                    console.log("CRITICAL ERROR: " + m);
+                    coreLib.displayError(m);
+                }
+                populateContinue(populateArray);
+            };
+            fc = function (st) {
+                coreLib.displayError(st.payload.message);
+                populateContinue(populateArray);
+            };
+            ajax(rest, sc, fc);
         },
 
         populateLastExisting = function (populateArray) {
             var cu = currentUser('obj'),
                 eid = cu.eid,
                 date, tsr,
-                rest, sc, fc, fnToCall;
+                rest, sc, fc, populateContinue;
             date = $("#iNdate").text();
             console.log("Entering populateLastExisting() with date " + date);
-            if (populateArray.length === 0) {
-                fnToCall = function (populateArray) {};
-            } else {
-                fnToCall = populateArray.shift();
-            }
+            populateContinue = populate.shift(populateArray);
             tsr = "[ \"" + date + " 00:00\", \"" + date + " 24:00\" )";
             rest = {
                 "method": "GET",
                 "path": "interval/eid/" + eid + "/" + tsr,
             };
             sc = function (st) {
-                console.log("AJAX: POST " + rest["path"] + " succeeded", st);
                 if (st.code === "DISPATCH_RECORDS_FOUND") {
                     // payload is an array of interval objects
                     appLib.displayIntervals(
@@ -304,42 +284,40 @@ define ([
                     );
                 }
                 coreLib.clearResult();
-                fnToCall(populateArray);
+                populateContinue(populateArray);
             };
             fc = function (st) {
-                console.log("AJAX: POST " + rest["path"] + " failed", st);
                 if (st.code === "DISPATCH_NOTHING_IN_TSRANGE") {
                     // form field is pre-populated with "(none)"
                     coreLib.clearResult();
                 } else {
                     coreLib.displayError(st.payload.message);
                 }
-                fnToCall(populateArray);
+                populateContinue(populateArray);
             };
             ajax(rest, sc, fc);
+        },
+
+        populateLastPlusOffset = function (populateArray) {
         },
 
         populateSchedIntvlsForDate = function (populateArray) {
             var cu = currentUser('obj'),
                 eid = cu.eid,
-                sid, date, tsr, rest, sc, fc, fnToCall;
+                sid, date, tsr, rest, sc, fc, populateContinue;
             date = $("#iNdate").text();
             console.log("Entering populateSchedIntvlsForDate() with date " + date);
             console.log(populateArray);
-            if (populateArray.length === 0) {
-                fnToCall = function (populateArray) {};
-            } else {
-                fnToCall = populateArray.shift();
-            }
+            populateContinue = populate.shift(populateArray);
             sid = parseInt($("#iNsid").text(), 10);
             if (coreLib.isInteger(sid) && sid > 0) {
-                console.log("SID: " + sid);
+                console.log("Active schedule of EID " + eid + " for " + date + " has SID " + sid);
             } else {
-                console.log("The user has no schedule for this date");
-                $("#iNschedintvls").html("(none)");
-                fnToCall(populateArray);
+                console.log("EID " + eid + " has no active schedule for " + date);
+                populateContinue(populateArray);
                 return null;
             }
+            // there is an active schedule: determine the schedule intervals
             tsr = "[ \"" + date + " 00:00\", \"" + date + " 24:00\" )";
             rest = {
                 "method": "POST",
@@ -352,20 +330,17 @@ define ([
                 },
             };
             sc = function (st) {
-                console.log("AJAX: POST " + rest["path"] + " succeeded", st);
                 if (st.code === "DISPATCH_FILLUP_INTERVALS_CREATED") {
                     appLib.displayIntervals(
                         st.payload.success.intervals,
                         $('#iNschedintvls')
                     );
                 }
-                coreLib.clearResult();
-                fnToCall(populateArray);
+                populateContinue(populateArray);
             };
             fc = function (st) {
-                console.log("AJAX: POST " + rest["path"] + " failed", st);
                 coreLib.displayError(st.payload.message);
-                fnToCall(populateArray);
+                populateContinue(populateArray);
             };
             ajax(rest, sc, fc);
         },
@@ -374,20 +349,20 @@ define ([
             var cu = currentUser('obj'),
                 fullProfile = getProfileByEID(parseInt(cu.eid, 10)),
                 sid = fullProfile.schedule,
-                fnToCall, rest, sc, fc, schedObj, m;
+                schedObj,
+                m,
+                rest, sc, fc, populateContinue;
             console.log("populateArray.length is " + populateArray.length);
-            if (populateArray.length === 0) {
-                fnToCall = function (populateArray) {};
-            } else {
-                fnToCall = populateArray.shift();
-            }
+            populateContinue = populate.shift(populateArray);
             if (! sid) {
-                fnToCall(populateArray);
+                // no SID; nothing to do
+                populateContinue(populateArray);
                 return null;
             }
             schedObj = getScheduleBySID(sid);
             if (schedObj) {
-                fnToCall(populateArray);
+                // schedule already in cache
+                populateContinue(populateArray);
                 return null;
             }
             rest = {
@@ -395,7 +370,6 @@ define ([
                 "path": 'schedule/sid/' + sid,
             };
             sc = function (st) {
-                console.log("AJAX GET " + rest.path + " succeeded", st);
                 scheduleCache.push(st.payload);
                 scheduleBySID[st.payload.sid] = $.extend({}, st.payload);
                 if (st.payload.scode && st.payload.scode.length > 0) {
@@ -404,15 +378,13 @@ define ([
                 m = "Schedule ID " + sid + " loaded into cache";
                 console.log(m);
                 coreLib.displayResult(m);
-                fnToCall(populateArray);
+                populateContinue(populateArray);
             };
             fc = function (st) {
-                console.log("AJAX: " + rest["path"] + " failed", st);
                 coreLib.displayError(st.payload.message);
-                fnToCall(populateArray);
+                populateContinue(populateArray);
             };
             ajax(rest, sc, fc);
-            coreLib.clearResult();
         },
 
         populateSIDByDate = function (populateArray) {
@@ -421,21 +393,15 @@ define ([
                 eid = parseInt(cu.eid, 10),
                 schedObj,
                 sid,
-                fnToCall,
-                rest, sc, fc;
+                rest, sc, fc, populateContinue;
             console.log("Entering populateSIDByDate(); EID is " + eid + " and date " + date);
-            if (populateArray.length === 0) {
-                fnToCall = function (populateArray) {};
-            } else {
-                fnToCall = populateArray.shift();
-            }
+            populateContinue = populate.shift(populateArray);
             // the date can be anything - there's no point in caching anything
             rest = {
                 "method": 'GET',
-                "path": 'schedule/eid/' + eid + '/',
+                "path": 'schedule/eid/' + eid + '/"' + date + ' 12:00"',
             };
             sc = function (st) {
-                console.log("GET " + rest.path + " returned", st);
                 sid = st.payload.schedule.sid;
                 $('#iNsid').html(sid);
                 schedObj = getScheduleBySID(sid);
@@ -445,14 +411,12 @@ define ([
                         scheduleByScode[st.payload.scode] = $.extend({}, st.payload);
                     }
                 }
-                fnToCall(populateArray);
+                populateContinue(populateArray);
             };
             fc = function (st) {
-                console.log("GET " + rest.path + " returned", st);
                 coreLib.displayError(st.payload.message);
-                fnToCall(populateArray);
+                populateContinue(populateArray);
             };
-            rest.path += '"' + date + ' 12:00"';
             ajax(rest, sc, fc);
         },
 
@@ -460,14 +424,9 @@ define ([
             var cu = currentUser('obj'),
                 eid = cu.supervisor,
                 nick,
-                fnToCall,
-                rest, sc, fc;
+                rest, sc, fc, populateContinue;
             console.log("Entering populateSupervisorNick(), supervisor EID is", eid);
-            if (populateArray.length === 0) {
-                fnToCall = function (populateArray) {};
-            } else {
-                fnToCall = populateArray.shift();
-            }
+            populateContinue = populate.shift(populateArray);
             // we assume the supervisor EID is in the current user object
             // which was populated when we logged in or started masquerade
             rest = {
@@ -477,18 +436,18 @@ define ([
             sc = function (st) {
                 nick = st.payload.nick,
                 $('#ePsuperNick').html(nick);
-                coreLib.clearResult();
-                fnToCall(populateArray);
+                populateContinue(populateArray);
             },
             fc = function (st) {
-                console.log("AJAX: GET " + rest["path"] + " failed with", st);
                 coreLib.displayError(st.payload.message);
                 $('#ePsuperNick').html('(ERR)');
-                fnToCall(populateArray);
+                populateContinue(populateArray);
             };
             if (eid) {
                 ajax(rest, sc, fc);
-            };
+            } else {
+                populateContinue(populateArray);
+            }
         },
 
         selectActivityAction = function (obj) {
@@ -515,6 +474,7 @@ define ([
         populateAIDfromCode: populateAIDfromCode,
         populateFullEmployeeProfileCache: populateFullEmployeeProfileCache,
         populateLastExisting: populateLastExisting,
+        populateLastPlusOffset: populateLastPlusOffset,
         populateSchedIntvlsForDate: populateSchedIntvlsForDate,
         populateScheduleBySID: populateScheduleBySID,
         populateSIDByDate: populateSIDByDate,

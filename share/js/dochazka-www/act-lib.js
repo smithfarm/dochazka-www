@@ -39,12 +39,10 @@
 define ([
     'jquery',
     'app/caches',
-    'ajax',
     'stack',
 ], function (
     $,
     appCaches,
-    ajax,
     stack,
 ) {
 

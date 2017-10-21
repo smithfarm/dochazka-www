@@ -109,10 +109,6 @@ define ([
             var cu = currentUser('obj'),
                 fullProfile = appCaches.getProfileByEID(cu.eid),
                 sc = function (st) {
-                    console.log(
-                        "AJAX: " + intervalNewREST["method"] + " " + intervalNewREST["path"] + " returned",
-                        st
-                    );
                     stack.restart(
                         emptyObj,
                         {
@@ -122,10 +118,6 @@ define ([
                     );
                 },
                 fc = function (st) {
-                    console.log(
-                        "AJAX: " + intervalNewREST["method"] + " " + intervalNewREST["path"] + " returned",
-                        st
-                    );
                     stack.restart(undefined, { "resultLine": st.payload.message });
                 };
 
