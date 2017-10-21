@@ -360,3 +360,10 @@ Revision history for App-Dochazka-WWW
 - js: move all cache-related code into a new caches.js module
 - js: implement populateSchedIntvlsForDate() and populateSIDByDate()
 
+0.156 2017-10-21 12:03 CEST
+- build/ops: require App::MFILE::WWW 0.164
+- js: fix ACL on schedule lookup/display
+- Revert "js: daction-init: fix pushable flag in one of the actions"
+- js: caches: implement populateLastExisting
+- js: refactor to use populate.bootstrap() and populate.shift()
+
