@@ -308,7 +308,7 @@ define ([
             name: 'iNdate',
             aclProfileRead: 'active',
             aclProfileWrite: 'active',
-            text: 'Interval date',
+            text: 'Date',
             prop: 'iNdate',
             maxlen: 20,
             vetter: datetime.vetDate,
@@ -390,6 +390,10 @@ define ([
             prop: 'long_desc',
             maxlen: 40,
         },
+        iNtoBeCreated: {
+            name: 'textOnly',
+            textOnly: "Interval to be created",
+        },
         iNschedintvls: {
             name: 'iNschedintvls',
             aclProfileRead: 'inactive',
@@ -412,7 +416,7 @@ define ([
             name: 'iNlastplusoffset',
             aclProfileRead: 'inactive',
             aclProfileWrite: 'admin',
-            text: 'To be created',
+            text: 'Time range',
             prop: 'iNlastplusoffset',
             maxlen: 50,
             populate: appCaches.populateLastPlusOffset,

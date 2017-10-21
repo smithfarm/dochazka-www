@@ -299,6 +299,49 @@ define ([
         },
 
         populateLastPlusOffset = function (populateArray) {
+            var cu = currentUser('obj'),
+                beginTime,
+                date = $('#iNdate').text(),
+                endTime,
+                eid = cu.eid,
+                offset = $('#iNoffset').text(),
+                schedIntvls = $('#iNschedintvls').text().trim().replace(/\s/g, '').split(';'),
+                lastExistIntvl = $('#iNlastexistintvl').text().trim().replace(/\s/g, ''),
+                formField = $('#iNlastplusoffset'),
+                rest, sc, fc, populateContinue;
+            console.log("Entering populateLastPlusOffset()");
+            console.log("Date", date);
+            console.log("Offset", offset);
+            if (schedIntvls.length === 1 && schedIntvls[0] === "(none)") {
+                schedIntvls = null;
+            }
+            console.log("Schedule intervals", schedIntvls);
+            if (lastExistIntvl === "(none)") {
+                lastExistIntvl = null;
+            }
+            console.log("Last existing interval", lastExistIntvl);
+            populateContinue = populate.shift(populateArray);
+            // no schedule intervals, no last existing interval
+            if (! schedIntvls && ! lastExistIntvl) {
+                [beginTime, endTime] = datetime.canonicalizeTimeRangeOffset("00:00" + String(offset));
+                return writeFormFieldAndContinue(
+                    formField,
+                    beginTime + '-' + endTime,
+                    populateContinue,
+                    populateArray,
+                );
+            }
+            if (! schedIntvls && lastExistIntvl) {
+                [beginTime, endTime] = lastExistIntvl.split('-');
+                [beginTime, endTime] = datetime.canonicalizeTimeRangeOffset(endTime + String(offset));
+                return writeFormFieldAndContinue(
+                    formField,
+                    beginTime + '-' + endTime,
+                    populateContinue,
+                    populateArray,
+                );
+            }
+            populateContinue(populateArray);
         },
 
         populateSchedIntvlsForDate = function (populateArray) {
@@ -307,7 +350,6 @@ define ([
                 sid, date, tsr, rest, sc, fc, populateContinue;
             date = $("#iNdate").text();
             console.log("Entering populateSchedIntvlsForDate() with date " + date);
-            console.log(populateArray);
             populateContinue = populate.shift(populateArray);
             sid = parseInt($("#iNsid").text(), 10);
             if (coreLib.isInteger(sid) && sid > 0) {
@@ -459,7 +501,14 @@ define ([
             } else {
                 coreLib.displayError("CRITICAL ERROR: activity cache is empty");
             }
-        };
+        },
+
+        writeFormFieldAndContinue = function (formField, content, populateContinue, populateArray) {
+            formField.html(content);
+            populateContinue(populateArray);
+            return null;
+        }
+        ;
 
     return {
         activityCache: activityCache,

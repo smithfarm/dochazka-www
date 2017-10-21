@@ -322,12 +322,23 @@ define ([
             'type': 'dform',
             'menuText': "Last plus offset",
             'title': "Create interval \"last plus offset\"",
+            'preamble': "You entered a bare offset instead of a time range. Deriving beginning " +
+                        "of interval from schedule and last existing interval (if any).",
             'aclProfile': 'active',
             'entriesRead': [
-                entries.iNdate, entries.iNoffset, entries.iNact,
-                entries.acTaid, entries.iNdesc, entries.iNsid,
-                entries.iNschedintvls, entries.iNlastexistintvl,
+                entries.iNoffset,
+                entries.iNschedintvls,
+                entries.iNlastexistintvl,
+                coreLib.emptyLineEntry,
+                entries.iNtoBeCreated,
+                entries.iNdate,
                 entries.iNlastplusoffset,
+                entries.iNact,
+                entries.iNdesc,
+            ],
+            'entriesHidden': [
+                entries.acTaid,
+                entries.iNsid,
             ],
             'miniMenu': {
                 entries: ['createLastPlusOffsetSave'],
