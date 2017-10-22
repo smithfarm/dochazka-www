@@ -367,3 +367,9 @@ Revision history for App-Dochazka-WWW
 - js: caches: implement populateLastExisting
 - js: refactor to use populate.bootstrap() and populate.shift()
 
+0.157 2017-10-23 01:52 CEST
+- js: finish Create interval "last plus offset" dialog
+- build/ops: require App::MFILE::WWW 0.166 for hidden entries feature
+- js: implement "Create next scheduled interval" feature
+- build/ops: designed to work with App::Dochazka::REST 0.552
+
