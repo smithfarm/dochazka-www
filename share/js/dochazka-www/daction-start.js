@@ -122,7 +122,6 @@ define ([
         "schedReallyDelete": schedLib.schedReallyDelete,
 
         // create interval actions
-        "createLastIntervalPlusOffsetSave": intLib.createLastIntervalPlusOffsetSave,
         "createNextScheduledIntervalSave": intLib.createNextScheduledIntervalSave,
         "createSingleIntSave": intLib.createSingleIntSave,
         

@@ -265,7 +265,7 @@ define ([
         populateLastExisting = function (populateArray) {
             var cu = currentUser('obj'),
                 eid = cu.eid,
-                date, tsr,
+                date, lia, tsr,
                 rest, sc, fc, populateContinue;
             date = $("#iNdate").text();
             console.log("Entering populateLastExisting() with date " + date);
@@ -278,12 +278,9 @@ define ([
             sc = function (st) {
                 if (st.code === "DISPATCH_RECORDS_FOUND") {
                     // payload is an array of interval objects
-                    appLib.displayIntervals(
-                        st.payload,
-                        $('#iNlastexistintvl')
-                    );
+                    lia = [st.payload[st.payload.length - 1]];
+                    appLib.displayIntervals(lia, $('#iNlastexistintvl'));
                 }
-                coreLib.clearResult();
                 populateContinue(populateArray);
             };
             fc = function (st) {
@@ -302,12 +299,16 @@ define ([
             var cu = currentUser('obj'),
                 beginTime,
                 date = $('#iNdate').text(),
-                endTime,
                 eid = cu.eid,
-                offset = $('#iNoffset').text(),
-                schedIntvls = $('#iNschedintvls').text().trim().replace(/\s/g, '').split(';'),
-                lastExistIntvl = $('#iNlastexistintvl').text().trim().replace(/\s/g, ''),
+                eolei,
+                endTime,
                 formField = $('#iNlastplusoffset'),
+                i,
+                lastExistIntvl = $('#iNlastexistintvl').text().trim().replace(/\s/g, ''),
+                offset = $('#iNoffset').text(),
+                schedAfter,
+                schedIntvls = $('#iNschedintvls').text().trim().replace(/\s/g, '').split(';'),
+                withinSchedIntvl,
                 rest, sc, fc, populateContinue;
             console.log("Entering populateLastPlusOffset()");
             console.log("Date", date);
@@ -324,23 +325,67 @@ define ([
             // no schedule intervals, no last existing interval
             if (! schedIntvls && ! lastExistIntvl) {
                 [beginTime, endTime] = datetime.canonicalizeTimeRangeOffset("00:00" + String(offset));
-                return writeFormFieldAndContinue(
-                    formField,
-                    beginTime + '-' + endTime,
-                    populateContinue,
-                    populateArray,
-                );
+                formField.html(beginTime + '-' + endTime);
+                populateContinue(populateArray);
+                return null;
             }
             if (! schedIntvls && lastExistIntvl) {
                 [beginTime, endTime] = lastExistIntvl.split('-');
                 [beginTime, endTime] = datetime.canonicalizeTimeRangeOffset(endTime + String(offset));
-                return writeFormFieldAndContinue(
-                    formField,
-                    beginTime + '-' + endTime,
-                    populateContinue,
-                    populateArray,
-                );
+                formField.html(beginTime + '-' + endTime);
+                populateContinue(populateArray);
+                return null;
             }
+            if (schedIntvls && ! lastExistIntvl) {
+                [beginTime, endTime] = schedIntvls[0].split('-');
+                [beginTime, endTime] = datetime.canonicalizeTimeRangeOffset(endTime + String(offset));
+                formField.html(beginTime + '-' + endTime);
+                populateContinue(populateArray);
+                return null;
+            }
+            // Names/meanings of variables
+            //
+            // "eolei": end of last existing interval
+            [beginTime, endTime] = lastExistIntvl.split('-');
+            eolei = endTime;
+            console.log("eolei is " + eolei);
+            //
+            // "withinSchedIntvl": eolei falls within a schedule interval (boolean)
+            // Example: eolei is 8:00, schedIntvl is 8:00-12:00 -> true
+            // Example: eolei is 12:00, schedIntvl is 8:00-12:00 -> false
+            // Example: eolei is 11:55, schedIntvl is 8:00-12:00 -> true
+            // (Calculate withSchedIntvl by comparing eolei with each schedIntvl in turn.
+            // If computation is true for any of them, then the result is true)
+            for (i = 0; i < schedIntvls.length; i += 1) {
+                withinSchedIntvl = datetime.isTimeWithinTimeRange(eolei, schedIntvls[i]);
+                if (withinSchedIntvl) {
+                    [beginTime, endTime] = datetime.canonicalizeTimeRangeOffset(eolei + String(offset));
+                    formField.html(beginTime + '-' + endTime);
+                    populateContinue(populateArray);
+                    return null;
+                }
+            }
+            console.log("eolei does not fall within any of the schedule intervals");
+            //
+            // "schedAfter": first schedule interval that lies fully after eolei 
+            schedAfter = null;
+            for (i = 0; i < schedIntvls.length; i += 1) {
+                if (datetime.isTimeRangeAfterTime(schedIntvls[i], eolei)) {
+                    schedAfter = schedIntvls[i];
+                    break;
+                }
+            }
+            // if schedAfter, add offset to beginning of schedAfter
+            // else, add offset to eolei
+            if (schedAfter) {
+                console.log("There is a schedule interval after eolei");
+                [beginTime, endTime] = schedAfter.split('-');
+                [beginTime, endTime] = datetime.canonicalizeTimeRangeOffset(beginTime + String(offset));
+            } else {
+                console.log("There is no schedule interval after eolei");
+                [beginTime, endTime] = datetime.canonicalizeTimeRangeOffset(eolei + String(offset));
+            }
+            formField.html(beginTime + '-' + endTime);
             populateContinue(populateArray);
         },
 
@@ -350,6 +395,8 @@ define ([
                 sid, date, tsr, rest, sc, fc, populateContinue;
             date = $("#iNdate").text();
             console.log("Entering populateSchedIntvlsForDate() with date " + date);
+            // Though #iNsid is hidden, the following will display its value
+            // console.log("SID", document.getElementById("iNsid").textContent);
             populateContinue = populate.shift(populateArray);
             sid = parseInt($("#iNsid").text(), 10);
             if (coreLib.isInteger(sid) && sid > 0) {
@@ -373,10 +420,7 @@ define ([
             };
             sc = function (st) {
                 if (st.code === "DISPATCH_FILLUP_INTERVALS_CREATED") {
-                    appLib.displayIntervals(
-                        st.payload.success.intervals,
-                        $('#iNschedintvls')
-                    );
+                    appLib.displayIntervals(st.payload.success.intervals, $('#iNschedintvls'));
                 }
                 populateContinue(populateArray);
             };
@@ -501,12 +545,6 @@ define ([
             } else {
                 coreLib.displayError("CRITICAL ERROR: activity cache is empty");
             }
-        },
-
-        writeFormFieldAndContinue = function (formField, content, populateContinue, populateArray) {
-            formField.html(content);
-            populateContinue(populateArray);
-            return null;
         }
         ;
 

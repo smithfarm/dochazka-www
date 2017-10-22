@@ -342,14 +342,6 @@ define ([
         });
 
         // Interval actions - create
-        target.push('createLastPlusOffsetSave', {
-            'name': 'createLastPlusOffsetSave',
-            'type': 'daction',
-            'menuText': 'Save',
-            'aclProfile': 'active',
-            'start': dactionStart('createLastPlusOffsetSave'),
-            'pushable': false
-        });
         target.push('createNextScheduledSave', {
             'name': 'createNextScheduledSave',
             'type': 'daction',

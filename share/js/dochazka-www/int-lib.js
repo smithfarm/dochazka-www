@@ -87,29 +87,15 @@ define ([
     // interval-related actions (see daction-start.js)
     return {
 
-        createLastPlusOffsetSave: function (obj) {
-        },
-
         createNextScheduledSave: function (obj) {
         },
 
         createSingleIntSave: function (obj) {
-            // obj will look like this:
-            // {
-            //     iNdate: "foo bar in a box",
-            //     iNtimerange: "25:00-27:00",
-            //     iNact: "LOITERING",
-            //     iNdesc: "none",
-            //     mm: true
-            // }
-            // any of the above properties may be present or missing
-            // also, there may or may not be an acTaid property with the AID of
-            // the chosen activity
-            console.log("createSingleIntSave called with obj", obj);
-            var cu = currentUser('obj'),
-                fullProfile = appCaches.getProfileByEID(cu.eid),
+            var caller = stack.getTarget().name,
+                cu = currentUser('obj'),
                 sc = function (st) {
-                    stack.restart(
+                    stack.unwindToTarget(
+                        'createSingleInt',
                         emptyObj,
                         {
                             "resultLine": "Interval " + st.payload.iid + " created",
@@ -120,34 +106,53 @@ define ([
                 fc = function (st) {
                     stack.restart(undefined, { "resultLine": st.payload.message });
                 };
+            if (caller === 'createSingleInt') {
+                // obj is scraped by start.js from the form inputs and will look
+                // like this:
+                // {
+                //     iNdate: "foo bar in a box",
+                //     iNtimerange: "25:00-27:00",
+                //     iNact: "LOITERING",
+                //     iNdesc: "none",
+                //     mm: true
+                // }
+                // any of the above properties may be present or missing
+                // also, there may or may not be an acTaid property with the AID of
+                // the chosen activity
+            } else if (caller === 'createLastPlusOffset') {
+                // Scrape time range from form
+                // (The "createLastPlusOffset" dform has no inputs (writable
+                // entries); instead, it has spans (read-only entries) that are
+                // populated asynchronously and obj does not contain any of
+                // the new values. In this case, the time range is residing
+                // in one of the spans.)
+                obj.iNtimerange = $('#iNlastplusoffset').text();
+            } else {
+                console.log("CRITICAL ERROR: unexpected caller", caller);
+                return null;
+            }
+            console.log("Entering createSingleIntSave() with obj", obj);
 
             // check that all mandatory properties are present
-            if (! obj.hasOwnProperty('iNdate')) {
+            if (! obj.iNdate) {
                 stack.restart(undefined, { "resultLine": "Interval date missing" });
+                return null;
             }
-            if (obj.iNdate.length === 0) {
-                stack.restart(undefined, { "resultLine": "Interval date missing" });
-            }
-
-            if (! obj.hasOwnProperty('iNtimerange')) {
-                stack.restart(undefined, { "resultLine": "Interval time range missing" });
-            }
-            if (obj.iNtimerange.length === 0) {
-                stack.restart(undefined, { "resultLine": "Interval time range missing" });
-            }
-
-            if (! obj.hasOwnProperty('iNact')) {
+            if (! obj.iNact) {
                 stack.restart(undefined, { "resultLine": "Interval activity code missing" });
+                return null;
             }
-            if (obj.iNact.length === 0) {
-                stack.restart(undefined, { "resultLine": "Interval activity code missing" });
-            }
-            if (! obj.hasOwnProperty('acTaid')) {
+            if (! obj.acTaid) {
                 console.log("Looking up activity " + obj.iNact + " in cache");
                 obj.acTaid = appCaches.getActivityByCode(obj.iNact).aid;
                 if (! obj.acTaid) {
                     stack.restart(undefined, { "resultLine": 'Activity ' + obj.iNact + ' not found' });
+                    return null;
                 }
+            }
+            if (! obj.iNtimerange) {
+                stack.restart(undefined, { "resultLine": "Interval time range missing" });
+                return null;
             }
 
             intervalNewREST.body = {
@@ -158,13 +163,18 @@ define ([
             }
             if (obj.iNtimerange === '+') {
                 stack.push('createNextScheduled', obj);
+                return null;
             } else if (obj.iNtimerange.match(/\+/)) {
                 obj.iNoffset = obj.iNtimerange;
                 stack.push('createLastPlusOffset', obj);
-            } else {
+                return null;
+            } else if (obj.iNtimerange) {
                 intervalNewREST.body["intvl"] = genIntvl(obj.iNdate, obj.iNtimerange);
-                ajax(intervalNewREST, sc, fc);
+            } else {
+                console.log("CRITICAL ERROR in createSingleIntSave: nothing to save!"); 
+                return null;
             }
+            ajax(intervalNewREST, sc, fc);
         },
 
     };
