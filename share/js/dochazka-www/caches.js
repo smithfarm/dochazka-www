@@ -296,10 +296,8 @@ define ([
         },
 
         populateLastPlusOffset = function (populateArray) {
-            var cu = currentUser('obj'),
-                beginTime,
+            var beginTime,
                 date = $('#iNdate').text(),
-                eid = cu.eid,
                 eolei,
                 endTime,
                 formField = $('#iNlastplusoffset'),
@@ -389,9 +387,82 @@ define ([
             populateContinue(populateArray);
         },
 
+        populateNextScheduled = function (populateArray) {
+            var cu = currentUser('obj'),
+                lastExisting = $('#iNlastexistintvl').text(),
+                lastExistingEnd,
+                schedIntvls = $('#iNschedintvls').text(),
+                m, sid, date, tsr, rest, sc, fc, populateContinue;
+            date = $("#iNdate").text();
+            console.log("Entering populateNextScheduled() with date " + date);
+            if (date === "(none)") {
+                date = null;
+            }
+            // Though #iNsid is hidden, the following will display its value
+            // console.log("SID", document.getElementById("iNsid").textContent);
+            populateContinue = populate.shift(populateArray);
+            sid = parseInt($("#iNsid").text(), 10);
+            if (coreLib.isInteger(sid) && sid > 0) {
+                console.log("Active schedule of EID " + cu.eid + " for " + date + " has SID " + sid);
+            } else {
+                m = "User " + cu.nick + " has no active schedule for " + date;
+                console.log(m);
+                coreLib.displayError(m);
+                populateContinue(populateArray);
+                return null;
+            }
+            // there is an active schedule: determine the schedule intervals
+            // while avoiding existing intervals
+            [m, lastExistingEnd] = lastExisting.split('-');
+            if (! lastExistingEnd) {
+                lastExisting = null;
+                lastExistingEnd = "00:00";
+            }
+            if (schedIntvls === "(none)") {
+                schedIntvls = null;
+            }
+            tsr = "[ \"" + date + " " + lastExistingEnd +"\", \"" + date + " 24:00\" )";
+            rest = {
+                "method": "POST",
+                "path": "interval/fillup",
+                "body": {
+                    'clobber': '0',
+                    'tsrange': tsr,
+                    'dry_run': '1',
+                    'eid': String(cu.eid),
+                },
+            };
+            sc = function (st) {
+                if (st.code === "DISPATCH_FILLUP_INTERVALS_CREATED") {
+                    appLib.displayIntervals([st.payload.success.intervals[0]], $('#iNnextscheduled'));
+                } else {
+                    if (date) {
+                        if (schedIntvls) {
+                            if (lastExisting) {
+                                m = "No scheduled intervals after last existing interval";
+                            } else {
+                                m = st.text;
+                            }
+                        } else {
+                            m = "No scheduled intervals for " + date;
+                        }
+                    } else {
+                        m = "No date given";
+                    }
+                    console.log("ERROR: " + m);
+                    coreLib.displayError(m);
+                }
+                populateContinue(populateArray);
+            };
+            fc = function (st) {
+                coreLib.displayError(st.payload.message);
+                populateContinue(populateArray);
+            };
+            ajax(rest, sc, fc);
+        },
+
         populateSchedIntvlsForDate = function (populateArray) {
             var cu = currentUser('obj'),
-                eid = cu.eid,
                 sid, date, tsr, rest, sc, fc, populateContinue;
             date = $("#iNdate").text();
             console.log("Entering populateSchedIntvlsForDate() with date " + date);
@@ -400,9 +471,9 @@ define ([
             populateContinue = populate.shift(populateArray);
             sid = parseInt($("#iNsid").text(), 10);
             if (coreLib.isInteger(sid) && sid > 0) {
-                console.log("Active schedule of EID " + eid + " for " + date + " has SID " + sid);
+                console.log("Active schedule of EID " + cu.eid + " for " + date + " has SID " + sid);
             } else {
-                console.log("EID " + eid + " has no active schedule for " + date);
+                console.log("EID " + cu.eid + " has no active schedule for " + date);
                 populateContinue(populateArray);
                 return null;
             }
@@ -415,7 +486,7 @@ define ([
                     'clobber': '1',
                     'tsrange': tsr,
                     'dry_run': '1',
-                    'eid': String(eid),
+                    'eid': String(cu.eid),
                 },
             };
             sc = function (st) {
@@ -550,6 +621,7 @@ define ([
 
     return {
         activityCache: activityCache,
+        endTheMasquerade: endTheMasquerade,
         getActivityByAID: getActivityByAID,
         getActivityByCode: getActivityByCode,
         getProfileByEID: getProfileByEID,
@@ -562,6 +634,7 @@ define ([
         populateFullEmployeeProfileCache: populateFullEmployeeProfileCache,
         populateLastExisting: populateLastExisting,
         populateLastPlusOffset: populateLastPlusOffset,
+        populateNextScheduled: populateNextScheduled,
         populateSchedIntvlsForDate: populateSchedIntvlsForDate,
         populateScheduleBySID: populateScheduleBySID,
         populateSIDByDate: populateSIDByDate,

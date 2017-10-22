@@ -296,10 +296,12 @@ define ([
             'type': 'dform',
             'menuText': 'Single interval',
             'title': 'Create a single interval',
-            'preamble': 'Enter date like, e.g.: 2017-JAN-5, 2017-1-5, 1-5, 1 5, today, tomorrow, etc.<br>' +
-                        'Enter time range e.g.: 11:30-15:00, 11:30-15, 11:30+3:30<br>' +
-                        'For validation, use <ENTER> to move to next field<br>' +
-                        'Description is optional',
+            'preamble': "Hints: (1) TAB or ENTER to validate and advance to next field " +
+                        "(2) date YYYY-MM-DD; year is optional " +
+                        "(3) time range HH:MM-HH:MM or HH:MM+HH:MM (start time plus offset) " +
+                        "or +HH:MM (last existing interval plus offset) or + (next scheduled " +
+                        "interval) (4) Use 'Select activity' if you don't know activity code " +
+                        '(5) Description is optional',
             'aclProfile': 'active',
             'entriesWrite': [entries.iNdate, entries.iNtimerange, entries.iNact, entries.iNdesc,],
             'rememberState': true,
@@ -355,10 +357,20 @@ define ([
             'menuText': "Next scheduled",
             'title': "Create interval \"next scheduled\"",
             'aclProfile': 'active',
-            'entriesRead': [entries.iNdate, entries.iNact, entries.iNdesc,
-                            entries.iNschedintvls, entries.iNlastexistintvl, entries.iNnextscheduled,],
+            'entriesRead': [
+                entries.acTaid,
+                entries.iNsid,
+                entries.iNschedintvls,
+                entries.iNlastexistintvl,
+                coreLib.emptyLineEntry,
+                entries.iNtoBeCreated,
+                entries.iNdate,
+                entries.iNnextscheduled,
+                entries.iNact,
+                entries.iNdesc,
+            ],
             'miniMenu': {
-                entries: ['createNextScheduledSave'],
+                entries: ['createSingleIntSave'],
             }
         }); // createNextScheduled
 

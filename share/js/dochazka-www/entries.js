@@ -430,9 +430,7 @@ define ([
             text: 'To be created',
             prop: 'iNnextscheduled',
             maxlen: 50,
-            populate: function () {
-                // TBD
-            },
+            populate: appCaches.populateNextScheduled,
         },
 
     };

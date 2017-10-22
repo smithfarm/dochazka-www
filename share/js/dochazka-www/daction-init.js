@@ -342,14 +342,6 @@ define ([
         });
 
         // Interval actions - create
-        target.push('createNextScheduledSave', {
-            'name': 'createNextScheduledSave',
-            'type': 'daction',
-            'menuText': 'Save',
-            'aclProfile': 'active',
-            'start': dactionStart('createNextScheduledSave'),
-            'pushable': false
-        });
         target.push('createSingleIntSave', {
             'name': 'createSingleIntSave',
             'type': 'daction',

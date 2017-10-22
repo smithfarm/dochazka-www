@@ -203,7 +203,7 @@ define ([
             assert.ok(cu.obj, "currentUserObj after logout: " + QUnit.dump.parse(cu));
             assert.strictEqual(cu.obj.nick, null, 'Current user object reset to null');
             assert.strictEqual(cu.priv, null, 'Current user priv reset to null');
-            containsFunc(assert, $('#mainarea').html(), "#mainarea", 'You have been logged out');
+            containsFunc(assert, $('#mainarea').html(), "#mainarea", 'You have logged out');
         },
 
         "login": function (assert, nick, priv) {

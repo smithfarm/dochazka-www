@@ -61,10 +61,14 @@ define ([
         },
 
         genIntvl = function (date, timerange) {
-            var ctr = datetime.canonicalizeTimeRange(timerange);
+            var ctr = datetime.canonicalizeTimeRange(timerange),
+                m;
             if (ctr === null) {
-                coreLib.displayError('Time range ->' + timerange + '<- is invalid');
-                stack.restart();
+                m = 'Time range ->' + timerange + '<- is invalid';
+                console.log(m);
+                stack.restart(undefined, {
+                    "resultLine": m
+                });
             } else {
                 return '[ "' +
                        date +
@@ -87,12 +91,10 @@ define ([
     // interval-related actions (see daction-start.js)
     return {
 
-        createNextScheduledSave: function (obj) {
-        },
-
         createSingleIntSave: function (obj) {
             var caller = stack.getTarget().name,
                 cu = currentUser('obj'),
+                m,
                 sc = function (st) {
                     stack.unwindToTarget(
                         'createSingleInt',
@@ -104,7 +106,9 @@ define ([
                     );
                 },
                 fc = function (st) {
-                    stack.restart(undefined, { "resultLine": st.payload.message });
+                    stack.restart(undefined, {
+                        "resultLine": st.payload.message,
+                    });
                 };
             if (caller === 'createSingleInt') {
                 // obj is scraped by start.js from the form inputs and will look
@@ -127,6 +131,9 @@ define ([
                 // the new values. In this case, the time range is residing
                 // in one of the spans.)
                 obj.iNtimerange = $('#iNlastplusoffset').text();
+            } else if (caller === 'createNextScheduled') {
+                // Scrape time range from form
+                obj.iNtimerange = $('#iNnextscheduled').text();
             } else {
                 console.log("CRITICAL ERROR: unexpected caller", caller);
                 return null;
@@ -135,23 +142,32 @@ define ([
 
             // check that all mandatory properties are present
             if (! obj.iNdate) {
-                stack.restart(undefined, { "resultLine": "Interval date missing" });
+                stack.restart(undefined, {
+                    "resultLine": "Interval date missing"
+                });
                 return null;
             }
             if (! obj.iNact) {
-                stack.restart(undefined, { "resultLine": "Interval activity code missing" });
+                stack.restart(undefined, {
+                    "resultLine": "Interval activity code missing"
+                });
                 return null;
             }
             if (! obj.acTaid) {
                 console.log("Looking up activity " + obj.iNact + " in cache");
-                obj.acTaid = appCaches.getActivityByCode(obj.iNact).aid;
-                if (! obj.acTaid) {
-                    stack.restart(undefined, { "resultLine": 'Activity ' + obj.iNact + ' not found' });
+                m = appCaches.getActivityByCode(obj.iNact);
+                if (! m) {
+                    stack.restart(undefined, {
+                        "resultLine": 'Activity ' + obj.iNact + ' not found'
+                    });
                     return null;
                 }
+                obj.acTaid = m.aid;
             }
             if (! obj.iNtimerange) {
-                stack.restart(undefined, { "resultLine": "Interval time range missing" });
+                stack.restart(undefined, {
+                    "resultLine": "Interval time range missing"
+                });
                 return null;
             }
 
@@ -170,6 +186,9 @@ define ([
                 return null;
             } else if (obj.iNtimerange) {
                 intervalNewREST.body["intvl"] = genIntvl(obj.iNdate, obj.iNtimerange);
+                if (! intervalNewREST.body["intvl"]) {
+                    return null;
+                }
             } else {
                 console.log("CRITICAL ERROR in createSingleIntSave: nothing to save!"); 
                 return null;
