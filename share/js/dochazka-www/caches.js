@@ -137,6 +137,10 @@ define ([
             return null;
         },
 
+        fullDayTsrange = function (date) {
+            return "[ \"" + date + " 00:00\", \"" + date + " 24:00\" )";
+        },
+
         masqEmployee = function (obj) {
             console.log("Entering masqEmployee() with object", obj);
             // if obj is empty, dA was selected from menu
@@ -216,6 +220,38 @@ define ([
             populateContinue(populateArray);
         },
 
+        populateExistingIntervals = function (populateArray) {
+            var cu = currentUser('obj'),
+                eid = cu.eid,
+                date, lia, tsr,
+                rest, sc, fc, populateContinue;
+            date = $("#iNdate").text();
+            console.log("Entering populateExistingIntervals() with date " + date);
+            populateContinue = populate.shift(populateArray);
+            tsr = fullDayTsrange(date);
+            rest = {
+                "method": "GET",
+                "path": "interval/eid/" + eid + "/" + tsr,
+            };
+            sc = function (st) {
+                if (st.code === "DISPATCH_RECORDS_FOUND") {
+                    // payload is an array of interval objects
+                    appLib.displayIntervals(st.payload, $('#iNexistintvls'));
+                }
+                populateContinue(populateArray);
+            };
+            fc = function (st) {
+                if (st.code === "DISPATCH_NOTHING_IN_TSRANGE") {
+                    // form field is pre-populated with "(none)"
+                    coreLib.clearResult();
+                } else {
+                    coreLib.displayError(st.payload.message);
+                }
+                populateContinue(populateArray);
+            };
+            ajax(rest, sc, fc);
+        },
+
         populateFullEmployeeProfileCache = function (populateArray) {
             var cu = currentUser('obj'),
                 eid = cu.eid,
@@ -270,7 +306,7 @@ define ([
             date = $("#iNdate").text();
             console.log("Entering populateLastExisting() with date " + date);
             populateContinue = populate.shift(populateArray);
-            tsr = "[ \"" + date + " 00:00\", \"" + date + " 24:00\" )";
+            tsr = fullDayTsrange(date);
             rest = {
                 "method": "GET",
                 "path": "interval/eid/" + eid + "/" + tsr,
@@ -389,10 +425,8 @@ define ([
 
         populateNextScheduled = function (populateArray) {
             var cu = currentUser('obj'),
-                lastExisting = $('#iNlastexistintvl').text(),
-                lastExistingEnd,
                 schedIntvls = $('#iNschedintvls').text(),
-                m, sid, date, tsr, rest, sc, fc, populateContinue;
+                m, sid, date, rest, sc, fc, populateContinue;
             date = $("#iNdate").text();
             console.log("Entering populateNextScheduled() with date " + date);
             if (date === "(none)") {
@@ -413,21 +447,15 @@ define ([
             }
             // there is an active schedule: determine the schedule intervals
             // while avoiding existing intervals
-            [m, lastExistingEnd] = lastExisting.split('-');
-            if (! lastExistingEnd) {
-                lastExisting = null;
-                lastExistingEnd = "00:00";
-            }
             if (schedIntvls === "(none)") {
                 schedIntvls = null;
             }
-            tsr = "[ \"" + date + " " + lastExistingEnd +"\", \"" + date + " 24:00\" )";
             rest = {
                 "method": "POST",
                 "path": "interval/fillup",
                 "body": {
                     'clobber': '0',
-                    'tsrange': tsr,
+                    'tsrange': fullDayTsrange(date),
                     'dry_run': '1',
                     'eid': String(cu.eid),
                 },
@@ -435,17 +463,12 @@ define ([
             sc = function (st) {
                 if (st.code === "DISPATCH_FILLUP_INTERVALS_CREATED") {
                     appLib.displayIntervals([st.payload.success.intervals[0]], $('#iNnextscheduled'));
+                    $('input[id="iNtimerange"]').val(
+                        datetime.tsrangeToTimeRange(st.payload.success.intervals[0].intvl)
+                    );
                 } else {
                     if (date) {
-                        if (schedIntvls) {
-                            if (lastExisting) {
-                                m = "No scheduled intervals after last existing interval";
-                            } else {
-                                m = st.text;
-                            }
-                        } else {
-                            m = "No scheduled intervals for " + date;
-                        }
+                        m = "No unfulfilled scheduled intervals for " + date;
                     } else {
                         m = "No date given";
                     }
@@ -478,7 +501,7 @@ define ([
                 return null;
             }
             // there is an active schedule: determine the schedule intervals
-            tsr = "[ \"" + date + " 00:00\", \"" + date + " 24:00\" )";
+            tsr = fullDayTsrange(date);
             rest = {
                 "method": "POST",
                 "path": "interval/fillup",
@@ -631,6 +654,7 @@ define ([
         masqEmployee: masqEmployee,
         populateActivityCache: populateActivityCache,
         populateAIDfromCode: populateAIDfromCode,
+        populateExistingIntervals: populateExistingIntervals,
         populateFullEmployeeProfileCache: populateFullEmployeeProfileCache,
         populateLastExisting: populateLastExisting,
         populateLastPlusOffset: populateLastPlusOffset,

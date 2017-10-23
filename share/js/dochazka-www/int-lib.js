@@ -133,7 +133,10 @@ define ([
                 obj.iNtimerange = $('#iNlastplusoffset').text();
             } else if (caller === 'createNextScheduled') {
                 // Scrape time range from form
-                obj.iNtimerange = $('#iNnextscheduled').text();
+                obj.iNdate = $('#iNdate').text();
+                obj.iNtimerange = $('input[id="iNtimerange"]').val();
+                obj.iNact = $('#iNact').text();
+                obj.iNdesc = $('#iNdesc').text();
             } else {
                 console.log("CRITICAL ERROR: unexpected caller", caller);
                 return null;

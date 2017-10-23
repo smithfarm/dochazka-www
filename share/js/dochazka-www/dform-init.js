@@ -295,7 +295,7 @@ define ([
             'name': 'createSingleInt',
             'type': 'dform',
             'menuText': 'Single interval',
-            'title': 'Create a single interval',
+            'title': 'Create an arbitrary interval',
             'preamble': "Hints: (1) TAB or ENTER to validate and advance to next field " +
                         "(2) date YYYY-MM-DD; year is optional " +
                         "(3) time range HH:MM-HH:MM or HH:MM+HH:MM (start time plus offset) " +
@@ -354,23 +354,28 @@ define ([
             // - first schedule interval that does not conflict/overlap with an existing interval
             'name': 'createNextScheduled',
             'type': 'dform',
-            'menuText': "Next scheduled",
+            'menuText': "Next scheduled interval",
             'title': "Create interval \"next scheduled\"",
             'aclProfile': 'active',
             'entriesRead': [
                 entries.acTaid,
                 entries.iNsid,
+                entries.iNdate,
+                entries.iNact,
                 entries.iNschedintvls,
-                entries.iNlastexistintvl,
+                entries.iNexistintvls,
+                entries.iNnextscheduled,
                 coreLib.emptyLineEntry,
                 entries.iNtoBeCreated,
+            ],
+            'entriesWrite': [
                 entries.iNdate,
-                entries.iNnextscheduled,
+                entries.iNtimerange,
                 entries.iNact,
                 entries.iNdesc,
             ],
             'miniMenu': {
-                entries: ['createSingleIntSave'],
+                entries: ['selectActivityAction', 'createSingleIntSave'],
             }
         }); // createNextScheduled
 

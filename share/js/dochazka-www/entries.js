@@ -405,6 +405,15 @@ define ([
             maxlen: 50,
             populate: appCaches.populateSchedIntvlsForDate,
         },
+        iNexistintvls: {
+            name: 'iNexistintvls',
+            aclProfileRead: 'inactive',
+            aclProfileWrite: 'admin',
+            text: 'Existing',
+            prop: 'iNexistintvls',
+            maxlen: 50,
+            populate: appCaches.populateExistingIntervals,
+        },
         iNlastexistintvl: {
             name: 'iNlastexistintvl',
             aclProfileRead: 'inactive',
