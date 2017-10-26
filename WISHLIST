@@ -1,0 +1,5 @@
+- At beginning of test run, send an AJAX call to ping the LDAP server. Set a cf
+  parameter with the result, and skip the LDAP-related tests if the LDAP server
+  is not reachable. (REST resource like "GET ldap/info" will have to be
+  implemented first...)
+
