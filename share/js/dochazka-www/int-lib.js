@@ -106,9 +106,10 @@ define ([
                     );
                 },
                 fc = function (st) {
-                    stack.restart(undefined, {
-                        "resultLine": st.payload.message,
-                    });
+                    // stack.restart(undefined, {
+                    //     "resultLine": st.payload.message,
+                    // });
+                    coreLib.displayError(st.payload.message);
                 };
             if (caller === 'createSingleInt') {
                 // obj is scraped by start.js from the form inputs and will look
@@ -123,20 +124,18 @@ define ([
                 // any of the above properties may be present or missing
                 // also, there may or may not be an acTaid property with the AID of
                 // the chosen activity
-            } else if (caller === 'createLastPlusOffset') {
+            } else if (caller === 'createLastPlusOffset' || caller === 'createNextScheduled') {
                 // Scrape time range from form
                 // (The "createLastPlusOffset" dform has no inputs (writable
                 // entries); instead, it has spans (read-only entries) that are
                 // populated asynchronously and obj does not contain any of
                 // the new values. In this case, the time range is residing
                 // in one of the spans.)
-                obj.iNtimerange = $('#iNlastplusoffset').text();
-            } else if (caller === 'createNextScheduled') {
                 // Scrape time range from form
-                obj.iNdate = $('#iNdate').text();
+                obj.iNdate = $('input[id="iNdate"]').val();
                 obj.iNtimerange = $('input[id="iNtimerange"]').val();
-                obj.iNact = $('#iNact').text();
-                obj.iNdesc = $('#iNdesc').text();
+                obj.iNact = $('input[id="iNact"]').val();
+                obj.iNdesc = $('input[id="iNdesc"]').val();
             } else {
                 console.log("CRITICAL ERROR: unexpected caller", caller);
                 return null;

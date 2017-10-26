@@ -336,7 +336,6 @@ define ([
                 date = $('#iNdate').text(),
                 eolei,
                 endTime,
-                formField = $('#iNlastplusoffset'),
                 i,
                 lastExistIntvl = $('#iNlastexistintvl').text().trim().replace(/\s/g, ''),
                 offset = $('#iNoffset').text(),
@@ -359,21 +358,21 @@ define ([
             // no schedule intervals, no last existing interval
             if (! schedIntvls && ! lastExistIntvl) {
                 [beginTime, endTime] = datetime.canonicalizeTimeRangeOffset("00:00" + String(offset));
-                formField.html(beginTime + '-' + endTime);
+                populateLastPlusOffsetFormFields(beginTime + '-' + endTime);
                 populateContinue(populateArray);
                 return null;
             }
             if (! schedIntvls && lastExistIntvl) {
                 [beginTime, endTime] = lastExistIntvl.split('-');
                 [beginTime, endTime] = datetime.canonicalizeTimeRangeOffset(endTime + String(offset));
-                formField.html(beginTime + '-' + endTime);
+                populateLastPlusOffsetFormFields(beginTime + '-' + endTime);
                 populateContinue(populateArray);
                 return null;
             }
             if (schedIntvls && ! lastExistIntvl) {
                 [beginTime, endTime] = schedIntvls[0].split('-');
                 [beginTime, endTime] = datetime.canonicalizeTimeRangeOffset(endTime + String(offset));
-                formField.html(beginTime + '-' + endTime);
+                populateLastPlusOffsetFormFields(beginTime + '-' + endTime);
                 populateContinue(populateArray);
                 return null;
             }
@@ -394,7 +393,7 @@ define ([
                 withinSchedIntvl = datetime.isTimeWithinTimeRange(eolei, schedIntvls[i]);
                 if (withinSchedIntvl) {
                     [beginTime, endTime] = datetime.canonicalizeTimeRangeOffset(eolei + String(offset));
-                    formField.html(beginTime + '-' + endTime);
+                    populateLastPlusOffsetFormFields(beginTime + '-' + endTime);
                     populateContinue(populateArray);
                     return null;
                 }
@@ -419,8 +418,15 @@ define ([
                 console.log("There is no schedule interval after eolei");
                 [beginTime, endTime] = datetime.canonicalizeTimeRangeOffset(eolei + String(offset));
             }
-            formField.html(beginTime + '-' + endTime);
+            populateLastPlusOffsetFormFields(beginTime + '-' + endTime);
             populateContinue(populateArray);
+        },
+
+        populateLastPlusOffsetFormFields = function (buf) {
+            var formField = $('#iNlastplusoffset'),
+                formInput = $('input[id="iNtimerange"');
+            formField.html(String(buf));
+            formInput.val(String(buf));
         },
 
         populateNextScheduled = function (populateArray) {

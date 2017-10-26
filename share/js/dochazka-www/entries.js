@@ -313,6 +313,15 @@ define ([
             maxlen: 20,
             vetter: datetime.vetDate,
         },
+        iNdateHidden: {
+            name: 'iNdate',
+            aclProfileRead: 'active',
+            aclProfileWrite: 'admin',
+            text: 'Date',
+            prop: 'iNdate',
+            hidden: true,
+            maxlen: 20,
+        },
         iNdaterange: {
             name: 'iNdaterange',
             aclProfileRead: 'active',
@@ -339,6 +348,15 @@ define ([
             prop: 'iNact',
             maxlen: 20,
             vetter: actLib.vetActivity,
+        },
+        iNactHidden: {
+            name: 'iNact',
+            aclProfileRead: 'active',
+            aclProfileWrite: 'admin',
+            text: 'Activity',
+            prop: 'iNact',
+            hidden: true,
+            maxlen: 20,
         },
         iNdesc: {
             name: 'iNdesc',
