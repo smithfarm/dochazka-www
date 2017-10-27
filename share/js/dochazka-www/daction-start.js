@@ -139,12 +139,12 @@ define ([
         },
 
         // logout action
-        "logout": function () {
+        "logout": function (msg) {
             console.log("Reached logout action");
             if (currentUser('flag1')) {
                 appCaches.endTheMasquerade();
             }
-            loggout();
+            loggout(msg);
         } // logout
 
     }; // var act
