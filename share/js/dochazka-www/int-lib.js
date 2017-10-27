@@ -91,6 +91,9 @@ define ([
     // interval-related actions (see daction-start.js)
     return {
 
+        createMultipleIntSave: function (obj) {
+        },
+
         createSingleIntSave: function (obj) {
             var caller = stack.getTarget().name,
                 cu = currentUser('obj'),

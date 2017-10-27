@@ -331,6 +331,24 @@ define ([
             maxlen: 30,
             vetter: datetime.vetDateRange,
         },
+        iNdaylist: {
+            name: 'iNdaylist',
+            aclProfileRead: 'active',
+            aclProfileWrite: 'active',
+            text: 'Day(s)',
+            prop: 'iNdaylist',
+            maxlen: 50,
+            vetter: datetime.vetDayList,
+        },
+        iNmonth: {
+            name: 'iNmonth',
+            aclProfileRead: 'active',
+            aclProfileWrite: 'active',
+            text: 'Month',
+            prop: 'iNmonth',
+            maxlen: 20,
+            vetter: datetime.vetMonth,
+        },
         iNtimerange: {
             name: 'iNtimerange',
             aclProfileRead: 'active',
@@ -346,7 +364,7 @@ define ([
             aclProfileWrite: 'active',
             text: 'Activity',
             prop: 'iNact',
-            maxlen: 20,
+            maxlen: 32,
             vetter: actLib.vetActivity,
         },
         iNactHidden: {

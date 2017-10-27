@@ -342,6 +342,15 @@ define ([
         });
 
         // Interval actions - create
+        target.push('createMultipleIntSave', {
+            'name': 'createMultipleIntSave',
+            'type': 'daction',
+            'menuText': 'Save',
+            'aclProfile': 'active',
+            'start': dactionStart('createMultipleIntSave'),
+            'pushable': false
+        });
+
         target.push('createSingleIntSave', {
             'name': 'createSingleIntSave',
             'type': 'daction',
