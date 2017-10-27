@@ -373,3 +373,10 @@ Revision history for App-Dochazka-WWW
 - js: implement "Create next scheduled interval" feature
 - build/ops: designed to work with App::Dochazka::REST 0.552
 
+0.158 2017-10-27 23:11 CEST
+- js: improve "Create next scheduled interval" dialog
+- js: tests: disable tests that require LDAP
+- WISHLIST: proper skipping of LDAP tests
+- js: allow user to modify to-be-created interval
+- daction-start: send logout message to core
+
