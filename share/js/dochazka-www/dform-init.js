@@ -297,15 +297,20 @@ define ([
             'menuText': 'Multiple intervals (\"Fillup\")',
             'title': 'Create multiple intervals according to schedule',
             'preamble': "Hints: (1) TAB or ENTER to validate and advance to next field " +
-                        "(2) enter month by name (e.g. \"June\") or number (e.g. \"6\") with " +
-                        "optional year, or leave blank for the current month " +
-                        "(3) leave \"Day\" field blank for entire month, or enter days as " +
+                        "(2) enter month by name (e.g. \"June\") or number (e.g. \"6\"); " +
+                        "DEFAULT: current month " +
+                        "(3) enter days as " +
                         "an inclusive range (e.g. \"15-18\"), as a comma-separated list (e.g. " +
-                        "\"7, 9, 28\"), or as a combination of the two (e.g. \"1, 3-5, 16-20\") " +
+                        "\"7, 9, 28\"), or as a combination of the two (e.g. \"1, 3-5, 16-20\"); " +
+                        "DEFAULT: entire month " +
                         "(4) Use 'Select activity' if you don't know activity code " +
                         '(5) Description is optional',
             'aclProfile': 'active',
+            'entriesRead': [
+                entries.iNyearHidden,
+            ],
             'entriesWrite': [
+                entries.iNyear,
                 entries.iNmonth,
                 entries.iNdaylist,
                 entries.iNact,

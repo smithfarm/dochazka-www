@@ -636,6 +636,15 @@ define ([
             }
         },
 
+        populateYear = function (populateArray) {
+            var populateContinue;
+            console.log("Entering populateYear()");
+            $('input[id="iNyear"]').val(
+                (new Date()).getFullYear()
+            );
+            populate.shift(populateArray);
+        },
+
         selectActivityAction = function (obj) {
             if (activityCache.length > 0) {
                 stack.push('selectActivity', {
@@ -669,6 +678,7 @@ define ([
         populateScheduleBySID: populateScheduleBySID,
         populateSIDByDate: populateSIDByDate,
         populateSupervisorNick: populateSupervisorNick,
+        populateYear: populateYear,
         profileCacheLength: function () {
             return profileCache.length
         },
