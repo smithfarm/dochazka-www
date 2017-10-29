@@ -41,7 +41,7 @@ define ([
     'app/lib',
     'ajax',
     'current-user',
-    'dt',
+    'datetime',
     'lib',
     'populate',
     'stack',

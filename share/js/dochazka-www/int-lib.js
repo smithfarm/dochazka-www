@@ -120,6 +120,60 @@ define ([
     return {
 
         createMultipleIntSave: function (obj) {
+            var cu = currentUser('obj'),
+                daylist = $('input[id="iNdaylist"]').val(),
+                month = $('input[id="iNmonth"]').val(),
+                year = $('input[id="iNyear"]').val(),
+                dl = daylist.split(','),
+                i, rest, sc, fc;
+            // validate activity
+            if (obj.iNact) {
+                console.log("Looking up activity " + obj.iNact + " in cache");
+                i = appCaches.getActivityByCode(obj.iNact);
+                if (! i) {
+                    coreLib.displayError('Activity ' + obj.iNact + ' not found');
+                    return null;
+                }
+                obj.acTaid = i.aid;
+            } else {
+                coreLib.displayError("Interval activity code missing");
+                return null;
+            }
+            // validate day list
+            if (! coreLib.isArray(dl) || dl.length === 0) {
+                coreLib.displayError("Invalid day list");
+                return null;
+            }
+            for (i = 0; i < dl.length; i += 1) {
+                dl[i] = year + '-' + dt.monthToInt(month) + '-' + dl[i];
+            }
+            console.log("Day list", dl);
+            rest = {
+                "method": "POST",
+                "path": "interval/fillup",
+                "body": {
+                    'date_list': dl,
+                    'dry_run': '0',
+                    'eid': String(cu.eid),
+                    'aid': obj.acTaid,
+                },
+            };
+            sc = function (st) {
+                if (st.code === "DISPATCH_FILLUP_INTERVALS_CREATED") {
+                    coreLib.displayResult(
+                        st.payload.success.intervals.length + " intervals created; " +
+                        st.payload.failure.intervals.length + " intervals failed"
+                    );
+                } else if (st.code === "DISPATCH_FILLUP_NO_INTERVALS_CREATED") {
+                    coreLib.displayResult("0 intervals created (check schedule?, pre-existing intervals?)");
+                } else {
+                    coreLib.displayError(st.text);
+                }
+            };
+            fc = function (st) {
+                // coreLib.displayError(st.level + " " + st.code + ": " + st.payload.message);
+            };
+            ajax(rest, sc);
         },
 
         createSingleIntSave: function (obj) {
