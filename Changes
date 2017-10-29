@@ -380,3 +380,12 @@ Revision history for App-Dochazka-WWW
 - js: allow user to modify to-be-created interval
 - daction-start: send logout message to core
 
+0.159 2017-10-29 14:40 CET
+- js: "Create multiple intervals": add pre-populated year entry
+- js: caches: use datetime.currentYear() function from core
+- js: int-lib: implement vetDayList()
+- build/ops: require App::MFILE::WWW 0.168 for entry "size" attribute
+- js: implement createMultipleIntSave()
+- Initial implementation of "Create multiple intervals according to schedule"
+  feature
+
