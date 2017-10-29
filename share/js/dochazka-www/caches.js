@@ -41,7 +41,7 @@ define ([
     'app/lib',
     'ajax',
     'current-user',
-    'datetime',
+    'dt',
     'lib',
     'populate',
     'stack',
@@ -50,7 +50,7 @@ define ([
     appLib,
     ajax,
     currentUser,
-    datetime,
+    dt,
     coreLib,
     populate,
     stack,
@@ -357,21 +357,21 @@ define ([
             populateContinue = populate.shift(populateArray);
             // no schedule intervals, no last existing interval
             if (! schedIntvls && ! lastExistIntvl) {
-                [beginTime, endTime] = datetime.canonicalizeTimeRangeOffset("00:00" + String(offset));
+                [beginTime, endTime] = dt.canonicalizeTimeRangeOffset("00:00" + String(offset));
                 populateLastPlusOffsetFormFields(beginTime + '-' + endTime);
                 populateContinue(populateArray);
                 return null;
             }
             if (! schedIntvls && lastExistIntvl) {
                 [beginTime, endTime] = lastExistIntvl.split('-');
-                [beginTime, endTime] = datetime.canonicalizeTimeRangeOffset(endTime + String(offset));
+                [beginTime, endTime] = dt.canonicalizeTimeRangeOffset(endTime + String(offset));
                 populateLastPlusOffsetFormFields(beginTime + '-' + endTime);
                 populateContinue(populateArray);
                 return null;
             }
             if (schedIntvls && ! lastExistIntvl) {
                 [beginTime, endTime] = schedIntvls[0].split('-');
-                [beginTime, endTime] = datetime.canonicalizeTimeRangeOffset(endTime + String(offset));
+                [beginTime, endTime] = dt.canonicalizeTimeRangeOffset(endTime + String(offset));
                 populateLastPlusOffsetFormFields(beginTime + '-' + endTime);
                 populateContinue(populateArray);
                 return null;
@@ -390,9 +390,9 @@ define ([
             // (Calculate withSchedIntvl by comparing eolei with each schedIntvl in turn.
             // If computation is true for any of them, then the result is true)
             for (i = 0; i < schedIntvls.length; i += 1) {
-                withinSchedIntvl = datetime.isTimeWithinTimeRange(eolei, schedIntvls[i]);
+                withinSchedIntvl = dt.isTimeWithinTimeRange(eolei, schedIntvls[i]);
                 if (withinSchedIntvl) {
-                    [beginTime, endTime] = datetime.canonicalizeTimeRangeOffset(eolei + String(offset));
+                    [beginTime, endTime] = dt.canonicalizeTimeRangeOffset(eolei + String(offset));
                     populateLastPlusOffsetFormFields(beginTime + '-' + endTime);
                     populateContinue(populateArray);
                     return null;
@@ -403,7 +403,7 @@ define ([
             // "schedAfter": first schedule interval that lies fully after eolei 
             schedAfter = null;
             for (i = 0; i < schedIntvls.length; i += 1) {
-                if (datetime.isTimeRangeAfterTime(schedIntvls[i], eolei)) {
+                if (dt.isTimeRangeAfterTime(schedIntvls[i], eolei)) {
                     schedAfter = schedIntvls[i];
                     break;
                 }
@@ -413,10 +413,10 @@ define ([
             if (schedAfter) {
                 console.log("There is a schedule interval after eolei");
                 [beginTime, endTime] = schedAfter.split('-');
-                [beginTime, endTime] = datetime.canonicalizeTimeRangeOffset(beginTime + String(offset));
+                [beginTime, endTime] = dt.canonicalizeTimeRangeOffset(beginTime + String(offset));
             } else {
                 console.log("There is no schedule interval after eolei");
-                [beginTime, endTime] = datetime.canonicalizeTimeRangeOffset(eolei + String(offset));
+                [beginTime, endTime] = dt.canonicalizeTimeRangeOffset(eolei + String(offset));
             }
             populateLastPlusOffsetFormFields(beginTime + '-' + endTime);
             populateContinue(populateArray);
@@ -470,7 +470,7 @@ define ([
                 if (st.code === "DISPATCH_FILLUP_INTERVALS_CREATED") {
                     appLib.displayIntervals([st.payload.success.intervals[0]], $('#iNnextscheduled'));
                     $('input[id="iNtimerange"]').val(
-                        datetime.tsrangeToTimeRange(st.payload.success.intervals[0].intvl)
+                        dt.tsrangeToTimeRange(st.payload.success.intervals[0].intvl)
                     );
                 } else {
                     if (date) {
@@ -639,9 +639,7 @@ define ([
         populateYear = function (populateArray) {
             var populateContinue;
             console.log("Entering populateYear()");
-            $('input[id="iNyear"]').val(
-                (new Date()).getFullYear()
-            );
+            $('input[id="iNyear"]').val(dt.currentYear());
             populate.shift(populateArray);
         },
 
