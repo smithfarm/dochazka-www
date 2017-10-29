@@ -72,6 +72,19 @@ define ([
             }
         });
 
+        target.push('viewMultipleInt', {
+            'name': 'viewMultipleInt',
+            'type': 'dtable',
+            'menuText': 'View',
+            'title': 'Intervals in date range',
+            'preamble': null,
+            'aclProfile': 'passerby',
+            'entriesRead': [entries.iNdate, entries.iNtimerange, entries.iNiid, entries.acTcode],
+            'miniMenu': {
+                entries: null,
+            }
+        });
+
     };
 
 });

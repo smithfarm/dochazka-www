@@ -125,6 +125,7 @@ define ([
         "createMultipleIntSave": intLib.createMultipleIntSave,
         "createNextScheduledIntervalSave": intLib.createNextScheduledIntervalSave,
         "createSingleIntSave": intLib.createSingleIntSave,
+        "viewMultipleIntAction": intLib.viewMultipleIntAction,
         
         // activity select actions
         "selectActivityAction": appCaches.selectActivityAction,

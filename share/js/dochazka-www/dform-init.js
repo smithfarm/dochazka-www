@@ -291,56 +291,6 @@ define ([
             }
         }); // schedNewCustom
 
-        target.push('createMultipleInt', {
-            'name': 'createMultipleInt',
-            'type': 'dform',
-            'menuText': 'Multiple intervals (\"Fillup\")',
-            'title': 'Create multiple intervals according to schedule',
-            'preamble': "Hints: (1) TAB or ENTER to validate and advance to next field " +
-                        "(2) enter month by name (e.g. \"June\") or number (e.g. \"6\"); " +
-                        "DEFAULT: current month " +
-                        "(3) enter days as " +
-                        "an inclusive range (e.g. \"15-18\"), as a comma-separated list (e.g. " +
-                        "\"7, 9, 28\"), or as a combination of the two (e.g. \"1, 3-5, 16-20\"); " +
-                        "DEFAULT: entire month " +
-                        "(4) Use 'Select activity' if you don't know activity code " +
-                        '(5) Description is optional',
-            'aclProfile': 'active',
-            'entriesRead': [
-                entries.iNyearHidden,
-            ],
-            'entriesWrite': [
-                entries.iNyear,
-                entries.iNmonth,
-                entries.iNdaylist,
-                entries.iNact,
-                entries.iNdesc,
-            ],
-            'rememberState': true,
-            'miniMenu': {
-                entries: ['selectActivityAction', 'createMultipleIntSave']
-            }
-        }); // createMultipleInt
-
-        target.push('createSingleInt', {
-            'name': 'createSingleInt',
-            'type': 'dform',
-            'menuText': 'Single interval',
-            'title': 'Create an arbitrary interval',
-            'preamble': "Hints: (1) TAB or ENTER to validate and advance to next field " +
-                        "(2) date YYYY-MM-DD; year is optional " +
-                        "(3) time range HH:MM-HH:MM or HH:MM+HH:MM (start time plus offset) " +
-                        "or +HH:MM (last existing interval plus offset) or + (next scheduled " +
-                        "interval) (4) Use 'Select activity' if you don't know activity code " +
-                        '(5) Description is optional',
-            'aclProfile': 'active',
-            'entriesWrite': [entries.iNdate, entries.iNtimerange, entries.iNact, entries.iNdesc,],
-            'rememberState': true,
-            'miniMenu': {
-                entries: ['selectActivityAction', 'createSingleIntSave']
-            }
-        }); // createSingleInt
-
         target.push('createLastPlusOffset', {
             // before doing any calculations, look up:
             // - employee's schedule
@@ -381,6 +331,39 @@ define ([
             }
         }); // createLastPlusOffset
 
+        target.push('createMultipleInt', {
+            'name': 'createMultipleInt',
+            'type': 'dform',
+            'menuText': 'Multiple intervals (\"Fillup\")',
+            'title': 'Create multiple intervals according to schedule',
+            'preamble': "Hints: (1) TAB or ENTER to validate and advance to next field " +
+                        "(2) enter month by name (e.g. \"June\") or number (e.g. \"6\"); " +
+                        "DEFAULT: current month " +
+                        "(3) enter days as " +
+                        "an inclusive range (e.g. \"15-18\"), as a comma-separated list (e.g. " +
+                        "\"7, 9, 28\"), or as a combination of the two (e.g. \"1, 3-5, 16-20\"); " +
+                        "DEFAULT: entire month " +
+                        "(4) Use 'Select activity' if you don't know activity code " +
+                        '(5) Description is optional',
+            'aclProfile': 'active',
+            'entriesRead': [
+                entries.iNdaterangeBegin,
+                entries.iNdaterangeEnd,
+                entries.iNyearHidden,
+            ],
+            'entriesWrite': [
+                entries.iNyear,
+                entries.iNmonth,
+                entries.iNdaylist,
+                entries.iNact,
+                entries.iNdesc,
+            ],
+            'rememberState': true,
+            'miniMenu': {
+                entries: ['selectActivityAction', 'createMultipleIntSave', 'viewMultipleIntAction']
+            }
+        }); // createMultipleInt
+
         target.push('createNextScheduled', {
             // before doing any calculations, look up/calculate:
             // - employee's schedule
@@ -414,6 +397,25 @@ define ([
                 entries: ['selectActivityAction', 'createSingleIntSave'],
             }
         }); // createNextScheduled
+
+        target.push('createSingleInt', {
+            'name': 'createSingleInt',
+            'type': 'dform',
+            'menuText': 'Single interval',
+            'title': 'Create an arbitrary interval',
+            'preamble': "Hints: (1) TAB or ENTER to validate and advance to next field " +
+                        "(2) date YYYY-MM-DD; year is optional " +
+                        "(3) time range HH:MM-HH:MM or HH:MM+HH:MM (start time plus offset) " +
+                        "or +HH:MM (last existing interval plus offset) or + (next scheduled " +
+                        "interval) (4) Use 'Select activity' if you don't know activity code " +
+                        '(5) Description is optional',
+            'aclProfile': 'active',
+            'entriesWrite': [entries.iNdate, entries.iNtimerange, entries.iNact, entries.iNdesc,],
+            'rememberState': true,
+            'miniMenu': {
+                entries: ['selectActivityAction', 'createSingleIntSave']
+            }
+        }); // createSingleInt
 
         target.push('displaySingleInt', {
             'name': 'displaySingleInt',

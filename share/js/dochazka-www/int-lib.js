@@ -53,73 +53,7 @@ define ([
 ) {
 
     var
-        emptyObj = {
-            "iNdate": "",
-            "iNtimerange": "",
-            "iNact": "",
-            "iNdesc": ""
-        },
-
-        genIntvl = function (date, timerange) {
-            var ctr = dt.canonicalizeTimeRange(timerange),
-                m;
-            if (ctr === null) {
-                m = 'Time range ->' + timerange + '<- is invalid';
-                console.log(m);
-                stack.restart(undefined, {
-                    "resultLine": m
-                });
-            } else {
-                return '[ "' +
-                       date +
-                       ' ' +
-                       ctr[0] +
-                       '", "' +
-                       date +
-                       ' ' +
-                       ctr[1] +
-                       '" )';
-            }
-        },
-
-        intervalNewREST = {
-            "method": 'POST',
-            "path": 'interval/new'
-        },
-
-        vetDayList = function (dl, testing) {
-            var buf, daylist,
-                month = $('input[id="iNmonth"]').val(),
-                year = $('input[id="iNyear"]').val(),
-                tokens = String(dl).trim().replace(/\s/g, '').split(',');
-            console.log("Entering vetDayList() with tokens", tokens, month);
-            if (! coreLib.isInteger(year)) {
-                year = dt.currentYear();
-                $('input[id="iNyear"]').val(year);
-            }
-            if (! month) {
-                month = dt.currentMonth();
-                $('input[id="iNmonth"]').val(month);
-            }
-            if (! coreLib.isArray(tokens) || (tokens.length === 1 && tokens[0] === "")) {
-                tokens = ["1-" + dt.daysInMonth(year, month)];
-            }
-            daylist = dt.vetDayList(tokens);
-            if (daylist.length > 0) {
-                buf = daylist.join(',');
-                $('input[id=iNdaylist]').val(buf);
-                return buf;
-            } else {
-                return null;
-            }
-        }
-        ;
-
-    // here is where we define methods implementing the various
-    // interval-related actions (see daction-start.js)
-    return {
-
-        createMultipleIntSave: function (obj) {
+        createMultipleIntSave = function (obj) {
             var cu = currentUser('obj'),
                 daylist = $('input[id="iNdaylist"]').val(),
                 month = $('input[id="iNmonth"]').val(),
@@ -147,7 +81,7 @@ define ([
             for (i = 0; i < dl.length; i += 1) {
                 dl[i] = year + '-' + dt.monthToInt(month) + '-' + dl[i];
             }
-            console.log("Day list", dl);
+            console.log("Date list", dl);
             rest = {
                 "method": "POST",
                 "path": "interval/fillup",
@@ -170,13 +104,10 @@ define ([
                     coreLib.displayError(st.text);
                 }
             };
-            fc = function (st) {
-                // coreLib.displayError(st.level + " " + st.code + ": " + st.payload.message);
-            };
             ajax(rest, sc);
         },
 
-        createSingleIntSave: function (obj) {
+        createSingleIntSave = function (obj) {
             var caller = stack.getTarget().name,
                 cu = currentUser('obj'),
                 m,
@@ -283,8 +214,112 @@ define ([
             ajax(intervalNewREST, sc, fc);
         },
 
-        vetDayList: vetDayList,
+        emptyObj = {
+            "iNdate": "",
+            "iNtimerange": "",
+            "iNact": "",
+            "iNdesc": ""
+        },
 
+        genIntvl = function (date, timerange) {
+            var ctr = dt.canonicalizeTimeRange(timerange),
+                m;
+            if (ctr === null) {
+                m = 'Time range ->' + timerange + '<- is invalid';
+                console.log(m);
+                stack.restart(undefined, {
+                    "resultLine": m
+                });
+            } else {
+                return '[ "' +
+                       date +
+                       ' ' +
+                       ctr[0] +
+                       '", "' +
+                       date +
+                       ' ' +
+                       ctr[1] +
+                       '" )';
+            }
+        },
+
+        intervalNewREST = {
+            "method": 'POST',
+            "path": 'interval/new'
+        },
+
+        vetDayList = function (dl, testing) {
+            var buf, daylist,
+                month = $('input[id="iNmonth"]').val(),
+                year = $('input[id="iNyear"]').val(),
+                tokens = String(dl).trim().replace(/\s/g, '').split(',');
+            console.log("Entering vetDayList() with tokens", tokens, month);
+            if (! coreLib.isInteger(year)) {
+                year = dt.currentYear();
+                $('input[id="iNyear"]').val(year);
+            }
+            if (! month) {
+                month = dt.currentMonth();
+                $('input[id="iNmonth"]').val(month);
+            }
+            if (! coreLib.isArray(tokens) || (tokens.length === 1 && tokens[0] === "")) {
+                tokens = ["1-" + dt.daysInMonth(year, month)];
+            }
+            daylist = dt.vetDayList(tokens);
+            if (daylist.length > 0) {
+                // populate hidden entries with begin and end of date range
+                $('#iNdaterangeBegin').html(year + "-" + dt.monthToInt(month) + "-" + daylist[0]);
+                $('#iNdaterangeEnd').html(year + "-" + dt.monthToInt(month) + "-" + daylist[daylist.length - 1]);
+                buf = daylist.join(',');
+                $('input[id=iNdaylist]').val(buf);
+                return buf;
+            } else {
+                return null;
+            }
+        },
+
+        viewMultipleIntAction = function () {
+            // scrape begin and end dates from form
+            // call GET interval/eid/:eid/:tsrange
+            // viewMultipleInt dtable on the resulting object
+            var begin = $("#iNdaterangeBegin").text(),
+                arr,
+                cu = currentUser('obj'),
+                end = $("#iNdaterangeEnd").text(),
+                i,
+                tsr = "[ " + begin + " 00:00, " + end + " 24:00 )",
+                rest = {
+                    "method": 'GET',
+                    "path": 'interval/eid/' + cu.eid + "/" + tsr,
+                },
+                sc = function (st) {
+                    if (st.code === 'DISPATCH_RECORDS_FOUND' ) {
+                        // convert intvl to iNdate and iNtimerange
+                        for (i = 0; i < st.payload.length; i += 1) {
+                            arr = dt.tsrangeToDateAndTimeRange(st.payload[i].intvl);
+                            st.payload[i].iNdate = arr[0];
+                            st.payload[i].iNtimerange = arr[1];
+                        }
+                        stack.push('viewMultipleInt', st.payload, {
+                            "resultLine": st.count + " intervals found"
+                        });
+                    } else if (st.code === 'DISPATCH_NO_RECORDS_FOUND' ) {
+                        coreLib.displayError(st.code + ": " + st.text);
+                    } else {
+                        coreLib.displayError(st.code + ": " + st.text);
+                    }
+                };
+            ajax(rest, sc);
+        }
+        ;
+
+    // here is where we define methods implementing the various
+    // interval-related actions (see daction-start.js)
+    return {
+        createMultipleIntSave: createMultipleIntSave,
+        createSingleIntSave: createSingleIntSave,
+        vetDayList: vetDayList,
+        viewMultipleIntAction: viewMultipleIntAction,
     };
 
 });

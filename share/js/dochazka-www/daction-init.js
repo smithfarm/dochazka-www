@@ -350,13 +350,20 @@ define ([
             'start': dactionStart('createMultipleIntSave'),
             'pushable': false
         });
-
         target.push('createSingleIntSave', {
             'name': 'createSingleIntSave',
             'type': 'daction',
             'menuText': 'Save',
             'aclProfile': 'active',
             'start': dactionStart('createSingleIntSave'),
+            'pushable': false
+        });
+        target.push('viewMultipleIntAction', {
+            'name': 'viewMultipleIntAction',
+            'type': 'daction',
+            'menuText': 'View',
+            'aclProfile': 'active',
+            'start': dactionStart('viewMultipleIntAction'),
             'pushable': false
         });
 
