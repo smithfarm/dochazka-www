@@ -39,10 +39,12 @@
 define ([
     'app/caches',
     'app/act-lib',
+    'app/int-lib',
     'datetime',
 ], function (
     caches,
     actLib,
+    intLib,
     datetime,
 ) {
 
@@ -222,8 +224,9 @@ define ([
             aclProfileWrite: 'active',
             text: 'Day(s)',
             prop: 'iNdaylist',
-            maxlen: 50,
-            vetter: datetime.vetDayList,
+            maxlen: 120,
+            size: 60,
+            vetter: intLib.vetDayList,
         },
         iNdesc: {
             name: 'iNdesc',

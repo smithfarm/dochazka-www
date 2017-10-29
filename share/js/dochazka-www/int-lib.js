@@ -47,7 +47,7 @@ define ([
     ajax,
     appCaches,
     currentUser,
-    datetime,
+    dt,
     coreLib,
     stack,
 ) {
@@ -61,7 +61,7 @@ define ([
         },
 
         genIntvl = function (date, timerange) {
-            var ctr = datetime.canonicalizeTimeRange(timerange),
+            var ctr = dt.canonicalizeTimeRange(timerange),
                 m;
             if (ctr === null) {
                 m = 'Time range ->' + timerange + '<- is invalid';
@@ -85,7 +85,35 @@ define ([
         intervalNewREST = {
             "method": 'POST',
             "path": 'interval/new'
-        };
+        },
+
+        vetDayList = function (dl, testing) {
+            var buf, daylist,
+                month = $('input[id="iNmonth"]').val(),
+                year = $('input[id="iNyear"]').val(),
+                tokens = String(dl).trim().replace(/\s/g, '').split(',');
+            console.log("Entering vetDayList() with tokens", tokens, month);
+            if (! coreLib.isInteger(year)) {
+                year = dt.currentYear();
+                $('input[id="iNyear"]').val(year);
+            }
+            if (! month) {
+                month = dt.currentMonth();
+                $('input[id="iNmonth"]').val(month);
+            }
+            if (! coreLib.isArray(tokens) || (tokens.length === 1 && tokens[0] === "")) {
+                tokens = ["1-" + dt.daysInMonth(year, month)];
+            }
+            daylist = dt.vetDayList(tokens);
+            if (daylist.length > 0) {
+                buf = daylist.join(',');
+                $('input[id=iNdaylist]').val(buf);
+                return buf;
+            } else {
+                return null;
+            }
+        }
+        ;
 
     // here is where we define methods implementing the various
     // interval-related actions (see daction-start.js)
@@ -200,6 +228,8 @@ define ([
             }
             ajax(intervalNewREST, sc, fc);
         },
+
+        vetDayList: vetDayList,
 
     };
 
