@@ -395,6 +395,14 @@ define ([
             prop: 'scode',
             maxlen: 20,
         },
+        sDdisabled: {
+            name: 'sDdisabled',
+            aclProfileRead: 'admin',
+            aclProfileWrite: 'admin',
+            text: 'Disabled?',
+            prop: 'disabled',
+            maxlen: 10,
+        },
         sDid: {
             name: 'sDid',
             aclProfileRead: 'inactive',
@@ -458,14 +466,6 @@ define ([
             text: 'Sunday',
             prop: 'sun',
             maxlen: 50,
-        },
-        sDdisabled: {
-            name: 'sDdisabled',
-            aclProfileRead: 'admin',
-            aclProfileWrite: 'admin',
-            text: 'Disabled?',
-            prop: 'disabled',
-            maxlen: 10,
         },
         sEnick: {
             name: 'sEnick',

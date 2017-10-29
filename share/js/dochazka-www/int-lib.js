@@ -165,7 +165,7 @@ define ([
                         st.payload.failure.intervals.length + " intervals failed"
                     );
                 } else if (st.code === "DISPATCH_FILLUP_NO_INTERVALS_CREATED") {
-                    coreLib.displayResult("0 intervals created (check schedule?, pre-existing intervals?)");
+                    coreLib.displayResult("The dates in question already have 100% schedule fulfillment");
                 } else {
                     coreLib.displayError(st.text);
                 }

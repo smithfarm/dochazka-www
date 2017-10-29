@@ -467,7 +467,7 @@ define ([
                 },
             };
             sc = function (st) {
-                if (st.code === "DISPATCH_FILLUP_INTERVALS_CREATED") {
+                if (st.code === "DISPATCH_SCHEDULED_INTERVALS_IDENTIFIED") {
                     appLib.displayIntervals([st.payload.success.intervals[0]], $('#iNnextscheduled'));
                     $('input[id="iNtimerange"]').val(
                         dt.tsrangeToTimeRange(st.payload.success.intervals[0].intvl)
@@ -510,16 +510,14 @@ define ([
             tsr = fullDayTsrange(date);
             rest = {
                 "method": "POST",
-                "path": "interval/fillup",
+                "path": "interval/scheduled",
                 "body": {
-                    'clobber': '1',
                     'tsrange': tsr,
-                    'dry_run': '1',
                     'eid': String(cu.eid),
                 },
             };
             sc = function (st) {
-                if (st.code === "DISPATCH_FILLUP_INTERVALS_CREATED") {
+                if (st.code === "DISPATCH_SCHEDULED_INTERVALS_IDENTIFIED") {
                     appLib.displayIntervals(st.payload.success.intervals, $('#iNschedintvls'));
                 }
                 populateContinue(populateArray);
