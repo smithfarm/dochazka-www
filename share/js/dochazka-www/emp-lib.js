@@ -143,6 +143,12 @@ define ([
             ajax(rest, sc, fc);
         },
 
+        empSetSupervisor = function (superEmp) {
+            var cu = currentUser('obj');
+            console.log("Entering empSetSupervisor() with superEmp", superEmp);
+            console.log("Will set superEmp as the supervisor of " + cu.nick);
+        },
+
         myProfileAction = function () {
             var cu = currentUser('obj'),
                 profileObj = appCaches.getProfileByEID(cu.eid),
@@ -191,6 +197,7 @@ define ([
     return {
         actionEmplSearch: actionEmplSearch,
         empProfileEditSave: empProfileEditSave,
+        empSetSupervisor: empSetSupervisor,
         myProfileAction: myProfileAction,
     };
 

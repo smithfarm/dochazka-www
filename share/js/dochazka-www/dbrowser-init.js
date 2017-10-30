@@ -58,7 +58,7 @@ define ([
             'entriesRead': [entries.ePnick, entries.ePsec_id, entries.ePfullname,
                         entries.ePemail, entries.ePremark],
             'miniMenu': {
-                entries: ['ldapSync', 'empProfileEdit', 'masqEmployee']
+                entries: ['ldapSync', 'empProfileEdit', 'masqEmployee', 'empSetSupervisor']
             }
         });
 

@@ -129,6 +129,14 @@ define ([
             'start': dactionStart('masqEmployee'),
             'pushable': false
         });
+        target.push('empSetSupervisor', {
+            'name': 'empSetSupervisor',
+            'type': 'daction',
+            'menuText': 'Set supervisor',
+            'aclProfile': 'admin',
+            'start': dactionStart('empSetSupervisor'),
+            'pushable': false
+        });
 
         // Privhistory actions
         target.push('actionPrivHistory', { // read-only
