@@ -452,6 +452,7 @@ define ([
                 entries.iNmonth,
                 entries.iNdayrange,
             ],
+            'rememberState': true,
             'miniMenu': {
                 entries: ['viewIntervalsAction']
             }
