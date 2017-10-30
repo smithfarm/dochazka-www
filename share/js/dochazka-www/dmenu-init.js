@@ -68,7 +68,7 @@ define ([
             'menuText': 'Employee',
             'title': 'Employee menu',
             'aclProfile': 'passerby',
-            'entries': ['myProfileAction', 'ldapLookup', 'searchEmployee', 'masqEmployee']
+            'entries': ['myProfileAction', 'ldapLookup', 'searchEmployee']
         });
 
         target.push('mainInt', {
@@ -86,7 +86,7 @@ define ([
             'menuText': 'Main',
             'title': 'Main menu',
             'aclProfile': 'passerby',
-            'entries': ['mainEmpl', 'mainPriv', 'mainSched', 'mainInt', 'mainAdmin']
+            'entries': ['mainEmpl', 'mainPriv', 'mainSched', 'mainInt', 'masqEmployee', 'mainAdmin']
         });
 
         target.push('mainPriv', {
