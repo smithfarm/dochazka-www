@@ -429,6 +429,35 @@ define ([
             }
         }); // displaySingleInt
 
+        target.push('viewMultipleIntPrep', {
+            'name': 'viewMultipleIntPrep',
+            'type': 'dform',
+            'menuText': 'View multiple intervals',
+            'title': 'View intervals for a range of dates',
+            'preamble': "Hints: (1) TAB or ENTER to validate and advance to next field " +
+                        "(2) enter month by name (e.g. \"June\") or number (e.g. \"6\"); " +
+                        "DEFAULT: current month " +
+                        "(3) enter days as " +
+                        "an inclusive range (e.g. \"15-18\"), as a comma-separated list (e.g. " +
+                        "\"7, 9, 28\"), or as a combination of the two (e.g. \"1, 3-5, 16-20\"); " +
+                        "DEFAULT: entire month",
+            'aclProfile': 'inactive',
+            'entriesRead': [
+                entries.iNdaterangeBegin,
+                entries.iNdaterangeEnd,
+                entries.iNyearHidden,
+            ],
+            'entriesWrite': [
+                entries.iNyear,
+                entries.iNmonth,
+                entries.iNdaylist,
+            ],
+            'rememberState': true,
+            'miniMenu': {
+                entries: ['viewMultipleIntAction']
+            }
+        }); // viewMultipleIntPrep
+
     }; // return function ()
     
 });
