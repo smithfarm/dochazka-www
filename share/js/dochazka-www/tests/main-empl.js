@@ -76,11 +76,11 @@ define ([
                 ct.mainMenuToMainEmpl(assert);
                 loggout();
                 done();
-            }, 1500);
+            }, 2000);
             setTimeout(function () {
                 ct.loggout(assert);
                 done();
-            }, 2000);
+            }, 2500);
         });
 
         test_desc = 'employee profile - passerby';
@@ -90,8 +90,6 @@ define ([
             console.log("***TEST*** " + prefix + test_desc);
             login({"nam": "demo", "pwd": "demo"});
             setTimeout(function() {
-                var htmlbuf,
-                    result;
                 ct.login(assert, "demo", "passerby");
                 done();
             }, 1500);

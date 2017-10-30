@@ -51,7 +51,7 @@ define ([
         target.push('simpleEmployeeBrowser', {
             'name': 'simpleEmployeeBrowser',
             'type': 'dbrowser',
-            'menuText': 'Browse employee search results',
+            'menuText': 'simpleEmployeeBrowser',
             'title': 'Employee search results',
             'preamble': null,
             'aclProfile': 'admin',
