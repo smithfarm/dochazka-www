@@ -389,3 +389,8 @@ Revision history for App-Dochazka-WWW
 - Initial implementation of "Create multiple intervals according to schedule"
   feature
 
+0.160 2017-10-30 08:42 CET
+- build/ops: require App::MFILE::WWW 0.169 for bug fix
+- js: caches: use "interval/scheduled" resource instead of "interval/fillup"
+- js: First sketch of "View intervals" functionality
+
