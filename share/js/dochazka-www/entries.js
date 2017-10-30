@@ -115,6 +115,7 @@ define ([
             text: 'Status',
             prop: 'priv',
             maxlen: 10,
+            // populate: empLib.populateProfilePriv,
         },
         ePprivEffective: {
             name: 'ePprivEffective',
@@ -123,6 +124,7 @@ define ([
             text: 'Status since',
             prop: 'privEffective',
             maxlen: 30,
+            // populate: empLib.populateProfilePrivEffective,
         },
         ePremark: {
             name: 'ePremark',

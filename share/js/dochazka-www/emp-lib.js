@@ -155,7 +155,7 @@ define ([
                 coreLib.displayError(m);
                 return null;
             }
-            if (profileObj.privhistory !== null) {
+            if (profileObj.privhistory) {
                 obj['priv'] = profileObj.privhistory.priv;
                 obj['privEffective'] = datetime.readableDate(
                     profileObj.privhistory.effective
@@ -164,7 +164,7 @@ define ([
                 obj['priv'] = '(none)';
                 obj['privEffective'] = '(none)';
             }
-            if (profileObj.schedhistory !== null) {
+            if (profileObj.schedhistory) {
                 obj['sid'] = profileObj.schedhistory.sid;
                 if (profileObj.schedhistory.scode !== null) {
                     obj['scode'] = profileObj.schedhistory.scode;
@@ -184,7 +184,7 @@ define ([
             obj['fullname'] = profileObj.emp.fullname;
             obj['email'] = profileObj.emp.email;
             obj['remark'] = profileObj.emp.remark;
-            obj['sec_id'] - profileObj.emp.sec_id;
+            obj['sec_id'] = profileObj.emp.sec_id;
             stack.push('empProfile', obj);
         };
 
