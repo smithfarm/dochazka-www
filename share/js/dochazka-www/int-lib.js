@@ -278,10 +278,60 @@ define ([
             }
         },
 
-        viewMultipleIntAction = function () {
+        vetDayRange = function (dl, testing) {
+            var buf, dayrange,
+                month = $('input[id="iNmonth"]').val(),
+                year = $('input[id="iNyear"]').val(),
+                rangeBegin, rangeEnd,
+                tokens = String(dl).trim().replace(/\s/g, '').split(','),
+                t;
+            console.log("Entering vetDayRange() with tokens", tokens, month);
+            if (! coreLib.isInteger(year)) {
+                year = dt.currentYear();
+                $('input[id="iNyear"]').val(year);
+            }
+            if (! month) {
+                month = dt.currentMonth();
+                $('input[id="iNmonth"]').val(month);
+            }
+            if (! coreLib.isArray(tokens) || (tokens.length === 1 && tokens[0] === "")) {
+                tokens = ["1-" + dt.daysInMonth(year, month)];
+            }
+            if (tokens.length === 1) {
+                t = tokens[0];
+                // t is either a number or a range: if it's a number, push it 
+                // to daylist. If it's a range, push each range member.
+                if (t.indexOf('-') === -1) {
+                    if (! coreLib.isInteger(t) || t < 1 || t > 31) {
+                        console.log("Ignoring non-numeric dayspec " + t);
+                        return null;
+                    }
+                    $('#iNdaterangeBegin').html(year + "-" + dt.monthToInt(month) + "-" + t);
+                    $('#iNdaterangeEnd').html(year + "-" + dt.monthToInt(month) + "-" + t);
+                } else {
+                    [rangeBegin, rangeEnd] = t.split('-');
+                    rangeBegin = parseInt(rangeBegin, 10);
+                    rangeEnd = parseInt(rangeEnd, 10);
+                    if (! coreLib.isInteger(rangeBegin) || ! coreLib.isInteger(rangeEnd) ||
+                        rangeBegin < 1 || rangeBegin > 31 ||
+                        rangeEnd < 1 || rangeEnd > 31 ||
+                        rangeBegin > rangeEnd) {
+                        console.log("Ignoring invalid day range ->" + t + "<-");
+                        return null;
+                    }
+                    // console.log("Encountered range from " + rangeBegin + " to " + rangeEnd);
+                    $('#iNdaterangeBegin').html(year + "-" + dt.monthToInt(month) + "-" + rangeBegin);
+                    $('#iNdaterangeEnd').html(year + "-" + dt.monthToInt(month) + "-" + rangeEnd);
+                }
+                return t;
+            }
+            return null;
+        },
+
+        viewIntervalsAction = function () {
             // scrape begin and end dates from form
             // call GET interval/eid/:eid/:tsrange
-            // viewMultipleInt dtable on the resulting object
+            // viewIntervalsDtable on the resulting object
             var begin = $("#iNdaterangeBegin").text(),
                 arr,
                 cu = currentUser('obj'),
@@ -300,7 +350,7 @@ define ([
                             st.payload[i].iNdate = arr[0];
                             st.payload[i].iNtimerange = arr[1];
                         }
-                        stack.push('viewMultipleInt', st.payload, {
+                        stack.push('viewIntervalsDtable', st.payload, {
                             "resultLine": st.count + " intervals found"
                         });
                     } else if (st.code === 'DISPATCH_NO_RECORDS_FOUND' ) {
@@ -319,7 +369,8 @@ define ([
         createMultipleIntSave: createMultipleIntSave,
         createSingleIntSave: createSingleIntSave,
         vetDayList: vetDayList,
-        viewMultipleIntAction: viewMultipleIntAction,
+        vetDayRange: vetDayRange,
+        viewIntervalsAction: viewIntervalsAction,
     };
 
 });

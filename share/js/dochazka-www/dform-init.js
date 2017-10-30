@@ -326,6 +326,7 @@ define ([
                 entries.iNact,
                 entries.iNdesc,
             ],
+            'rememberState': true,
             'miniMenu': {
                 entries: ['createSingleIntSave'],
             }
@@ -360,7 +361,7 @@ define ([
             ],
             'rememberState': true,
             'miniMenu': {
-                entries: ['selectActivityAction', 'createMultipleIntSave', 'viewMultipleIntAction']
+                entries: ['selectActivityAction', 'createMultipleIntSave', 'viewIntervalsAction']
             }
         }); // createMultipleInt
 
@@ -393,6 +394,7 @@ define ([
                 entries.iNact,
                 entries.iNdesc,
             ],
+            'rememberState': true,
             'miniMenu': {
                 entries: ['selectActivityAction', 'createSingleIntSave'],
             }
@@ -429,17 +431,15 @@ define ([
             }
         }); // displaySingleInt
 
-        target.push('viewMultipleIntPrep', {
-            'name': 'viewMultipleIntPrep',
+        target.push('viewIntervalsPrep', {
+            'name': 'viewIntervalsPrep',
             'type': 'dform',
-            'menuText': 'View multiple intervals',
-            'title': 'View intervals for a range of dates',
+            'menuText': 'View intervals',
+            'title': 'View intervals for date or range of dates',
             'preamble': "Hints: (1) TAB or ENTER to validate and advance to next field " +
                         "(2) enter month by name (e.g. \"June\") or number (e.g. \"6\"); " +
                         "DEFAULT: current month " +
-                        "(3) enter days as " +
-                        "an inclusive range (e.g. \"15-18\"), as a comma-separated list (e.g. " +
-                        "\"7, 9, 28\"), or as a combination of the two (e.g. \"1, 3-5, 16-20\"); " +
+                        "(3) enter days as a singleton (e.g. \"13\") or inclusive range (e.g. \"15-18\") " +
                         "DEFAULT: entire month",
             'aclProfile': 'inactive',
             'entriesRead': [
@@ -450,13 +450,12 @@ define ([
             'entriesWrite': [
                 entries.iNyear,
                 entries.iNmonth,
-                entries.iNdaylist,
+                entries.iNdayrange,
             ],
-            'rememberState': true,
             'miniMenu': {
-                entries: ['viewMultipleIntAction']
+                entries: ['viewIntervalsAction']
             }
-        }); // viewMultipleIntPrep
+        }); // viewIntervalsPrep
 
     }; // return function ()
     

@@ -77,7 +77,7 @@ define ([
             'menuText': 'Interval',
             'title': 'Interval menu',
             'aclProfile': 'passerby',
-            'entries': ['viewMultipleIntPrep', 'createInt'],
+            'entries': ['viewIntervalsPrep', 'createInt'],
         });
 
         target.push('mainMenu', {

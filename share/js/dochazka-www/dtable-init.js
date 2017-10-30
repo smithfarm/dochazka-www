@@ -72,8 +72,8 @@ define ([
             }
         });
 
-        target.push('viewMultipleInt', {
-            'name': 'viewMultipleInt',
+        target.push('viewIntervalsDtable', {
+            'name': 'viewIntervalsDtable',
             'type': 'dtable',
             'menuText': 'View',
             'title': 'Intervals in date range',
@@ -83,7 +83,7 @@ define ([
             'miniMenu': {
                 entries: null,
             }
-        });
+        }); // viewIntervalsDtable
 
     };
 

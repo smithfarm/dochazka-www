@@ -246,6 +246,15 @@ define ([
             size: 60,
             vetter: intLib.vetDayList,
         },
+        iNdayrange: {
+            name: 'iNdayrange',
+            aclProfileRead: 'inactive',
+            aclProfileWrite: 'inactive',
+            text: 'Day(s)',
+            prop: 'iNdayrange',
+            maxlen: 20,
+            vetter: intLib.vetDayRange,
+        },
         iNdesc: {
             name: 'iNdesc',
             aclProfileRead: 'active',

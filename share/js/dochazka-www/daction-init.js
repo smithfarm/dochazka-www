@@ -358,12 +358,12 @@ define ([
             'start': dactionStart('createSingleIntSave'),
             'pushable': false
         });
-        target.push('viewMultipleIntAction', {
-            'name': 'viewMultipleIntAction',
+        target.push('viewIntervalsAction', {
+            'name': 'viewIntervalsAction',
             'type': 'daction',
             'menuText': 'View',
             'aclProfile': 'active',
-            'start': dactionStart('viewMultipleIntAction'),
+            'start': dactionStart('viewIntervalsAction'),
             'pushable': false
         });
 
