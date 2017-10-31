@@ -215,7 +215,7 @@ define ([
                 entries.ePscode, entries.ePsid, entries.ePschedEffective
             ],
             'miniMenu': {
-                entries: ['empProfileEdit', 'ldapSync']
+                entries: ['empProfileEdit', 'ldapSync', 'empProfileSetSuperSearch']
             }
         }); // empProfile
 

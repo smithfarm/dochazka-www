@@ -129,12 +129,12 @@ define ([
             'start': dactionStart('masqEmployee'),
             'pushable': false
         });
-        target.push('empSetSupervisor', {
-            'name': 'empSetSupervisor',
+        target.push('empProfileSetSuperChoose', {
+            'name': 'empProfileSetSuperChoose',
             'type': 'daction',
             'menuText': 'Set supervisor',
             'aclProfile': 'admin',
-            'start': dactionStart('empSetSupervisor'),
+            'start': dactionStart('empProfileSetSuperChoose'),
             'pushable': false
         });
         target.push('empProfileSetSuperCommit', {
@@ -143,6 +143,14 @@ define ([
             'menuText': 'Yes, I really do',
             'aclProfile': 'admin',
             'start': dactionStart('empProfileSetSuperCommit'),
+            'pushable': false
+        });
+        target.push('empProfileSetSuperSearch', {
+            'name': 'empProfileSetSuperSearch',
+            'type': 'daction',
+            'menuText': 'Set supervisor',
+            'aclProfile': 'admin',
+            'start': dactionStart('empProfileSetSuperSearch'),
             'pushable': false
         });
 

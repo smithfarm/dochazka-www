@@ -60,9 +60,10 @@ define ([
     stack,
 ) {
 
-    var 
+    var empProfileEmp,
+
         actionEmplSearch = function (obj) {
-            var count, masquerade, opts, rs;
+            var count, masquerade, opts, rs, supervisor;
             // obj is searchKeyNick from the form
             if (! obj) {
                 obj = stack.getState();
@@ -82,19 +83,23 @@ define ([
                         count = rs.length;
                         opts = stack.getOpts();
                         masquerade = ('masquerade' in opts) ? opts.masquerade : false;
+                        supervisor = ('supervisor' in opts) ? opts.supervisor : false;
         
                         console.log("Search found " + count + " employees");
                         if (masquerade) {
                             stack.push(
                                 "masqueradeCandidatesBrowser",
                                 {"set": rs, "pos": 0},
-                                {"flag": true},
+                            );
+                        } else if (supervisor) {
+                            stack.push(
+                                "setSupervisorBrowser",
+                                {"set": rs, "pos": 0},
                             );
                         } else {
                             stack.push(
                                 "simpleEmployeeBrowser",
                                 {"set": rs, "pos": 0},
-                                {"flag": true},
                             );
                         }
                     } else {
@@ -154,6 +159,20 @@ define ([
             ajax(rest, sc, fc);
         },
 
+        empProfileSetSuperChoose = function (superEmp) {
+            var cu = currentUser('obj'),
+                obj = {
+                    "ePsetsuperofEID": cu.eid,
+                    "ePsetsupertoEID": superEmp.eid,
+                    "ePsetsuperof": cu.nick,
+                    "ePsetsuperto": superEmp.nick,
+                };
+            console.log("Entering empSetSupervisor() with superEmp", superEmp);
+            console.log("Will set superEmp as the supervisor of " + cu.nick);
+            console.log("Pushing empProfileSetSuperConfirm onto stack with obj", obj);
+            stack.push('empProfileSetSuperConfirm', obj);
+        },
+
         empProfileSetSuperCommit = function (obj) {
             var cu = currentUser('obj'),
                 empProfile,
@@ -186,18 +205,11 @@ define ([
             ajax(rest, sc);
         },
 
-        empSetSupervisor = function (superEmp) {
-            var cu = currentUser('obj'),
-                obj = {
-                    "ePsetsuperofEID": cu.eid,
-                    "ePsetsupertoEID": superEmp.eid,
-                    "ePsetsuperof": cu.nick,
-                    "ePsetsuperto": superEmp.nick,
-                };
-            console.log("Entering empSetSupervisor() with superEmp", superEmp);
-            console.log("Will set superEmp as the supervisor of " + cu.nick);
-            console.log("Pushing empProfileSetSuperConfirm onto stack with obj", obj);
-            stack.push('empProfileSetSuperConfirm', obj);
+        empProfileSetSuperSearch = function (superEmp) {
+            empProfileEmp = superEmp;
+            stack.push('searchEmployee', {}, {
+                "supervisor": true,
+            });
         },
 
         myProfileAction = function () {
@@ -248,8 +260,9 @@ define ([
     return {
         actionEmplSearch: actionEmplSearch,
         empProfileEditSave: empProfileEditSave,
-        empSetSupervisor: empSetSupervisor,
+        empProfileSetSuperChoose: empProfileSetSuperChoose,
         empProfileSetSuperCommit: empProfileSetSuperCommit,
+        empProfileSetSuperSearch: empProfileSetSuperSearch,
         myProfileAction: myProfileAction,
     };
 
