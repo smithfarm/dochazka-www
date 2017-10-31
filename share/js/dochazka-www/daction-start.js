@@ -96,6 +96,7 @@ define ([
         "actionEmplSearch": empLib.actionEmplSearch,
         "masqEmployee": appCaches.masqEmployee,
         "empSetSupervisor": empLib.empSetSupervisor,
+        "empProfileSetSuperCommit": empLib.empProfileSetSuperCommit,
 
         // Employee LDAP actions
         "ldapLookupSubmit": ldapLib.ldapLookupSubmit,

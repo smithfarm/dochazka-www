@@ -58,7 +58,21 @@ define ([
             'entriesRead': [entries.ePnick, entries.ePsec_id, entries.ePfullname,
                         entries.ePemail, entries.ePremark],
             'miniMenu': {
-                entries: ['ldapSync', 'empProfileEdit', 'masqEmployee', 'empSetSupervisor']
+                entries: ['ldapSync', 'empProfileEdit', 'empSetSupervisor']
+            }
+        });
+
+        target.push('masqueradeCandidatesBrowser', {
+            'name': 'masqueradeCandidatesBrowser',
+            'type': 'dbrowser',
+            'menuText': 'masqueradeCandidatesBrowser',
+            'title': 'Masquerade candidates',
+            'preamble': null,
+            'aclProfile': 'admin',
+            'entriesRead': [entries.ePnick, entries.ePsec_id, entries.ePfullname,
+                        entries.ePemail, entries.ePremark],
+            'miniMenu': {
+                entries: ['masqEmployee']
             }
         });
 

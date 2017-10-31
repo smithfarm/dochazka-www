@@ -176,7 +176,7 @@ define ([
                     assert,
                     $('#mainarea').html(),
                     "#mainarea html",
-                    "0. LDAP sync",
+                    "0.&nbsp;LDAP sync",
                 );
                 assert.ok(true, "*** REACHED miniMenu contains 0. LDAP sync");
                 // // choose '0' for ldapSync

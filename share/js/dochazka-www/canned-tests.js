@@ -60,6 +60,7 @@ define ([
             containsFunc(assert, htmlbuf, "#result", 'AJAX call');
         },
         containsFunc = function (assert, lookIn, lookInDesc, lookFor) {
+            // console.log("containsFunc() looking for ->" + lookFor + "<- in ->" + lookIn + "<-");
             // asserts that the string lookIn contains substring lookFor
             // lookInDesc describes what lookIn represents
             assert.notStrictEqual(
@@ -276,7 +277,7 @@ define ([
                 assert,
                 htmlbuf,
                 "#mainarea html",
-                "0. Search"
+                "0.&nbsp;Search"
             );
             assert.ok(
                 $('#searchEmployee input[name="entry0"]'),

@@ -137,6 +137,14 @@ define ([
             'start': dactionStart('empSetSupervisor'),
             'pushable': false
         });
+        target.push('empProfileSetSuperCommit', {
+            'name': 'empProfileSetSuperCommit',
+            'type': 'daction',
+            'menuText': 'Yes, I really do',
+            'aclProfile': 'admin',
+            'start': dactionStart('empProfileSetSuperCommit'),
+            'pushable': false
+        });
 
         // Privhistory actions
         target.push('actionPrivHistory', { // read-only

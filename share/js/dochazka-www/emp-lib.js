@@ -62,6 +62,7 @@ define ([
 
     var 
         actionEmplSearch = function (obj) {
+            var count, masquerade, opts, rs;
             // obj is searchKeyNick from the form
             if (! obj) {
                 obj = stack.getState();
@@ -77,15 +78,25 @@ define ([
         
                         // if only one record is returned, it might be in a result_set
                         // or it might be alone in the payload
-                        var rs = st.payload.result_set || st.payload,
-                            count = rs.length;
+                        rs = st.payload.result_set || st.payload;
+                        count = rs.length;
+                        opts = stack.getOpts();
+                        masquerade = ('masquerade' in opts) ? opts.masquerade : false;
         
                         console.log("Search found " + count + " employees");
-                        stack.push(
-                            "simpleEmployeeBrowser",
-                            {"set": rs, "pos": 0},
-                            {"flag": true},
-                        );
+                        if (masquerade) {
+                            stack.push(
+                                "masqueradeCandidatesBrowser",
+                                {"set": rs, "pos": 0},
+                                {"flag": true},
+                            );
+                        } else {
+                            stack.push(
+                                "simpleEmployeeBrowser",
+                                {"set": rs, "pos": 0},
+                                {"flag": true},
+                            );
+                        }
                     } else {
                         coreLib.displayError("Unexpected status code " + st.code);
                     }
@@ -143,10 +154,50 @@ define ([
             ajax(rest, sc, fc);
         },
 
+        empProfileSetSuperCommit = function (obj) {
+            var cu = currentUser('obj'),
+                empProfile,
+                rest = {
+                    "method": 'PUT',
+                    "path": 'employee/eid/' + obj.ePsetsuperofEID,
+                    "body": {
+                        "supervisor": obj.ePsetsupertoEID,
+                    }
+                },
+                sc = function (st) {
+                    if (st.code === 'DOCHAZKA_CUD_OK') {
+                        cu.supervisor = obj.ePsetsupertoEID;
+                        empProfile = appCaches.getProfileByEID(obj.ePsetsuperofEID);
+                        if (empProfile) {
+                             empProfile.supervisor = obj.ePsetsupertoEID;
+                             appCaches.setProfileByEID(obj.ePsetsuperofEID, empProfile);
+                        }
+                        stack.unwindToType('dmenu', {
+                            "_start": false
+                        });
+                        stack.push('myProfileAction', {
+                            "resultLine": "Commit OK"
+                        });
+                    } else {
+                        coreLib.displayError("CRITICAL ERROR THIS IS A BUG: " + st.code);
+                    }
+                };
+            console.log("Entered empProfileSetSuperCommit() with obj", obj);
+            ajax(rest, sc);
+        },
+
         empSetSupervisor = function (superEmp) {
-            var cu = currentUser('obj');
+            var cu = currentUser('obj'),
+                obj = {
+                    "ePsetsuperofEID": cu.eid,
+                    "ePsetsupertoEID": superEmp.eid,
+                    "ePsetsuperof": cu.nick,
+                    "ePsetsuperto": superEmp.nick,
+                };
             console.log("Entering empSetSupervisor() with superEmp", superEmp);
             console.log("Will set superEmp as the supervisor of " + cu.nick);
+            console.log("Pushing empProfileSetSuperConfirm onto stack with obj", obj);
+            stack.push('empProfileSetSuperConfirm', obj);
         },
 
         myProfileAction = function () {
@@ -198,6 +249,7 @@ define ([
         actionEmplSearch: actionEmplSearch,
         empProfileEditSave: empProfileEditSave,
         empSetSupervisor: empSetSupervisor,
+        empProfileSetSuperCommit: empProfileSetSuperCommit,
         myProfileAction: myProfileAction,
     };
 

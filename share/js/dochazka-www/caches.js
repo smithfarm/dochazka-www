@@ -175,7 +175,7 @@ define ([
         
             // let the admin pick which user to masquerade as
             stack.push('searchEmployee', {}, {
-                "xtarget": "mainEmpl"
+                "masquerade": true,
             });
         },
 
@@ -682,6 +682,9 @@ define ([
             return scheduleCache.length
         },
         selectActivityAction: selectActivityAction,
+        setProfileByEID: function (eid, obj) {
+            profileByEID[parseInt(eid, 10)] = obj;
+        },
     };
 
 });
