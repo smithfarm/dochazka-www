@@ -394,3 +394,11 @@ Revision history for App-Dochazka-WWW
 - js: caches: use "interval/scheduled" resource instead of "interval/fillup"
 - js: First sketch of "View intervals" functionality
 
+0.161 2017-10-31 12:33 CET
+- js: Make "View intervals" dform take single day or day range only
+- js: dmenu-init: move Masqeruade to main menu
+- js: tests/main-menu: add "Masquerade as a different employee" test case
+- js: ldap: stop ldapSync from partially clobbering employee profile
+- js: implement "Set supervisor" feature
+- build/ops: require App::MFILE:WWW 0.170 for unwindToTarget opts handling
+
