@@ -57,6 +57,28 @@ define ([
 ) {
 
     var
+        colorList = [
+            "#e6194b",
+            "#3cb44b",
+            "#ffe119",
+            "#0082c8",
+            "#f58231",
+            "#911eb4",
+            "#46f0f0",
+            "#f032e6",
+            "#d2f53c",
+            "#fabebe",
+            "#008080",
+            "#e6beff",
+            "#aa6e28",
+            "#fffac8",
+            "#800000",
+            "#aaffc3",
+            "#808000",
+            "#ffd8b1",
+            "#000080",
+        ],
+
         backgroundColorStashed = null,
         currentEmployeeStashed = null,
         currentEmplPrivStashed = null,
@@ -79,7 +101,7 @@ define ([
             currentUser('obj', currentEmployeeStashed);
             currentEmployeeStashed = null;
             $('#userbox').html(appLib.fillUserBox()); // reset userbox
-            $('#mainarea').css("background-color", backgroundColorStashed);
+            $('body').css("background-color", backgroundColorStashed);
             coreLib.displayResult('Masquerade is finished');
             $('input[name="sel"]').val('');
         },
@@ -160,7 +182,7 @@ define ([
                 }
                 // let the masquerade begin
                 currentEmployeeStashed = $.extend({}, cu);
-                backgroundColorStashed = $('#mainarea').css("background-color");
+                backgroundColorStashed = $('body').css("background-color");
                 currentUser('obj', obj);
                 currentUser('flag1', 1); // turn on masquerade flag
                 populate.bootstrap([
@@ -168,7 +190,7 @@ define ([
                     populateScheduleBySID,
                 ]);
                 $('#userbox').html(appLib.fillUserBox()); // reset userbox
-                $('#mainarea').css("background-color", "red");
+                $('body').css("background-color", "#669933");
                 stack.unwindToType('dmenu'); // return to most recent dmenu
                 return;
             }
@@ -180,7 +202,7 @@ define ([
         },
 
         populateActivityCache = function (populateArray) {
-            var rest, sc, fc, populateContinue;
+            var ao, rest, sc, fc, populateContinue;
             console.log("Entering populateActivityCache()");
             populateContinue = populate.shift(populateArray);
             if (activityCache.length === 0) {
@@ -191,9 +213,11 @@ define ([
                 sc = function (st) {
                     var i;
                     for (i = 0; i < st.payload.length; i += 1) {
-                        activityCache.push(st.payload[i]);
-                        activityByAID[st.payload[i].aid] = st.payload[i];
-                        activityByCode[st.payload[i].code] = st.payload[i];
+                        ao = st.payload[i];
+                        ao.color = colorList[i];
+                        activityCache.push(ao);
+                        activityByAID[st.payload[i].aid] = ao;
+                        activityByCode[st.payload[i].code] = ao;
                     }
                     coreLib.displayResult(i + 1 + " activity objects loaded into cache");
                     populateContinue();
@@ -371,7 +395,7 @@ define ([
             }
             if (schedIntvls && ! lastExistIntvl) {
                 [beginTime, endTime] = schedIntvls[0].split('-');
-                [beginTime, endTime] = dt.canonicalizeTimeRangeOffset(endTime + String(offset));
+                [beginTime, endTime] = dt.canonicalizeTimeRangeOffset(beginTime + String(offset));
                 populateLastPlusOffsetFormFields(beginTime + '-' + endTime);
                 populateContinue(populateArray);
                 return null;

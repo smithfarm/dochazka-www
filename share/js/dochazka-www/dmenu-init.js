@@ -86,7 +86,8 @@ define ([
             'menuText': 'Main',
             'title': 'Main menu',
             'aclProfile': 'passerby',
-            'entries': ['mainEmpl', 'mainPriv', 'mainSched', 'mainInt', 'masqEmployee', 'mainAdmin']
+            'entries': ['mainEmpl', 'mainPriv', 'mainSched', 'mainInt', 'masqEmployee',
+                        'mainAdmin']
         });
 
         target.push('mainPriv', {

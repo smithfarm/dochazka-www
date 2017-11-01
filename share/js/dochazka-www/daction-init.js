@@ -419,13 +419,6 @@ define ([
             'pushable': false
         });
 
-        // Run unit tests
-        target.push('unitTests', {
-            'name': 'unitTests',
-            'menuText': 'Run unit tests',
-            'aclProfile': 'passerby'
-        }),
-        
         // return to (saved) browser state 
         target.push('returnToBrowser', {
             'name': 'returnToBrowser',

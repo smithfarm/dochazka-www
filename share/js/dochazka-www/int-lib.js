@@ -333,10 +333,13 @@ define ([
             // call GET interval/eid/:eid/:tsrange
             // viewIntervalsDtable on the resulting object
             var begin = $("#iNdaterangeBegin").text(),
-                arr,
+                arr, obj,
                 cu = currentUser('obj'),
                 end = $("#iNdaterangeEnd").text(),
+                firstDate,
                 i,
+                multipleDates,
+                opts,
                 tsr = "[ " + begin + " 00:00, " + end + " 24:00 )",
                 rest = {
                     "method": 'GET',
@@ -344,15 +347,30 @@ define ([
                 },
                 sc = function (st) {
                     if (st.code === 'DISPATCH_RECORDS_FOUND' ) {
+                        opts = { "resultLine": st.count + " intervals found" };
                         // convert intvl to iNdate and iNtimerange
+                        multipleDates = false;
                         for (i = 0; i < st.payload.length; i += 1) {
                             arr = dt.tsrangeToDateAndTimeRange(st.payload[i].intvl);
                             st.payload[i].iNdate = arr[0];
+                            if (i === 0) {
+                                firstDate = arr[0];  // first date in result set
+                            }
+                            if (arr[0] !== firstDate) {
+                                multipleDates = true; // multiple dates in result set
+                            }
                             st.payload[i].iNtimerange = arr[1];
                         }
-                        stack.push('viewIntervalsDtable', st.payload, {
-                            "resultLine": st.count + " intervals found"
-                        });
+                        if (multipleDates) {
+                            obj = {
+                                "beginDate": begin,
+                                "endDate": end,
+                                "intervals": st.payload,
+                            };
+                            stack.push('multiDayViewer', obj, opts);
+                        } else {
+                            stack.push('viewIntervalsDtable', st.payload, opts);
+                        }
                     } else if (st.code === 'DISPATCH_NO_RECORDS_FOUND' ) {
                         coreLib.displayError(st.code + ": " + st.text);
                     } else {
@@ -360,6 +378,31 @@ define ([
                     }
                 };
             ajax(rest, sc);
+        },
+
+        viewIntervalsMultiDayCallback = function (obj, title, preamble) {
+            var i, r = '';
+            preamble = preamble
+                         .replace(/\[BEGIN\]/, obj.beginDate)
+                         .replace(/\[END\]/, obj.endDate);
+            r += "<b>" + title + "</b><br><br>";
+            r += preamble + "<br><br>";
+            return r;
+        },
+
+        viewIntervalsMultiDayCallbackRaw = function (obj) {
+            var r = '';
+            r += "<pre>";
+            if (typeof obj === 'object') {
+                r += JSON.stringify(obj, null, 2);
+            } else if (typeof obj === 'string') {
+                r += obj;
+            } else {
+                console.log("viewIntervalsMultiDayCallbackRaw(): CRITICAL ERROR: bad object", obj);
+                r += 'ERROR<br>';
+            }
+            r += "</pre><br>";
+            return r;
         }
         ;
 
@@ -371,6 +414,8 @@ define ([
         vetDayList: vetDayList,
         vetDayRange: vetDayRange,
         viewIntervalsAction: viewIntervalsAction,
+        viewIntervalsMultiDayCallback: viewIntervalsMultiDayCallback,
+        viewIntervalsMultiDayCallbackRaw: viewIntervalsMultiDayCallbackRaw,
     };
 
 });

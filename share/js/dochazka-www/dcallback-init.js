@@ -30,33 +30,49 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // *************************************************************************
 //
-// app/dnotice-init.js
+// app/dcallback-init.js
 //
-// Round one of dnotice initialization - called from app/target-init.js
+// Round one of dcallback initialization (called from app/target-init)
 //
 "use strict";
 
 define ([
-    'current-user',
-    'target'
+    "app/int-lib",
+    "app/viewer",
+    "target",
 ], function (
-    currentUser,
-    target
+    intLib,
+    viewer,
+    target,
 ) {
 
     return function () {
 
-        // demo notice from App::MFILE::WWW
-        target.push('demoNotice', {
-            'name': 'demoNotice',
-            'type': 'dnotice',
-            'menuText': 'Demo notice',
-            'title': 'Demo notice',
-            'preamble': 'This is just an illustration',
-            'aclProfile': 'passerby',
-            'back': 'demoMenu'
+        target.push('multiDayViewer', {
+            'name': 'multiDayViewer',
+            'type': 'dcallback',
+            'menuText': 'multiDayViewer',
+            'aclProfile': 'inactive',
+            'callback': viewer.multiDayViewer,
+            'rememberState': true,
+            'miniMenu': {
+                entries: ['viewIntervalsMultiDayRaw'],
+            }
+        });
+
+        target.push('viewIntervalsMultiDayRaw', {
+            'name': 'viewIntervalsMultiDayRaw',
+            'type': 'dcallback',
+            'menuText': 'Raw JSON',
+            'title': 'Multi-day interval viewer (RAW)',
+            'preamble': 'Attendance intervals from [BEGIN] to [END]',
+            'aclProfile': 'inactive',
+            'callback': intLib.viewIntervalsMultiDayCallbackRaw,
+            'miniMenu': {
+                entries: [],
+            }
         });
 
     };
-
+    
 });
