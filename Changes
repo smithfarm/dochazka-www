@@ -402,3 +402,8 @@ Revision history for App-Dochazka-WWW
 - js: implement "Set supervisor" feature
 - build/ops: require App::MFILE:WWW 0.170 for unwindToTarget opts handling
 
+0.162 2017-11-02 20:21 CET
+- js: move "Set supervisor" functionality to employee profile
+- js: Implement "Multi-day interval viewer" feature
+- build/ops: require App::MFILE::WWW 0.171 for dcallback widget
+
