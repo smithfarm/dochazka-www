@@ -53,6 +53,41 @@ define ([
 ) {
 
     var
+        createIntervalCheckMandatoryProps = function (obj) {
+            var actObj;
+            // check that all mandatory properties are present
+            if (! obj.iNdate) {
+                stack.restart(undefined, {
+                    "resultLine": "Interval date missing"
+                });
+                return false;
+            }
+            if (! obj.iNact) {
+                stack.restart(undefined, {
+                    "resultLine": "Interval activity code missing"
+                });
+                return false;
+            }
+            if (! obj.acTaid) {
+                console.log("Looking up activity " + obj.iNact + " in cache");
+                actObj = appCaches.getActivityByCode(obj.iNact);
+                if (! actObj) {
+                    stack.restart(undefined, {
+                        "resultLine": 'Activity ' + obj.iNact + ' not found'
+                    });
+                    return false;
+                }
+                obj.acTaid = actObj.aid;
+            }
+            if (! obj.iNtimerange) {
+                stack.restart(undefined, {
+                    "resultLine": "Interval time range missing"
+                });
+                return false;
+            }
+            return true;
+        },
+
         createMultipleIntSave = function (obj) {
             var cu = currentUser('obj'),
                 daylist = $('input[id="iNdaylist"]').val(),
@@ -110,7 +145,7 @@ define ([
         createSingleIntSave = function (obj) {
             var caller = stack.getTarget().name,
                 cu = currentUser('obj'),
-                m,
+                rest,
                 sc = function (st) {
                     stack.unwindToTarget(
                         'createSingleInt',
@@ -120,13 +155,8 @@ define ([
                             "inputId": "iNdate",
                         }
                     );
-                },
-                fc = function (st) {
-                    // stack.restart(undefined, {
-                    //     "resultLine": st.payload.message,
-                    // });
-                    coreLib.displayError(st.payload.message);
                 };
+            console.log("Entering createSingleIntSave() from caller " + caller + " with obj", obj);
             if (caller === 'createSingleInt') {
                 // obj is scraped by start.js from the form inputs and will look
                 // like this:
@@ -156,62 +186,34 @@ define ([
                 console.log("CRITICAL ERROR: unexpected caller", caller);
                 return null;
             }
-            console.log("Entering createSingleIntSave() with obj", obj);
-
-            // check that all mandatory properties are present
-            if (! obj.iNdate) {
-                stack.restart(undefined, {
-                    "resultLine": "Interval date missing"
-                });
-                return null;
-            }
-            if (! obj.iNact) {
-                stack.restart(undefined, {
-                    "resultLine": "Interval activity code missing"
-                });
-                return null;
-            }
-            if (! obj.acTaid) {
-                console.log("Looking up activity " + obj.iNact + " in cache");
-                m = appCaches.getActivityByCode(obj.iNact);
-                if (! m) {
-                    stack.restart(undefined, {
-                        "resultLine": 'Activity ' + obj.iNact + ' not found'
-                    });
-                    return null;
-                }
-                obj.acTaid = m.aid;
-            }
-            if (! obj.iNtimerange) {
-                stack.restart(undefined, {
-                    "resultLine": "Interval time range missing"
-                });
-                return null;
-            }
-
-            intervalNewREST.body = {
-                "eid": cu.eid,
-                "aid": obj.acTaid,
-                "long_desc": obj.iNdesc,
-                "remark": null,
-            }
             if (obj.iNtimerange === '+') {
                 stack.push('createNextScheduled', obj);
                 return null;
-            } else if (obj.iNtimerange.match(/\+/)) {
+            }
+            if (obj.iNtimerange.match(/\+/)) {
                 obj.iNoffset = obj.iNtimerange;
                 stack.push('createLastPlusOffset', obj);
                 return null;
-            } else if (obj.iNtimerange) {
-                intervalNewREST.body["intvl"] = genIntvl(obj.iNdate, obj.iNtimerange);
-                if (! intervalNewREST.body["intvl"]) {
-                    return null;
-                }
-            } else {
-                console.log("CRITICAL ERROR in createSingleIntSave: nothing to save!"); 
+            }
+            if (! createIntervalCheckMandatoryProps(obj)) {
                 return null;
             }
-            ajax(intervalNewREST, sc, fc);
+            obj["intvl"] = genIntvl(obj.iNdate, obj.iNtimerange);
+            if (! obj.intvl) {
+                return null;
+            }
+            rest = {
+                "method": 'POST',
+                "path": 'interval/new',
+                "body": {
+                    "eid": cu.eid,
+                    "aid": obj.acTaid,
+                    "intvl": obj.intvl,
+                    "long_desc": obj.iNdesc,
+                    "remark": null,
+                },
+            }
+            ajax(rest, sc);
         },
 
         emptyObj = {
@@ -241,11 +243,6 @@ define ([
                        ctr[1] +
                        '" )';
             }
-        },
-
-        intervalNewREST = {
-            "method": 'POST',
-            "path": 'interval/new'
         },
 
         vetDayList = function (dl, testing) {
