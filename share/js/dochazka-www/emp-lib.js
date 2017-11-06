@@ -254,6 +254,7 @@ define ([
             obj['email'] = profileObj.emp.email;
             obj['remark'] = profileObj.emp.remark;
             obj['sec_id'] = profileObj.emp.sec_id;
+            obj['has_reports'] = ( profileObj.has_reports === 0 ) ? null : profileObj.has_reports;
             stack.push('empProfile', obj);
         };
 

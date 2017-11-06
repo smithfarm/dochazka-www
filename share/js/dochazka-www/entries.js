@@ -209,6 +209,14 @@ define ([
             maxlen: 30,
             populate: caches.populateSupervisorNick,
         },
+        ePhasReports: {
+            name: 'ePhasReports',
+            aclProfileRead: 'inactive',
+            aclProfileWrite: 'admin',
+            text: 'Direct reports',
+            prop: 'has_reports',
+            maxlen: 8,
+        },
         iNact: {
             name: 'iNact',
             aclProfileRead: 'active',

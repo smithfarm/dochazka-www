@@ -208,7 +208,8 @@ define ([
             'entriesRead': [
                 entries.ePfullname, entries.ePnick,
                 entries.ePsec_id, entries.ePemail,
-                entries.ePsuperNick, entries.ePremark,
+                entries.ePsuperNick, entries.ePhasReports,
+                entries.ePremark,
                 coreLib.emptyLineEntry,
                 entries.ePpriv, entries.ePprivEffective,
                 coreLib.emptyLineEntry,
