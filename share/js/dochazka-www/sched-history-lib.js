@@ -56,8 +56,7 @@ define ([
 
     var genSchedHistoryAction = function (tgt) {
             return function () {
-                var nick = currentUser('obj').nick,
-                    rest = {
+                var rest = {
                         "method": 'GET',
                         "path": 'schedule/history/nick/' + currentUser('obj').nick
                     },
@@ -68,7 +67,6 @@ define ([
                             var history = st.payload.history.map(
                                 function (row) {
                                     return {
-                                        "nick": nick,
                                         "shid": row.shid,
                                         "sid": row.sid,
                                         "effective": datetime.readableDate(row.effective),
@@ -175,9 +173,10 @@ define ([
             // start.drowselectListen();
         },
         "schedHistoryAddRecordAction": function (obj) {
-            console.log("Entering schedHistoryAddRecordAction with obj", obj);
+            var cu = currentUser('obj');
+            console.log("Entering schedHistoryAddRecordAction, nick is " + cu.nick);
             stack.push('schedHistoryAddRecord', {
-                'nick': obj.nick
+                'nick': cu.nick
             });
         }
     };
