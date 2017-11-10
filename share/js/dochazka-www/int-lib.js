@@ -417,6 +417,7 @@ define ([
                 opts,
                 rest,
                 sc = function (st) {
+                    var ld;
                     if (st.code === 'DISPATCH_RECORDS_FOUND' ) {
                         opts = { "resultLine": st.count + " intervals found" };
                         // convert intvl to iNdate and iNtimerange
@@ -440,6 +441,10 @@ define ([
                             };
                             stack.push('multiDayViewer', obj, opts);
                         } else {
+                            for (i = 0; i < st.payload.length; i += 1) {
+                                ld = (st.payload[i].long_desc === undefined) ? "" : st.payload[i].long_desc;
+                                st.payload[i].long_desc = ld.slice(0, 30);
+                            }
                             opts['xtarget'] = 'viewIntervalsPrep';
                             stack.push('viewIntervalsDrowselect', {
                                 'pos': 0,
