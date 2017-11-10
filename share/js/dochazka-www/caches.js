@@ -310,10 +310,7 @@ define ([
             sc = function (st) {
                 if (st.code === 'DISPATCH_EMPLOYEE_PROFILE_FULL') {
                     profileObj = $.extend({}, st.payload);
-                    profileCache.push(profileObj);
-                    profileByEID[parseInt(st.payload.emp.eid, 10)] = $.extend({}, profileObj);
-                    profileByNick[String(st.payload.emp.nick)] = $.extend({}, profileObj);
-                    coreLib.displayResult("Profile of employee " + st.payload.emp.nick + " loaded into cache");
+                    setProfileCache(profileObj);
                 } else {
                     m = "Unexpected status code " + st.code;
                     console.log("CRITICAL ERROR: " + m);
@@ -562,17 +559,24 @@ define ([
         populateScheduleBySID = function (populateArray) {
             var cu = currentUser('obj'),
                 fullProfile = getProfileByEID(parseInt(cu.eid, 10)),
-                sid = fullProfile.schedule,
+                sid,
                 schedObj,
                 m,
                 rest, sc, fc, populateContinue;
             console.log("populateArray.length is " + populateArray.length);
             populateContinue = populate.shift(populateArray);
-            if (! sid) {
+            if (
+                    typeof fullProfile !== 'object' ||
+                    ! fullProfile ||
+                    ! 'schedule' in fullProfile ||
+                    ! fullProfile.schedule
+               )
+            {
                 // no SID; nothing to do
                 populateContinue(populateArray);
                 return null;
             }
+            sid = fullProfile.schedule;
             schedObj = getScheduleBySID(sid);
             if (schedObj) {
                 // schedule already in cache
@@ -680,6 +684,38 @@ define ([
             } else {
                 coreLib.displayError("CRITICAL ERROR: activity cache is empty");
             }
+        },
+
+        setProfileCache = function (profileObj) {
+            var eid, nick, cacheEID, i, cached = false;
+            if ( typeof profileObj !== 'object' ||
+                 profileObj === null ||
+                 ! 'emp' in profileObj ||
+                 ! 'eid' in profileObj.emp
+               )
+            {
+                console.log("CRITICAL ERROR: bad profileObj in setProfileCache()", profileObj);
+                return null;
+            }
+            eid = parseInt(profileObj.emp.eid, 10);
+            nick = String(profileObj.emp.nick);
+            console.log("setProfileCache() EID, nick", eid, nick);
+            console.log(profileCache.length + " objects in profileCache");
+            for (i = 0; i < profileCache.length; i += 1) {
+                cacheEID = parseInt(profileCache[i].emp.eid, 10);
+                if (eid === cacheEID) {
+                    cached = true;
+                    profileCache[i] = $.extend(profileCache[i], profileObj);
+                    console.log("Employee " + nick + ": profile cache updated");
+                    profileObj = profileCache[i];
+                }
+            }
+            if (! cached) {
+                profileCache.push($.extend({}, profileObj));
+                coreLib.displayResult("Employee " + nick + ": profile cache created");
+            }
+            profileByEID[eid] = $.extend({}, profileObj);
+            profileByNick[nick] = $.extend({}, profileObj);
         }
         ;
 
@@ -715,6 +751,7 @@ define ([
         setProfileByEID: function (eid, obj) {
             profileByEID[parseInt(eid, 10)] = obj;
         },
+        setProfileCache: setProfileCache,
     };
 
 });

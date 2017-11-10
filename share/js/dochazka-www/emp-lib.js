@@ -115,15 +115,30 @@ define ([
         },
 
         empProfileEditSave = function (emp) {
-            var protoEmp = Object.create(prototypes.empProfile),
-                employeeProfile,
-                parentTarget;
+                // protoEmp = Object.create(prototypes.empProfile),
+            var empObj,
+                parentTarget,
+                protoEmp = $.extend(Object.create(prototypes.empObject), emp);
             console.log("Entering empProfileEditSave with object", emp);
-            $.extend(protoEmp, emp);
+            // protoEmp = {
+            //     'emp': { 'eid': emp.eid,
+            //              'email': coreLib.nullify(emp.email),
+            //              'fullname': coreLib.nullify(emp.fullname),
+            //              'nick': coreLib.nullify(emp.nick),
+            //              'remark': coreLib.nullify(emp.remark),
+            //              'sec_id': coreLib.nullify(emp.sec_id), },
+            //     'has_reports': emp.has_reports,
+            //     'priv': emp.priv,
+            //     'privhistory': { 'effective': emp.privEffective },
+            //     'schedhistory': { 'effective': emp.schedEffective,
+            //                       'scode': emp.scode,
+            //                       'sid': emp.sid },
+            //     'schedule': { 'scode': emp.scode, 'sid': emp.sid },
+            // };
             var rest = {
                     "method": 'POST',
                     "path": 'employee/nick',
-                    "body": protoEmp.sanitize()
+                    "body": protoEmp.sanitize(),
                 },
                 sc = function (st) {
                     console.log("POST employee/nick returned status", st);
@@ -133,12 +148,16 @@ define ([
                     // "simpleEmployeeBrowser"
                     parentTarget = stack.getTarget(-1);
                     console.log("parentTarget", parentTarget);
-                    employeeProfile = Object.create(prototypes.empProfile);
-                    $.extend(employeeProfile, st.payload);
+                    empObj = Object.create(prototypes.empObject);
+                    $.extend(empObj, st.payload);
                     if (parentTarget.name === 'empProfile') {
-                        console.log("Profile object is", employeeProfile);
-                        currentUser('obj', employeeProfile);
-                        stack.pop(employeeProfile, {"resultLine": "Employee profile updated"});
+                        console.log("Employee object is", empObj);
+                        currentUser('obj', empObj);
+                        appCaches.setProfileCache({"emp": empObj});
+                        stack.unwindToTarget(
+                            'myProfileAction', undefined,
+                            {"resultLine": "Employee profile updated"}
+                        );
                     } else if (parentTarget.name === 'simpleEmployeeBrowser') {
                         console.log("Parent target is " + parentTarget.name);
                         console.log("current object in dbrowerState set",
@@ -212,11 +231,15 @@ define ([
             });
         },
 
-        myProfileAction = function () {
+        myProfileAction = function (obj, opts) {
             var cu = currentUser('obj'),
-                profileObj = appCaches.getProfileByEID(cu.eid),
+                m,
                 obj = {},
-                m;
+                profileObj = appCaches.getProfileByEID(cu.eid),
+                newOpts = {
+                    'resultLine': (typeof opts === 'object') ? opts.resultLine : null,
+                    'xtarget': 'mainEmpl',
+                };
             // if the employee profile has not been loaded into the cache, we have a problem
             if (! profileObj) {
                 m = "CRITICAL ERROR: the employee profile has not been loaded into the cache";
@@ -255,7 +278,7 @@ define ([
             obj['remark'] = profileObj.emp.remark;
             obj['sec_id'] = profileObj.emp.sec_id;
             obj['has_reports'] = ( profileObj.has_reports === 0 ) ? null : profileObj.has_reports;
-            stack.push('empProfile', obj);
+            stack.push('empProfile', obj, newOpts);
         };
 
     return {

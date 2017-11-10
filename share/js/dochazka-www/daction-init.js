@@ -79,7 +79,7 @@ define ([
             'menuText': 'My profile',
             'aclProfile': 'passerby',
             'start': dactionStart('myProfileAction'),
-            'pushable': false
+            'pushable': true
         });
         target.push('empProfileEditSave', {
             'name': 'empProfileEditSave',
