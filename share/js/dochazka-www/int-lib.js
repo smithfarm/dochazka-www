@@ -433,6 +433,7 @@ define ([
                             }
                             st.payload[i].iNtimerange = arr[1];
                         }
+                        opts['xtarget'] = 'viewIntervalsPrep'; // so we don't land in viewIntervalsAction
                         if (multipleDates) {
                             obj = {
                                 "beginDate": begin,
@@ -445,7 +446,6 @@ define ([
                                 ld = (st.payload[i].long_desc === undefined) ? "" : st.payload[i].long_desc;
                                 st.payload[i].long_desc = ld.slice(0, 30);
                             }
-                            opts['xtarget'] = 'viewIntervalsPrep';
                             stack.push('viewIntervalsDrowselect', {
                                 'pos': 0,
                                 'set': st.payload
@@ -456,13 +456,16 @@ define ([
                     } else {
                         coreLib.displayError(st.code + ": " + st.text);
                     }
+                },
+                fc = function (st) {
+                    stack.pop(undefined, {"resultLine": st.payload.message});
                 };
             [begin, end] = viewIntervalsActionCache();
             rest = {
                 "method": 'GET',
                 "path": 'interval/eid/' + cu.eid + "/[" + String(begin) + " 00:00, " + String(end) + " 24:00 )",
             };
-            ajax(rest, sc);
+            ajax(rest, sc, fc);
         },
         viewIntervalsCache = [],
 
