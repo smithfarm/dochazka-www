@@ -127,7 +127,10 @@ define ([
         // create interval actions
         "createMultipleIntSave": intLib.createMultipleIntSave,
         "createNextScheduledIntervalSave": intLib.createNextScheduledIntervalSave,
+        "createSingleIntMenuItem": intLib.createSingleIntMenuItem,
         "createSingleIntSave": intLib.createSingleIntSave,
+        "deleteSingleInt": intLib.deleteSingleInt,
+        "updateSingleIntSave": intLib.updateSingleIntSave,
         "viewIntervalsAction": intLib.viewIntervalsAction,
         
         // activity select actions

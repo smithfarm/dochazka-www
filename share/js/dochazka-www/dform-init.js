@@ -170,7 +170,7 @@ define ([
         target.push('createSingleInt', {
             'name': 'createSingleInt',
             'type': 'dform',
-            'menuText': 'Single interval',
+            'menuText': 'Create',
             'title': 'Create an arbitrary interval',
             'preamble': "Hints: (1) TAB or ENTER to validate and advance to next field " +
                         "(2) date YYYY-MM-DD; year is optional " +
@@ -180,6 +180,24 @@ define ([
                         '(5) Description is optional',
             'aclProfile': 'active',
             'entriesWrite': [entries.iNdate, entries.iNtimerange, entries.iNact, entries.iNdesc,],
+            'rememberState': true,
+            'miniMenu': {
+                entries: ['selectActivityAction', 'createSingleIntSave']
+            }
+        }); // createSingleInt
+
+        target.push('createSingleIntFixedDay', {
+            'name': 'createSingleIntFixedDay',
+            'type': 'dform',
+            'menuText': 'Create',
+            'title': 'Create an arbitrary interval',
+            'preamble': "Hints: (1) TAB or ENTER to validate and advance to next field " +
+                        "(2) time range HH:MM-HH:MM " +
+                        "(3) Use 'Select activity' if you don't know activity code " +
+                        '(4) Description is optional',
+            'aclProfile': 'active',
+            'entriesRead': [entries.iNdate,],
+            'entriesWrite': [entries.iNtimerangeNoOffset, entries.iNact, entries.iNdesc,],
             'rememberState': true,
             'miniMenu': {
                 entries: ['selectActivityAction', 'createSingleIntSave']
@@ -449,6 +467,24 @@ define ([
                 entries: ['actionEmplSearch']
             }
         }); // searchEmployee
+
+        target.push('updateSingleInt', {
+            'name': 'updateSingleInt',
+            'type': 'dform',
+            'menuText': 'Update',
+            'title': 'Update an interval',
+            'preamble': "Hints: (1) TAB or ENTER to validate and advance to next field " +
+                        "(2) time range HH:MM-HH:MM " +
+                        "(3) Use 'Select activity' if you don't know activity code " +
+                        '(4) Description is optional',
+            'aclProfile': 'active',
+            'entriesRead': [entries.iNdate, entries.acTaid],
+            'entriesWrite': [entries.iNtimerangeNoOffset, entries.iNact, entries.iNdesc,],
+            'rememberState': true,
+            'miniMenu': {
+                entries: ['selectActivityAction', 'updateSingleIntSave']
+            }
+        }); // updateSingleInt
 
         target.push('viewIntervalsPrep', {
             'name': 'viewIntervalsPrep',

@@ -62,22 +62,22 @@ define ([
                 });
                 return false;
             }
-            if (! obj.iNact) {
+            if (! obj.code) {
                 stack.restart(undefined, {
                     "resultLine": "Interval activity code missing"
                 });
                 return false;
             }
-            if (! obj.acTaid) {
-                console.log("Looking up activity " + obj.iNact + " in cache");
-                actObj = appCaches.getActivityByCode(obj.iNact);
+            if (! obj.aid) {
+                console.log("Looking up activity " + obj.code + " in cache");
+                actObj = appCaches.getActivityByCode(obj.code);
                 if (! actObj) {
                     stack.restart(undefined, {
-                        "resultLine": 'Activity ' + obj.iNact + ' not found'
+                        "resultLine": 'Activity ' + obj.code + ' not found'
                     });
                     return false;
                 }
-                obj.acTaid = actObj.aid;
+                obj.aid = actObj.aid;
             }
             if (! obj.iNtimerange) {
                 stack.restart(undefined, {
@@ -96,14 +96,14 @@ define ([
                 dl = daylist.split(','),
                 i, rest, sc, fc;
             // validate activity
-            if (obj.iNact) {
-                console.log("Looking up activity " + obj.iNact + " in cache");
-                i = appCaches.getActivityByCode(obj.iNact);
+            if (obj.code) {
+                console.log("Looking up activity " + obj.code + " in cache");
+                i = appCaches.getActivityByCode(obj.code);
                 if (! i) {
-                    coreLib.displayError('Activity ' + obj.iNact + ' not found');
+                    coreLib.displayError('Activity ' + obj.code + ' not found');
                     return null;
                 }
-                obj.acTaid = i.aid;
+                obj.aid = i.aid;
             } else {
                 coreLib.displayError("Interval activity code missing");
                 return null;
@@ -142,34 +142,31 @@ define ([
             ajax(rest, sc);
         },
 
+        createSingleIntMenuItem = function (obj) {
+            stack.push('createSingleInt');
+        },
+
         createSingleIntSave = function (obj) {
             var caller = stack.getTarget().name,
                 cu = currentUser('obj'),
                 rest,
                 sc = function (st) {
-                    stack.unwindToTarget(
-                        'createSingleInt',
-                        emptyObj,
-                        {
-                            "resultLine": "Interval " + st.payload.iid + " created",
-                            "inputId": "iNdate",
-                        }
-                    );
+                    if (caller === 'createSingleIntFixedDay') {
+                        stack.unwindToTarget('viewIntervalsAction');
+                    } else {
+                        stack.unwindToTarget(
+                            'createSingleInt',
+                            emptyObj,
+                            {
+                                "resultLine": "Interval " + st.payload.iid + " created",
+                                "inputId": "iNdate",
+                            }
+                        );
+                    }
                 };
             console.log("Entering createSingleIntSave() from caller " + caller + " with obj", obj);
-            if (caller === 'createSingleInt') {
-                // obj is scraped by start.js from the form inputs and will look
-                // like this:
-                // {
-                //     iNdate: "foo bar in a box",
-                //     iNtimerange: "25:00-27:00",
-                //     iNact: "LOITERING",
-                //     iNdesc: "none",
-                //     mm: true
-                // }
-                // any of the above properties may be present or missing
-                // also, there may or may not be an acTaid property with the AID of
-                // the chosen activity
+            if (caller === 'createSingleInt' || caller === 'createSingleIntFixedDay') {
+                // obj already populated
             } else if (caller === 'createLastPlusOffset' || caller === 'createNextScheduled') {
                 // Scrape time range from form
                 // (The "createLastPlusOffset" dform has no inputs (writable
@@ -180,8 +177,8 @@ define ([
                 // Scrape time range from form
                 obj.iNdate = $('input[id="iNdate"]').val();
                 obj.iNtimerange = $('input[id="iNtimerange"]').val();
-                obj.iNact = $('input[id="iNact"]').val();
-                obj.iNdesc = $('input[id="iNdesc"]').val();
+                obj.code = $('input[id="iNact"]').val();
+                obj.long_desc = $('input[id="iNdesc"]').val();
             } else {
                 console.log("CRITICAL ERROR: unexpected caller", caller);
                 return null;
@@ -207,20 +204,36 @@ define ([
                 "path": 'interval/new',
                 "body": {
                     "eid": cu.eid,
-                    "aid": obj.acTaid,
+                    "aid": obj.aid,
                     "intvl": obj.intvl,
-                    "long_desc": obj.iNdesc,
+                    "long_desc": obj.long_desc,
                     "remark": null,
                 },
             }
             ajax(rest, sc);
         },
 
+        deleteSingleInt = function (obj) {
+            var rest = {
+                    "method": "DELETE",
+                    "path": "interval/iid/" + obj.iid,
+                },
+                sc = function (st) {
+                    if (st.code === 'DOCHAZKA_CUD_OK') {
+                        stack.unwindToTarget('viewIntervalsAction');
+                    } else {
+                        coreLib.displayError(st.text);
+                    }
+                };
+            console.log("Entering deleteSingleInt() with obj", obj);
+            ajax(rest, sc);
+        },
+
         emptyObj = {
             "iNdate": "",
             "iNtimerange": "",
-            "iNact": "",
-            "iNdesc": ""
+            "code": "",
+            "long_desc": ""
         },
 
         genIntvl = function (date, timerange) {
@@ -243,6 +256,55 @@ define ([
                        ctr[1] +
                        '" )';
             }
+        },
+
+        updateSingleIntSave = function (obj) {
+            var caller = stack.getTarget().name,
+                cu = currentUser('obj'),
+                rest,
+                sc = function (st) {
+                    // FIXME: update the interval inside the drowselect state
+                    // var pos = coreLib.drowselectState.pos,
+                    //     set = coreLib.drowselectState.set.slice();
+                    // set[pos] = st.payload;
+                    stack.unwindToTarget('viewIntervalsAction');
+                };
+            console.log("Entering updateSingleIntSave() from caller " + caller + " with obj", obj);
+            if (caller === 'updateSingleInt') {
+                // obj is scraped by start.js from the form inputs and will look
+                // like this:
+                // {
+                //     iNdate: "foo bar in a box",
+                //     iNtimerange: "25:00-27:00",
+                //     code: "LOITERING",
+                //     iid: 148
+                //     long_desc: "none",
+                // }
+                // any of the above properties may be present or missing
+                // also, there may or may not be an acTaid property with the AID of
+                // the chosen activity
+            } else {
+                console.log("CRITICAL ERROR: unexpected caller", caller);
+                return null;
+            }
+            if (! createIntervalCheckMandatoryProps(obj)) {
+                return null;
+            }
+            obj["intvl"] = genIntvl(obj.iNdate, obj.iNtimerange);
+            if (! obj.intvl) {
+                return null;
+            }
+            rest = {
+                "method": 'PUT',
+                "path": 'interval/iid/' + obj.iid,
+                "body": {
+                    "eid": cu.eid,
+                    "aid": obj.acTaid,
+                    "intvl": obj.intvl,
+                    "long_desc": obj.long_desc,
+                },
+            }
+            ajax(rest, sc);
         },
 
         vetDayList = function (dl, testing) {
@@ -325,23 +387,35 @@ define ([
             return null;
         },
 
+        viewIntervalsActionCache = function () {
+            // 0 == begin; 1 == end
+            var i, frm = [], res;
+            frm[0] = coreLib.nullify($("#iNdaterangeBegin").text()); 
+            frm[1] = coreLib.nullify($("#iNdaterangeEnd").text()); 
+            for (i = 0; i < 2; i += 1) {
+                if (frm[i]) {
+                    viewIntervalsCache[i] = frm[i];
+                } else {
+                    frm[i] = viewIntervalsCache[i];
+                }
+            }
+            // console.log("viewIntervalsActionCache() returning", frm);
+            return frm;
+        },
         viewIntervalsAction = function () {
             // scrape begin and end dates from form
             // call GET interval/eid/:eid/:tsrange
-            // viewIntervalsDtable on the resulting object
-            var begin = $("#iNdaterangeBegin").text(),
-                arr, obj,
+            // viewIntervalsDrowselect on the resulting object
+            var arr, 
+                begin,
                 cu = currentUser('obj'),
-                end = $("#iNdaterangeEnd").text(),
+                end,
                 firstDate,
                 i,
                 multipleDates,
+                obj,
                 opts,
-                tsr = "[ " + begin + " 00:00, " + end + " 24:00 )",
-                rest = {
-                    "method": 'GET',
-                    "path": 'interval/eid/' + cu.eid + "/" + tsr,
-                },
+                rest,
                 sc = function (st) {
                     if (st.code === 'DISPATCH_RECORDS_FOUND' ) {
                         opts = { "resultLine": st.count + " intervals found" };
@@ -366,7 +440,11 @@ define ([
                             };
                             stack.push('multiDayViewer', obj, opts);
                         } else {
-                            stack.push('viewIntervalsDtable', st.payload, opts);
+                            opts['xtarget'] = 'viewIntervalsPrep';
+                            stack.push('viewIntervalsDrowselect', {
+                                'pos': 0,
+                                'set': st.payload
+                            }, opts);
                         }
                     } else if (st.code === 'DISPATCH_NO_RECORDS_FOUND' ) {
                         coreLib.displayError(st.code + ": " + st.text);
@@ -374,8 +452,14 @@ define ([
                         coreLib.displayError(st.code + ": " + st.text);
                     }
                 };
+            [begin, end] = viewIntervalsActionCache();
+            rest = {
+                "method": 'GET',
+                "path": 'interval/eid/' + cu.eid + "/[" + String(begin) + " 00:00, " + String(end) + " 24:00 )",
+            };
             ajax(rest, sc);
         },
+        viewIntervalsCache = [],
 
         viewIntervalsMultiDayCallback = function (obj, title, preamble) {
             var i, r = '';
@@ -407,9 +491,12 @@ define ([
     // interval-related actions (see daction-start.js)
     return {
         createMultipleIntSave: createMultipleIntSave,
+        createSingleIntMenuItem: createSingleIntMenuItem,
         createSingleIntSave: createSingleIntSave,
+        deleteSingleInt: deleteSingleInt,
         vetDayList: vetDayList,
         vetDayRange: vetDayRange,
+        updateSingleIntSave: updateSingleIntSave,
         viewIntervalsAction: viewIntervalsAction,
         viewIntervalsMultiDayCallback: viewIntervalsMultiDayCallback,
         viewIntervalsMultiDayCallbackRaw: viewIntervalsMultiDayCallbackRaw,

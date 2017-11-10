@@ -291,87 +291,21 @@ define ([
             'pushable': false
         });
 
-        // Interval actions - browse
-        target.push('browseIntToday', {
-            'name': 'browseIntToday',
-            'type': 'daction',
-            'menuText': 'Today',
-            'aclProfile': 'inactive',
-            'start': dactionStart('actionNoop'),
-            'pushable': false
-        });
-        target.push('browseIntYesterday', {
-            'name': 'browseIntYesterday',
-            'type': 'daction',
-            'menuText': 'Yesterday',
-            'aclProfile': 'inactive',
-            'start': dactionStart('actionNoop'),
-            'pushable': false
-        });
-        target.push('browseIntAnyday', {
-            'name': 'browseIntAnyday',
-            'type': 'daction',
-            'menuText': 'Any day',
-            'aclProfile': 'inactive',
-            'start': dactionStart('actionNoop'),
-            'pushable': false
-        });
-        target.push('browseIntThisWeek', {
-            'name': 'browseIntThisWeek',
-            'type': 'daction',
-            'menuText': 'This week',
-            'aclProfile': 'inactive',
-            'start': dactionStart('actionNoop'),
-            'pushable': false
-        });
-        target.push('browseIntLastWeek', {
-            'name': 'browseIntLastWeek',
-            'type': 'daction',
-            'menuText': 'Last week',
-            'aclProfile': 'inactive',
-            'start': dactionStart('actionNoop'),
-            'pushable': false
-        });
-        target.push('browseIntAnyWeek', {
-            'name': 'browseIntAnyWeek',
-            'type': 'daction',
-            'menuText': 'Any week',
-            'aclProfile': 'inactive',
-            'start': dactionStart('actionNoop'),
-            'pushable': false
-        });
-        target.push('browseIntThisMonth', {
-            'name': 'browseIntThisMonth',
-            'type': 'daction',
-            'menuText': 'This month',
-            'aclProfile': 'inactive',
-            'start': dactionStart('actionNoop'),
-            'pushable': false
-        });
-        target.push('browseIntLastMonth', {
-            'name': 'browseIntLastMonth',
-            'type': 'daction',
-            'menuText': 'Last month',
-            'aclProfile': 'inactive',
-            'start': dactionStart('actionNoop'),
-            'pushable': false
-        });
-        target.push('browseIntAnyMonth', {
-            'name': 'browseIntAnyMonth',
-            'type': 'daction',
-            'menuText': 'Any month',
-            'aclProfile': 'inactive',
-            'start': dactionStart('actionNoop'),
-            'pushable': false
-        });
-
-        // Interval actions - create
+        // Interval actions
         target.push('createMultipleIntSave', {
             'name': 'createMultipleIntSave',
             'type': 'daction',
             'menuText': 'Save',
             'aclProfile': 'active',
             'start': dactionStart('createMultipleIntSave'),
+            'pushable': false
+        });
+        target.push('createSingleIntMenuItem', {
+            'name': 'createSingleIntMenuItem',
+            'type': 'daction',
+            'menuText': 'Single interval',
+            'aclProfile': 'active',
+            'start': dactionStart('createSingleIntMenuItem'),
             'pushable': false
         });
         target.push('createSingleIntSave', {
@@ -382,13 +316,29 @@ define ([
             'start': dactionStart('createSingleIntSave'),
             'pushable': false
         });
+        target.push('deleteSingleInt', {
+            'name': 'deleteSingleInt',
+            'type': 'daction',
+            'menuText': 'Delete',
+            'aclProfile': 'active',
+            'start': dactionStart('deleteSingleInt'),
+            'pushable': false
+        });
+        target.push('updateSingleIntSave', {
+            'name': 'updateSingleIntSave',
+            'type': 'daction',
+            'menuText': 'Save',
+            'aclProfile': 'active',
+            'start': dactionStart('updateSingleIntSave'),
+            'pushable': false
+        });
         target.push('viewIntervalsAction', {
             'name': 'viewIntervalsAction',
             'type': 'daction',
             'menuText': 'View',
             'aclProfile': 'active',
             'start': dactionStart('viewIntervalsAction'),
-            'pushable': false
+            'pushable': true
         });
 
         // Activity actions - select

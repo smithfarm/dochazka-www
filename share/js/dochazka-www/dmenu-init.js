@@ -50,7 +50,7 @@ define ([
             'menuText': 'Create',
             'title': 'Create interval(s)',
             'aclProfile': 'active',
-            'entries': ['createSingleInt', 'createMultipleInt',],
+            'entries': ['createSingleIntMenuItem', 'createMultipleInt',],
         });
 
         target.push('mainAdmin', {

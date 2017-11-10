@@ -169,9 +169,10 @@ define ([
             // start.drowselectListen();
         },
         "privHistoryAddRecordAction": function (obj) {
-            console.log("Entering privHistoryAddRecordAction with obj", obj);
+            var cu = currentUser('obj');
+            console.log("Entering privHistoryAddRecordAction with nick " + cu.nick);
             stack.push('privHistoryAddRecord', {
-                'nick': obj.nick
+                'nick': cu.nick
             });
         }
     };

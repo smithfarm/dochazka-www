@@ -234,11 +234,17 @@ define ([
 
         populateAIDfromCode = function (populateArray) {
             var aid, code, populateContinue;
-            console.log("Entering populateAIDfromCode()");
             populateContinue = populate.shift(populateArray);
             // assume there is a form with the code in it
-            code = $('#iNact').text();
-            console.log("Activity code is " + code);
+            code = coreLib.nullify($('#iNact').text());
+            if (! code) {
+                code = coreLib.nullify($('input[id="iNact"]').val());
+                if (! code) {
+                    console.log("CRITICAL ERROR: populateAIDfromCode: no code in form");
+                    populateContinue(populateArray);
+                }
+            }
+            console.log("populateAIDfromCode: Activity code is " + code);
             aid = getActivityByCode(code).aid;
             $('#acTaid').html(String(aid));
             populateContinue(populateArray);
