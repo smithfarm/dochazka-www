@@ -295,7 +295,7 @@ define ([
         target.push('createSingleIntMenuItem', {
             'name': 'createSingleIntMenuItem',
             'type': 'daction',
-            'menuText': 'Single interval',
+            'menuText': 'Create single interval',
             'aclProfile': 'active',
             'start': dactionStart('createSingleIntMenuItem'),
             'pushable': false

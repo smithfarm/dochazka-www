@@ -44,15 +44,6 @@ define ([
 
     return function () {
 
-        target.push('createInt', {
-            'name': 'createInt',
-            'type': 'dmenu',
-            'menuText': 'Create',
-            'title': 'Create interval(s)',
-            'aclProfile': 'active',
-            'entries': ['createSingleIntMenuItem', 'createMultipleInt',],
-        });
-
         target.push('mainAdmin', {
             'name': 'mainAdmin',
             'type': 'dmenu',
@@ -77,7 +68,7 @@ define ([
             'menuText': 'Interval',
             'title': 'Interval menu',
             'aclProfile': 'passerby',
-            'entries': ['viewIntervalsPrep', 'createInt'],
+            'entries': ['viewIntervalsPrep', 'createSingleIntMenuItem', 'createMultipleInt',],
         });
 
         target.push('mainMenu', {
