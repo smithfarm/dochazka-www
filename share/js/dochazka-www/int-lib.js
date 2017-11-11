@@ -443,7 +443,7 @@ define ([
                             stack.push('multiDayViewer', obj, opts);
                         } else {
                             for (i = 0; i < st.payload.length; i += 1) {
-                                ld = (st.payload[i].long_desc === undefined) ? "" : st.payload[i].long_desc;
+                                ld = st.payload[i].long_desc ? st.payload[i].long_desc : "";
                                 st.payload[i].long_desc = ld.slice(0, 30);
                             }
                             stack.push('viewIntervalsDrowselect', {
