@@ -102,7 +102,7 @@ define ([
         target.push('createMultipleInt', {
             'name': 'createMultipleInt',
             'type': 'dform',
-            'menuText': 'Create multiple intervals (\"Fillup\")',
+            'menuText': 'Create multiple intervals',
             'title': 'Create multiple intervals according to schedule',
             'preamble': "Hints: (1) TAB or ENTER to validate and advance to next field " +
                         "(2) enter month by name (e.g. \"June\") or number (e.g. \"6\"); " +
