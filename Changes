@@ -416,3 +416,9 @@ Revision history for App-Dochazka-WWW
 - js: implement create, update, delete of single intervals
 - build/ops: require App::MFILE::WWW 0.172 for nullify and vetTimeRangeNoOffset
 
+0.164 2017-11-11 04:16 CET
+- js: int-lib: make iNshortDesc really be short by truncating it
+- js: do not lose information when updating employee profile
+- js: move status and schedule histories to profile
+- js: simplify interval menu
+
