@@ -49,8 +49,8 @@ define ([
         target.push('privHistoryDtable', {
             'name': 'privHistoryDtable',
             'type': 'dtable',
-            'menuText': 'Privilege (status) history',
-            'title': 'Privilege (status) history',
+            'menuText': 'Status history',
+            'title': 'Status history',
             'preamble': null,
             'aclProfile': 'passerby',
             'entriesRead': [entries.ePnick, entries.pHeffective, entries.pHpriv],
@@ -68,7 +68,7 @@ define ([
             'aclProfile': 'passerby',
             'entriesRead': [entries.pHeffective, entries.sDid, entries.sDcode],
             'miniMenu': {
-                entries: ['actionSchedHistoryEdit']
+                entries: ['actionSchedLookup', 'actionSchedHistoryEdit']
             }
         });
 

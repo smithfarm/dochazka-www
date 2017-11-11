@@ -68,6 +68,7 @@ define ([
             var rest = {
                     "method": 'GET',
                 },
+                opts,
                 scheduleObj,
                 // success callback
                 sc = function (st) {
@@ -82,9 +83,8 @@ define ([
                                 'remark': st.payload.remark
                             }
                         );
-                        stack.push('schedDisplay', mungeScheduleForDisplay(scheduleObj), {
-                            "xtarget": "schedLookup"
-                        });
+                        // opts = { "xtarget": "schedLookup" };
+                        stack.push('schedDisplay', mungeScheduleForDisplay(scheduleObj), opts);
                     }
                 },
                 // failure callback
@@ -95,6 +95,10 @@ define ([
                 rest["path"] = 'schedule/sid/' + encodeURIComponent(obj.searchKeySchedID);
             } else if (obj.searchKeySchedCode) {
                 rest["path"] = 'schedule/scode/' + encodeURIComponent(obj.searchKeySchedCode);
+            } else if (obj.sid) {
+                rest["path"] = 'schedule/sid/' + encodeURIComponent(obj.sid);
+            } else if (obj.scode) {
+                rest["path"] = 'schedule/scode/' + encodeURIComponent(obj.scode);
             } else {
                 coreLib.displayError("Please enter a schedule code or ID to search for");
                 return;

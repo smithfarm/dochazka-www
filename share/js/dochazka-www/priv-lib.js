@@ -76,9 +76,7 @@ define ([
                                 }
                             );
                             if (tgt === 'privHistoryDtable') {
-                                stack.push(tgt, history, {
-                                    "xtarget": "mainPriv"
-                                });
+                                stack.push(tgt, history, { "xtarget": "empProfile" });
                             } else if (tgt === 'privHistoryDrowselect') {
                                 stack.push(tgt, {
                                     'pos': 0,
@@ -92,9 +90,7 @@ define ([
                             // The employee has no history records. This is not
                             // really an error condition.
                             if (tgt === 'privHistoryDtable') {
-                                stack.push(tgt, [], {
-                                    "xtarget": "mainPriv"
-                                });
+                                stack.push(tgt, [], { "xtarget": "empProfile" });
                             } else if (tgt === 'privHistoryDrowselect') {
                                 stack.push(tgt, {
                                     'pos': 0,

@@ -309,7 +309,7 @@ define ([
             $('input[name="sel"]').trigger($.Event("keydown", {keyCode: 13}));
             stackFunc(assert, 2, 'navigating from mainMenu to mainEmpl', 'dmenu', 'mainEmpl');
             mainareaFormFunc(assert, 'mainEmpl');
-            containsFunc(assert, $('#mainarea').html(), "#mainarea", "My profile");
+            containsFunc(assert, $('#mainarea').html(), "#mainarea", "Profile");
             assert.ok(true, "*** REACHED mainEmpl dmenu");
         },
 
@@ -338,8 +338,8 @@ define ([
         "mainSchedToSchedLookup": function (assert) {
             var entry0,
                 entry1;
-            assert.ok(true, 'select 1 ("Look up schedule by code or ID") in mainSched as root');
-            $('input[name="sel"]').val('1');
+            assert.ok(true, 'select 0 ("Look up schedule by code or ID") in mainSched as root');
+            $('input[name="sel"]').val('0');
             $('input[name="sel"]').focus();
             $('input[name="sel"]').trigger($.Event("keydown", {keyCode: 13}));
             stackFunc(assert, 3, 'navigating from mainSched to schedLookup', 'dform', 'schedLookup');

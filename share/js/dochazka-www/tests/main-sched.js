@@ -65,9 +65,9 @@ define ([
         QUnit.test(test_desc, function (assert) {
             console.log('***TEST*** ' + prefix + test_desc);
             var done = assert.async(3);
-            login({"nam": "demo", "pwd": "demo"});
+            login({"nam": "root", "pwd": "immutable"});
             setTimeout(function () {
-                ct.login(assert, "demo", "passerby");
+                ct.login(assert, "root", "admin");
                 done();
             }, 1000);
             setTimeout(function () {

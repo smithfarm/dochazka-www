@@ -68,7 +68,7 @@ define ([
             'menuText': 'Employee',
             'title': 'Employee menu',
             'aclProfile': 'passerby',
-            'entries': ['myProfileAction', 'ldapLookup', 'searchEmployee']
+            'entries': ['myProfileAction', 'ldapLookup', 'searchEmployee',]
         });
 
         target.push('mainInt', {
@@ -86,17 +86,8 @@ define ([
             'menuText': 'Main',
             'title': 'Main menu',
             'aclProfile': 'passerby',
-            'entries': ['mainEmpl', 'mainPriv', 'mainSched', 'mainInt', 'masqEmployee',
+            'entries': ['mainEmpl', 'mainInt', 'mainSched', 'masqEmployee',
                         'mainAdmin']
-        });
-
-        target.push('mainPriv', {
-            'name': 'mainPriv',
-            'type': 'dmenu',
-            'menuText': 'Priv (status)',
-            'title': 'Priv (status) menu',
-            'aclProfile': 'passerby',
-            'entries': ['actionPrivHistory']
         });
 
         target.push('mainSched', {
@@ -104,8 +95,8 @@ define ([
             'type': 'dmenu',
             'menuText': 'Schedule',
             'title': 'Schedule menu',
-            'aclProfile': 'passerby',
-            'entries': ['actionSchedHistory', 'schedLookup',
+            'aclProfile': 'admin',
+            'entries': ['schedLookup',
                         'browseAllSchedules', 'schedNew']
         });
 

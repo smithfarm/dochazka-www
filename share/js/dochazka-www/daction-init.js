@@ -76,7 +76,7 @@ define ([
         target.push('myProfileAction', {
             'name': 'myProfileAction',
             'type': 'daction',
-            'menuText': 'My profile',
+            'menuText': 'Profile',
             'aclProfile': 'passerby',
             'start': dactionStart('myProfileAction'),
             'pushable': true
@@ -158,7 +158,7 @@ define ([
         target.push('actionPrivHistory', { // read-only
             'name': 'actionPrivHistory',
             'type': 'daction',
-            'menuText': 'Privilege (status) history',
+            'menuText': 'Status history',
             'aclProfile': 'passerby',
             'start': dactionStart('actionPrivHistory'),
             // this starts the privhistory dtable, and if the dataset changes
@@ -200,20 +200,12 @@ define ([
         });
 
         // Schedhistory actions
-        target.push('actionSchedHistory', { // read-only
+        target.push('actionSchedHistory', {
             'name': 'actionSchedHistory',
             'type': 'daction',
             'menuText': 'Schedule history',
-            'aclProfile': 'passerby',
+            'aclProfile': 'inactive',
             'start': dactionStart('actionSchedHistory'),
-            'pushable': true
-        });
-        target.push('actionSchedHistoryEdit', { // read-write
-            'name': 'actionSchedHistoryEdit',
-            'type': 'daction',
-            'menuText': 'Edit',
-            'aclProfile': 'admin',
-            'start': dactionStart('actionSchedHistoryEdit'),
             'pushable': false
         });
         target.push('schedHistorySaveAction', {
@@ -253,7 +245,7 @@ define ([
         target.push('actionSchedLookup', {
             'name': 'actionSchedLookup',
             'type': 'daction',
-            'menuText': 'Lookup',
+            'menuText': 'Detail',
             'aclProfile': 'inactive',
             'start': dactionStart('actionSchedLookup'),
             'pushable': false

@@ -219,8 +219,8 @@ define ([
         target.push('empProfile', {
             'name': 'empProfile',
             'type': 'dform',
-            'menuText': 'My profile',
-            'title': 'My profile',
+            'menuText': 'Profile',
+            'title': 'Employee profile',
             'preamble': null,
             'aclProfile': 'passerby',
             'entriesRead': [
@@ -234,7 +234,13 @@ define ([
                 entries.ePscode, entries.ePsid, entries.ePschedEffective
             ],
             'miniMenu': {
-                entries: ['empProfileEdit', 'ldapSync', 'empProfileSetSuperSearch']
+                entries: [
+                    'actionPrivHistory',
+                    'actionSchedHistory',
+                    'empProfileEdit',
+                    'ldapSync',
+                    'empProfileSetSuperSearch',
+                ]
             }
         }); // empProfile
 
