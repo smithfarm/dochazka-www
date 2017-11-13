@@ -97,10 +97,10 @@ define ([
 
         endTheMasquerade = function () {
             currentUser('flag1', 0); // turn off masquerade flag
-            console.log('flag1 === ', currentUser('flag1'));
+            // console.log('flag1 === ', currentUser('flag1'));
             currentUser('obj', currentEmployeeStashed);
             currentEmployeeStashed = null;
-            $('#userbox').html(appLib.fillUserBox()); // reset userbox
+            appLib.fillUserBox();
             $('body').css("background-color", backgroundColorStashed);
             coreLib.displayResult('Masquerade is finished');
             $('input[name="sel"]').val('');
@@ -189,7 +189,7 @@ define ([
                     populateFullEmployeeProfileCache,
                     populateScheduleBySID,
                 ]);
-                $('#userbox').html(appLib.fillUserBox()); // reset userbox
+                appLib.fillUserBox(); // reset userbox
                 $('body').css("background-color", "#669933");
                 stack.unwindToType('dmenu'); // return to most recent dmenu
                 return;
