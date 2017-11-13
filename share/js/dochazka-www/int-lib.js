@@ -421,15 +421,11 @@ define ([
                     if (st.code === 'DISPATCH_RECORDS_FOUND' ) {
                         opts = { "resultLine": st.count + " intervals found" };
                         // convert intvl to iNdate and iNtimerange
-                        multipleDates = false;
                         for (i = 0; i < st.payload.length; i += 1) {
                             arr = dt.tsrangeToDateAndTimeRange(st.payload[i].intvl);
                             st.payload[i].iNdate = arr[0];
                             if (i === 0) {
                                 firstDate = arr[0];  // first date in result set
-                            }
-                            if (arr[0] !== firstDate) {
-                                multipleDates = true; // multiple dates in result set
                             }
                             st.payload[i].iNtimerange = arr[1];
                         }
@@ -451,16 +447,23 @@ define ([
                                 'set': st.payload
                             }, opts);
                         }
-                    } else if (st.code === 'DISPATCH_NO_RECORDS_FOUND' ) {
-                        coreLib.displayError(st.code + ": " + st.text);
                     } else {
                         coreLib.displayError(st.code + ": " + st.text);
                     }
                 },
                 fc = function (st) {
-                    stack.pop(undefined, {"resultLine": st.payload.message});
+                    opts = { "resultLine": st.payload.message };
+                    if (st.code === 'DISPATCH_NOTHING_IN_TSRANGE' ) {
+                        stack.push('viewIntervalsDrowselect', {
+                            'pos': 0,
+                            'set': []
+                        }, opts);
+                    } else {
+                        stack.pop(undefined, opts);
+                    }
                 };
             [begin, end] = viewIntervalsActionCache();
+            multipleDates = (begin === end) ? false : true;
             rest = {
                 "method": 'GET',
                 "path": 'interval/eid/' + cu.eid + "/[" + String(begin) + " 00:00, " + String(end) + " 24:00 )",

@@ -297,10 +297,11 @@ define ([
             sel = $('input[name="sel"]').val();
             assert.strictEqual(sel, '', "Selection form field is empty even after simulating 0 keypress");
             // simulating keypress doesn't work, so just set the value to "0"
-            $('input[name="sel"]').val('5');
+            $('input[name="sel"]').val('6');
             $('input[name="sel"]').focus();
             // press ENTER -> submit the form
             $('input[name="sel"]').trigger($.Event("keydown", {keyCode: 13}));
+            assert.ok(true, $('#mainarea').html());
             stackFunc(assert, 2, 'navigating from mainMenu to mainAdmin', 'dmenu', 'mainAdmin');
             mainareaFormFunc(assert, 'mainAdmin');
             containsFunc(assert, $('#mainarea').html(), "#mainarea", "Admin menu");
@@ -319,7 +320,7 @@ define ([
             sel = $('input[name="sel"]').val();
             assert.strictEqual(sel, '', "Selection form field is empty even after simulating 0 keypress");
             // simulating keypress doesn't work, so just set the value to "0"
-            $('input[name="sel"]').val('3');
+            $('input[name="sel"]').val('4');
             $('input[name="sel"]').focus();
             // press ENTER -> submit the form
             $('input[name="sel"]').trigger($.Event("keydown", {keyCode: 13}));

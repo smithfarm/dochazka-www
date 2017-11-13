@@ -124,7 +124,7 @@ define ([
         target.push('masqEmployee', {
             'name': 'masqEmployee',
             'type': 'daction',
-            'menuText': 'Masquerade (begin/end)',
+            'menuText': 'Masquerade',
             'aclProfile': 'admin',
             'start': dactionStart('masqEmployee'),
             'pushable': false
