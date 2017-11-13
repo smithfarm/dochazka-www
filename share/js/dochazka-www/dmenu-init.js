@@ -47,16 +47,16 @@ define ([
         target.push('mainAdmin', {
             'name': 'mainAdmin',
             'type': 'dmenu',
-            'menuText': 'Adminitrivia',
-            'title': 'Adminitrivia menu',
+            'menuText': 'Admin',
+            'title': 'Admin menu',
             'aclProfile': 'admin',
-            'entries': ['restServerDetailsAction']
+            'entries': ['ldapLookup', 'searchEmployee', 'restServerDetailsAction']
         });
 
         target.push('mainEmpl', {
             'name': 'mainEmpl',
             'type': 'dmenu',
-            'menuText': 'Employee',
+            'menuText': 'Profile',
             'title': 'Employee menu',
             'aclProfile': 'passerby',
             'entries': ['myProfileAction', 'ldapLookup', 'searchEmployee',]
@@ -65,7 +65,7 @@ define ([
         target.push('mainInt', {
             'name': 'mainInt',
             'type': 'dmenu',
-            'menuText': 'Interval',
+            'menuText': 'Intervals',
             'title': 'Interval menu',
             'aclProfile': 'passerby',
             'entries': ['viewIntervalsPrep', 'createSingleIntMenuItem', 'createMultipleInt',],
@@ -77,14 +77,14 @@ define ([
             'menuText': 'Main',
             'title': 'Main menu',
             'aclProfile': 'passerby',
-            'entries': ['mainEmpl', 'mainInt', 'mainSched', 'masqEmployee',
+            'entries': ['myProfileAction', 'mainInt', 'mainSched', 'masqEmployee',
                         'mainAdmin']
         });
 
         target.push('mainSched', {
             'name': 'mainSched',
             'type': 'dmenu',
-            'menuText': 'Schedule',
+            'menuText': 'Schedules',
             'title': 'Schedule menu',
             'aclProfile': 'admin',
             'entries': ['schedLookup',

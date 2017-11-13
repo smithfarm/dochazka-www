@@ -63,26 +63,6 @@ define ([
 
     return function () {
 
-        test_desc = 'employee menu appears';
-        QUnit.test(test_desc, function (assert) {
-            console.log('***TEST*** ' + prefix + test_desc);
-            var done = assert.async(3);
-            login({"nam": "demo", "pwd": "demo"});
-            setTimeout(function () {
-                ct.login(assert, "demo", "passerby");
-                done();
-            }, 1000);
-            setTimeout(function () {
-                ct.mainMenuToMainEmpl(assert);
-                loggout();
-                done();
-            }, 2000);
-            setTimeout(function () {
-                ct.loggout(assert);
-                done();
-            }, 2500);
-        });
-
         test_desc = 'employee profile - passerby';
         QUnit.test(test_desc, function (assert) {
             var done = assert.async(4),
@@ -103,9 +83,8 @@ define ([
                     "demo",
                     "Employee profile cache populated with employee \"demo\""
                 );
-                ct.mainMenuToMainEmpl(assert);
-                assert.ok(true, 'select 0 ("Profile") in mainEmpl as demo');
-                $('input[name="sel"]').val('0');
+                assert.ok(true, 'select 1 ("Profile") in mainMenu as demo');
+                $('input[name="sel"]').val('1');
                 $('input[name="sel"]').focus();
                 $('input[name="sel"]').trigger($.Event("keydown", {keyCode: 13}));
                 // no AJAX call is initiated, because the profile is already in the cache
@@ -135,15 +114,15 @@ define ([
             login({"nam": "root", "pwd": "immutable"});
             setTimeout(function () {
                 ct.login(assert, "root", "admin");
-                ct.mainMenuToMainEmpl(assert);
-                ct.mainEmplToSearchEmployee(assert);
+                ct.mainMenuToMainAdmin(assert);
+                ct.mainAdminToSearchEmployee(assert);
                 // enter search term into form
                 $('#searchEmployee input[name="entry0"]').val('inactive');
                 // choose '0' to start search
-                $('input[name="sel"]').val('0');
+                $('input[name="sel"]').val('1');
                 $('input[name="sel"]').focus();
                 start.mmKeyListener($.Event("keydown", {keyCode: 13}));
-                assert.ok(true, "*** REACHED pressed 0 to initiate search for Dochazka employee inactive");
+                assert.ok(true, "*** REACHED pressed 1 to initiate search for Dochazka employee inactive");
                 done();
             }, 1000);
             setTimeout(function () {
@@ -174,11 +153,11 @@ define ([
                 );
                 ct.contains(
                     assert,
-                    $('#mainarea').html(),
-                    "#mainarea html",
-                    "0.&nbsp;LDAP sync",
+                    $('#minimenu').html(),
+                    "#minimenu html",
+                    ".&nbsp;LDAP&nbsp;sync",
                 );
-                assert.ok(true, "*** REACHED miniMenu contains 0. LDAP sync");
+                assert.ok(true, "*** REACHED miniMenu contains substring '. LDAP sync'");
                 // // choose '0' for ldapSync
                 // $('input[name="sel"]').val('0');
                 // $('input[name="sel"]').focus();
@@ -224,7 +203,7 @@ define ([
                     2,
                     'After selecting X in ldapLookup',
                     'dmenu',
-                    'mainEmpl'
+                    'mainAdmin'
                 );
                 assert.ok(true, "*** REACHED mainEmpl dmenu via X from ldapLookup");
                 loggout();

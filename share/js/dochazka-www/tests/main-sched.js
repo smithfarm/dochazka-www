@@ -97,7 +97,7 @@ define ([
                 entry1 = $('form#schedLookup input[name="entry1"]');
                 entry1.val('BOGOSITYWHELP');
                 assert.strictEqual(entry1.val(), 'BOGOSITYWHELP', "Form filled out with bogus data");
-                $('input[name="sel"]').val('0');
+                $('input[name="sel"]').val('1');
                 $('input[name="sel"]').focus();
                 start.mmKeyListener($.Event("keydown", {keyCode: 13}));
                 assert.ok(true, "*** REACHED schedLookup form submitted");

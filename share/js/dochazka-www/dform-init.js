@@ -102,7 +102,7 @@ define ([
         target.push('createMultipleInt', {
             'name': 'createMultipleInt',
             'type': 'dform',
-            'menuText': 'Create multiple intervals',
+            'menuText': 'Create multiple',
             'title': 'Create multiple intervals according to schedule',
             'preamble': "Hints: (1) TAB or ENTER to validate and advance to next field " +
                         "(2) enter month by name (e.g. \"June\") or number (e.g. \"6\"); " +
@@ -340,9 +340,6 @@ define ([
             'type': 'dform',
             'menuText': 'REST server',
             'title': 'REST server details',
-            'preamble': '<b>URI</b> used by this App::Dochazka::WWW instance to communicate ' +
-                        'with REST server;<br><b>version</b> of App::Dochazka::REST running ' +
-                        'on REST server',
             'aclProfile': 'admin',
             'entriesRead': [entries.rSDurl, entries.rSDversion],
             'miniMenu': {
@@ -495,7 +492,7 @@ define ([
         target.push('viewIntervalsPrep', {
             'name': 'viewIntervalsPrep',
             'type': 'dform',
-            'menuText': 'View intervals',
+            'menuText': 'View',
             'title': 'View intervals for date or range of dates',
             'preamble': "Hints: (1) TAB or ENTER to validate and advance to next field " +
                         "(2) enter month by name (e.g. \"June\") or number (e.g. \"6\"); " +

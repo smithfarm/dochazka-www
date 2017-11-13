@@ -55,10 +55,11 @@ define ([
 ) {
 
     var 
-        actionDisplaySchedule = function (obj) {
+        actionDisplaySchedule = function (obj, opts) {
             stack.push(
                 'schedDisplay',
                 mungeScheduleForDisplay(obj),
+                opts
             );
         },
 

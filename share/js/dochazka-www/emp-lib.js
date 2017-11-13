@@ -164,7 +164,7 @@ define ([
                                     coreLib.dbrowserState.set[coreLib.dbrowserState.pos]);
                         $.extend(
                             coreLib.dbrowserState.set[coreLib.dbrowserState.pos],
-                            employeeProfile
+                            empObj,
                         );
                         stack.pop(undefined, {"resultLine": "Employee profile updated"});
                     } else {

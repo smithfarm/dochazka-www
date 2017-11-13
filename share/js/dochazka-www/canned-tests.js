@@ -255,11 +255,11 @@ define ([
             assert.ok(true, "*** REACHED ldapLookup dform");
         },
 
-        "mainEmplToSearchEmployee": function (assert) {
+        "mainAdminToSearchEmployee": function (assert) {
             var htmlbuf;
-            mainareaFormFunc(assert, 'mainEmpl');
-            stackFunc(assert, 2, 'In mainEmpl before navigating to searchEmployee', 'dmenu', 'mainEmpl');
-            assert.ok(true, 'select 2 ("Search Dochazka employees") in mainEmpl as root');
+            mainareaFormFunc(assert, 'mainAdmin');
+            stackFunc(assert, 2, 'In mainAdmin before navigating to searchEmployee', 'dmenu', 'mainAdmin');
+            assert.ok(true, 'select 2 ("Search Dochazka employees") in mainAdmin as root');
             $('input[name="sel"]').val('2');
             $('input[name="sel"]').focus();
             $('input[name="sel"]').trigger($.Event("keydown", {keyCode: 13}));
@@ -273,12 +273,6 @@ define ([
                 "#mainarea html",
                 "Enter search key, % is wildcard",
             );
-            containsFunc(
-                assert,
-                htmlbuf,
-                "#mainarea html",
-                "0.&nbsp;Search"
-            );
             assert.ok(
                 $('#searchEmployee input[name="entry0"]'),
                 "The searchEmployee form contains a data entry field"
@@ -291,7 +285,7 @@ define ([
             assert.ok(true, "*** REACHED searchEmployee dform");
         },
 
-        "mainMenuToMainEmpl": function (assert) {
+        "mainMenuToMainAdmin": function (assert) {
             var htmlbuf,
                 mainmarea,
                 sel;
@@ -303,14 +297,14 @@ define ([
             sel = $('input[name="sel"]').val();
             assert.strictEqual(sel, '', "Selection form field is empty even after simulating 0 keypress");
             // simulating keypress doesn't work, so just set the value to "0"
-            $('input[name="sel"]').val('0');
+            $('input[name="sel"]').val('5');
             $('input[name="sel"]').focus();
             // press ENTER -> submit the form
             $('input[name="sel"]').trigger($.Event("keydown", {keyCode: 13}));
-            stackFunc(assert, 2, 'navigating from mainMenu to mainEmpl', 'dmenu', 'mainEmpl');
-            mainareaFormFunc(assert, 'mainEmpl');
-            containsFunc(assert, $('#mainarea').html(), "#mainarea", "Profile");
-            assert.ok(true, "*** REACHED mainEmpl dmenu");
+            stackFunc(assert, 2, 'navigating from mainMenu to mainAdmin', 'dmenu', 'mainAdmin');
+            mainareaFormFunc(assert, 'mainAdmin');
+            containsFunc(assert, $('#mainarea').html(), "#mainarea", "Admin menu");
+            assert.ok(true, "*** REACHED mainAdmin dmenu");
         },
 
         "mainMenuToMainSched": function (assert) {
@@ -325,7 +319,7 @@ define ([
             sel = $('input[name="sel"]').val();
             assert.strictEqual(sel, '', "Selection form field is empty even after simulating 0 keypress");
             // simulating keypress doesn't work, so just set the value to "0"
-            $('input[name="sel"]').val('2');
+            $('input[name="sel"]').val('3');
             $('input[name="sel"]').focus();
             // press ENTER -> submit the form
             $('input[name="sel"]').trigger($.Event("keydown", {keyCode: 13}));
@@ -338,8 +332,8 @@ define ([
         "mainSchedToSchedLookup": function (assert) {
             var entry0,
                 entry1;
-            assert.ok(true, 'select 0 ("Look up schedule by code or ID") in mainSched as root');
-            $('input[name="sel"]').val('0');
+            assert.ok(true, 'select 1 ("Look up schedule by code or ID") in mainSched as root');
+            $('input[name="sel"]').val('1');
             $('input[name="sel"]').focus();
             $('input[name="sel"]').trigger($.Event("keydown", {keyCode: 13}));
             stackFunc(assert, 3, 'navigating from mainSched to schedLookup', 'dform', 'schedLookup');

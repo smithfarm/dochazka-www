@@ -80,6 +80,7 @@ define ([
             var done = assert.async(5),
                 mainarea,
                 match,
+                minimenu,
                 htmlbuf,
                 sel,
                 cu;
@@ -114,9 +115,18 @@ define ([
                 // enter a search string
                 $('input[id="sEnick"]').val('act%');
                 assert.strictEqual($('input[id="sEnick"]').val(), 'act%', "Search string entered into form");
-                mainarea = $('#mainarea').html();
-                ct.contains(assert, mainarea, "searchEmployee miniMenu", "0.&nbsp;Search");
-                $('input[name="sel"]').val('0');
+                minimenu = $('#minimenu').html();
+                ct.contains(assert, minimenu, "searchEmployee miniMenu", ".&nbsp;Search");
+                match = minimenu.match(/(\d+)\.&nbsp;Search/);
+                assert.ok(true, QUnit.dump.parse(match));
+                assert.ok(match !== null, "There is a match 1");
+                if (match !== null) {
+                    assert.ok(match.length >= 1, "There is a match 2");
+                    sel = match[1];
+                }
+                assert.ok(parseInt(sel, 10) >= 0, "Search selection number is sane");
+                assert.ok(true, "searchEmployee miniMenu contains Search as selection " + sel);
+                $('input[name="sel"]').val(sel);
                 $('input[name="sel"]').focus();
                 $('input[name="sel"]').trigger($.Event("keydown", {keyCode: 13}));
             }, 2500);
@@ -125,10 +135,11 @@ define ([
                          'dbrowser', 'masqueradeCandidatesBrowser');
                 assert.ok(true, "*** REACHED masqueradeCandidatesBrowser dform");
                 mainarea = $('#mainarea').html();
+                minimenu = $('#minimenu').html();
                 ct.contains(assert, mainarea, "Masquerade candidates browser", 'Masquerade candidates');
-                ct.contains(assert, mainarea, "Masquerade selection in miniMenu", "0.&nbsp;Masquerade");
+                ct.contains(assert, minimenu, "Masquerade selection in miniMenu", ".&nbsp;Masquerade");
                 assert.ok(true, "*** REACHED Masquerade selection in masqueradeCandidatesBrowser miniMenu");
-                match = mainarea.match(/(\d+)\.&nbsp;Masquerade/);
+                match = minimenu.match(/(\d+)\.&nbsp;Masquerade/);
                 assert.ok(true, QUnit.dump.parse(match));
                 assert.ok(match !== null, "There is a match 1");
                 if (match !== null) {
