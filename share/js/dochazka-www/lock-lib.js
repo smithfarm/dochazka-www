@@ -130,6 +130,19 @@ define ([
             return "[ " + String(begin) + " 00:00, " + String(end) + " 24:00 )";
         },
 
+        viewLocksActionCache = function () {
+            var i, frm = [];
+            frm[0] = coreLib.nullify($('input[id="iNyear"]').val()); 
+            for (i = 0; i < 1; i += 1) {
+                if (frm[i]) {
+                    viewLocksCache[i] = frm[i];
+                } else {
+                    frm[i] = viewLocksCache[i];
+                }
+            }
+            // console.log("viewLocksActionCache() returning", frm);
+            return frm;
+        },
         viewLocksAction = function () {
             // scrape year and month from form, generate tsrange
             // call GET lock/eid/:eid/:tsrange
@@ -162,7 +175,7 @@ define ([
                     stack.pop(undefined, {"resultLine": st.payload.message});
                 };
             // scrape year from form
-            year = $('input[id="iNyear"]').val();
+            [year] = viewLocksActionCache();
             begin = String(year) + "-1-1";
             end = String(year) + "-12-31";
             intvl = "[ " + String(begin) + " 00:00, " + String(end) + " 24:00 )";
@@ -171,7 +184,8 @@ define ([
                 "path": 'lock/eid/' + cu.eid + "/" + intvl,
             };
             ajax(rest, sc, fc);
-        }
+        },
+        viewLocksCache = []
         ;
 
     // here is where we define methods implementing the various
