@@ -186,6 +186,20 @@ define ([
             }
         }); // createSingleInt
 
+        target.push('createLock', {
+            'name': 'createLock',
+            'type': 'dform',
+            'menuText': 'Create',
+            'title': 'Create a Lock',
+            'preamble': "Hints: (1) TAB or ENTER to validate and advance to next field ",
+            'aclProfile': 'active',
+            'entriesWrite': [entries.iNyear, entries.iNmonth,],
+            'rememberState': true,
+            'miniMenu': {
+                entries: ['createLockSave']
+            }
+        }); // createLock
+
         target.push('createSingleIntFixedDay', {
             'name': 'createSingleIntFixedDay',
             'type': 'dform',
@@ -515,6 +529,24 @@ define ([
                 entries: ['viewIntervalsAction']
             }
         }); // viewIntervalsPrep
+
+        target.push('viewLocksPrep', {
+            'name': 'viewLocksPrep',
+            'type': 'dform',
+            'menuText': 'View',
+            'title': 'View locks',
+            'preamble': "Hints: (1) TAB or ENTER to validate and advance to next field " +
+                        "(2) enter month by name (e.g. \"June\") or number (e.g. \"6\"); " +
+                        "DEFAULT: current month ",
+            'aclProfile': 'inactive',
+            'entriesWrite': [
+                entries.iNyear,
+            ],
+            'rememberState': true,
+            'miniMenu': {
+                entries: ['viewLocksAction']
+            }
+        }); // viewLocksPrep
 
     }; // return function ()
     

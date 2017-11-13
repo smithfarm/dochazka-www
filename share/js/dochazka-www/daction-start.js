@@ -47,6 +47,7 @@ define ([
     "app/act-lib",
     "app/emp-lib",
     "app/ldap-lib",
+    "app/lock-lib",
     "app/priv-lib",
     "app/sched-history-lib",
     "app/sched-lib",
@@ -63,6 +64,7 @@ define ([
     actLib,
     empLib,
     ldapLib,
+    lockLib,
     privLib,
     schedHistLib,
     schedLib,
@@ -129,9 +131,12 @@ define ([
         "createNextScheduledIntervalSave": intLib.createNextScheduledIntervalSave,
         "createSingleIntMenuItem": intLib.createSingleIntMenuItem,
         "createSingleIntSave": intLib.createSingleIntSave,
+        "createLockSave": lockLib.createLockSave,
         "deleteSingleInt": intLib.deleteSingleInt,
+        "deleteLock": lockLib.deleteLock,
         "updateSingleIntSave": intLib.updateSingleIntSave,
         "viewIntervalsAction": intLib.viewIntervalsAction,
+        "viewLocksAction": lockLib.viewLocksAction,
         
         // activity select actions
         "selectActivityAction": appCaches.selectActivityAction,

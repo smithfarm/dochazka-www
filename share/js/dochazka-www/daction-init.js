@@ -308,12 +308,28 @@ define ([
             'start': dactionStart('createSingleIntSave'),
             'pushable': false
         });
+        target.push('createLockSave', {
+            'name': 'createLockSave',
+            'type': 'daction',
+            'menuText': 'Save',
+            'aclProfile': 'active',
+            'start': dactionStart('createLockSave'),
+            'pushable': false
+        });
         target.push('deleteSingleInt', {
             'name': 'deleteSingleInt',
             'type': 'daction',
             'menuText': 'Delete',
             'aclProfile': 'active',
             'start': dactionStart('deleteSingleInt'),
+            'pushable': false
+        });
+        target.push('deleteLock', {
+            'name': 'deleteLock',
+            'type': 'daction',
+            'menuText': 'Delete',
+            'aclProfile': 'active',
+            'start': dactionStart('deleteLock'),
             'pushable': false
         });
         target.push('updateSingleIntSave', {
@@ -330,6 +346,14 @@ define ([
             'menuText': 'View',
             'aclProfile': 'active',
             'start': dactionStart('viewIntervalsAction'),
+            'pushable': true
+        });
+        target.push('viewLocksAction', {
+            'name': 'viewLocksAction',
+            'type': 'daction',
+            'menuText': 'View',
+            'aclProfile': 'active',
+            'start': dactionStart('viewLocksAction'),
             'pushable': true
         });
 

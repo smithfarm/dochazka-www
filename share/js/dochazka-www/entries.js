@@ -330,7 +330,7 @@ define ([
             aclProfileWrite: 'admin',
             text: 'IID',
             prop: 'iid',
-            maxlen: 8,
+            maxlen: 10,
         },
         iNlastexistintvl: {
             name: 'iNlastexistintvl',
@@ -435,6 +435,22 @@ define ([
             hidden: true,
             maxlen: 5,
             populate: caches.populateYear,
+        },
+        lOintvl: {
+            name: 'lOintvl',
+            aclProfileRead: 'inactive',
+            aclProfileWrite: 'active',
+            text: 'Interval',
+            prop: 'intvl',
+            maxlen: 40,
+        },
+        lOlid: {
+            name: 'lOlid',
+            aclProfileRead: 'inactive',
+            aclProfileWrite: 'admin',
+            text: 'LID',
+            prop: 'lid',
+            maxlen: 10,
         },
         LDAPdochazka: {
             name: 'LDAPdochazka',

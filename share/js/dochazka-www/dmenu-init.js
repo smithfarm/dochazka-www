@@ -71,13 +71,22 @@ define ([
             'entries': ['viewIntervalsPrep', 'createSingleIntMenuItem', 'createMultipleInt',],
         });
 
+        target.push('mainLock', {
+            'name': 'mainLock',
+            'type': 'dmenu',
+            'menuText': 'Locks',
+            'title': 'Lock menu',
+            'aclProfile': 'passerby',
+            'entries': ['viewLocksPrep', 'createLock',],
+        });
+
         target.push('mainMenu', {
             'name': 'mainMenu',
             'type': 'dmenu',
             'menuText': 'Main',
             'title': 'Main menu',
             'aclProfile': 'passerby',
-            'entries': ['myProfileAction', 'mainInt', 'mainSched', 'masqEmployee',
+            'entries': ['myProfileAction', 'mainInt', 'mainLock', 'mainSched', 'masqEmployee',
                         'mainAdmin']
         });
 

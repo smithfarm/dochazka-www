@@ -86,21 +86,20 @@ define ([
             }
         });
 
-        target.push('viewIntervalsDrowselect', {
-            'name': 'viewIntervalsDrowselect',
+        target.push('viewLocksDrowselect', {
+            'name': 'viewLocksDrowselect',
             'type': 'drowselect',
             'menuText': 'View',
-            'title': 'Intervals in date',
+            'title': 'Lock list',
             'preamble': null,
             'aclProfile': 'passerby',
             'entriesRead': [
-                entries.iNdate, entries.iNtimerange, entries.iNiid, entries.acTcode,
-                entries.iNshortDesc,
+                entries.lOintvl, entries.lOlid,
             ],
             'miniMenu': {
-                entries: ['createSingleIntFixedDay', 'updateSingleInt', 'deleteSingleInt'],
+                entries: ['deleteLock'],
             }
-        }); // viewIntervalsDrowselect
+        }); // viewLocksDrowselect
 
     };
 });
