@@ -86,6 +86,22 @@ define ([
             }
         });
 
+        target.push('viewIntervalsDrowselect', {
+            'name': 'viewIntervalsDrowselect',
+            'type': 'drowselect',
+            'menuText': 'View',
+            'title': 'Intervals in date',
+            'preamble': null,
+            'aclProfile': 'passerby',
+            'entriesRead': [
+                entries.iNdate, entries.iNtimerange, entries.iNiid, entries.acTcode,
+                entries.iNshortDesc,
+            ],
+            'miniMenu': {
+                entries: ['createSingleIntFixedDay', 'updateSingleInt', 'deleteSingleInt'],
+            }
+        }); // viewIntervalsDrowselect
+
         target.push('viewLocksDrowselect', {
             'name': 'viewLocksDrowselect',
             'type': 'drowselect',
