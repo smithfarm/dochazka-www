@@ -223,7 +223,7 @@ define ([
         test_desc = 'Masquerade as active - set inactive as supervisor';
         QUnit.test(test_desc, function (assert) {
             console.log('***TEST*** ' + prefix + test_desc);
-            var done = assert.async(2);
+            var done = assert.async(6);
             login({"nam": "root", "pwd": "immutable"});
             setTimeout(function () {
                 ct.login(assert, "root", "admin");
@@ -246,6 +246,57 @@ define ([
                 assert.ok(true, "*** REACHED searchEmployee dform");
                 done();
             }, 2000);
+            setTimeout(function () {
+                var minimenu,
+                    sel;
+                // enter a search string
+                $('input[id="sEnick"]').val('act%');
+                assert.strictEqual($('input[id="sEnick"]').val(), 'act%', "Search string entered into form");
+                minimenu = $('#minimenu').html();
+                ct.contains(assert, minimenu, "searchEmployee miniMenu", ".&nbsp;Search");
+                sel = ct.getMenuEntry(assert, minimenu, 'Search')
+                ct.log(assert, "searchEmployee miniMenu contains Search as selection " + sel);
+                $('input[name="sel"]').val(sel);
+                $('input[name="sel"]').focus();
+                $('input[name="sel"]').trigger($.Event("keydown", {keyCode: 13}));
+                done();
+            }, 2500);
+            setTimeout(function () {
+                var mainarea,
+                    minimenu,
+                    sel;
+                ct.stack(assert, 3, 'browsing results of successful Dochazka employee search',
+                         'dbrowser', 'masqueradeCandidatesBrowser');
+                assert.ok(true, "*** REACHED masqueradeCandidatesBrowser dform");
+                mainarea = $('#mainarea').html();
+                minimenu = $('#minimenu').html();
+                ct.contains(assert, mainarea, "Masquerade candidates browser", 'Masquerade candidates');
+                ct.contains(assert, minimenu, "Masquerade selection in miniMenu", ".&nbsp;Masquerade");
+                assert.ok(true, "*** REACHED Masquerade selection in masqueradeCandidatesBrowser miniMenu");
+                sel = ct.getMenuEntry(assert, minimenu, 'Masquerade');
+                assert.ok(true, "masqueradeCandidatesBrowser miniMenu contains Masquerade as selection " + sel);
+                // select Masquerade (first time - begin)
+                $('input[name="sel"]').val(sel);
+                $('input[name="sel"]').focus();
+                // press ENTER -> submit the form
+                $('input[name="sel"]').trigger($.Event("keydown", {keyCode: 13}));
+                ct.stack(assert, 1, 'selected Masquerade in masqueradeCandidatesBrowser', 'dmenu', 'mainMenu');
+                assert.strictEqual($('#userbox').text(), '!!! Employee: active (MASQUERADE) !!!');
+                assert.ok(true, "*** REACHED masquerading as employee \"active\"");
+                done();
+            }, 3000);
+            setTimeout(function () {
+                var sel;
+                ct.mainMenuToEmpProfile(assert);
+                sel = ct.getMenuEntry(assert, $('#minimenu').html(), "Set&nbsp;supervisor");
+                assert.ok(true, "Selection is " + sel);
+                loggout();
+                done();
+            }, 3500);
+            setTimeout(function () {
+                ct.loggout(assert);
+                done();
+            }, 5500);
         });
 
     };

@@ -125,7 +125,7 @@ define ([
                 minimenu = $('#minimenu').html();
                 ct.contains(assert, minimenu, "searchEmployee miniMenu", ".&nbsp;Search");
                 sel = ct.getMenuEntry(assert, minimenu, 'Search')
-                assert.ok(true, "searchEmployee miniMenu contains Search as selection " + sel);
+                ct.log(assert, "searchEmployee miniMenu contains Search as selection " + sel);
                 $('input[name="sel"]').val(sel);
                 $('input[name="sel"]').focus();
                 $('input[name="sel"]').trigger($.Event("keydown", {keyCode: 13}));

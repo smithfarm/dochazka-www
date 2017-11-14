@@ -69,6 +69,21 @@ define ([
                 lookInDesc + " contains substring \"" + lookFor + "\""
             );
         },
+        getMenuEntryFunc = function (assert, htmlbuf, searchKey) {
+            var rx = new RegExp('(\\d+)\\.&nbsp;' + searchKey),
+                match = htmlbuf.match(rx),
+                msg,
+                sel;
+            logFunc(assert, "*** REACHED looking for " + searchKey + " in dmenu");
+            assert.ok(match !== null, "There is a match 1");
+            if (match !== null) {
+                assert.ok(match.length >= 1, "There is a match 2");
+                sel = match[1];
+            }
+            sel = parseInt(sel, 10);
+            assert.ok(parseInt(sel, 10) >= 0, "Search selection number is sane");
+            return sel;
+        },
         logFunc = function (assert, message, thing) {
             assert.ok(true, message);
             if (thing !== undefined) {
@@ -202,21 +217,7 @@ define ([
             ajax(rest, sc, fc);
         },
 
-        "getMenuEntry": function (assert, htmlbuf, searchKey) {
-            var rx = new RegExp('(\\d+)\\.&nbsp;' + searchKey),
-                match = htmlbuf.match(rx),
-                msg,
-                sel;
-            logFunc(assert, "*** REACHED looking for " + searchKey + " in dmenu");
-            assert.ok(match !== null, "There is a match 1");
-            if (match !== null) {
-                assert.ok(match.length >= 1, "There is a match 2");
-                sel = match[1];
-            }
-            sel = parseInt(sel, 10);
-            assert.ok(parseInt(sel, 10) >= 0, "Search selection number is sane");
-            return sel;
-        },
+        "getMenuEntry": getMenuEntryFunc,
 
         "log": logFunc,
 
@@ -322,6 +323,26 @@ define ([
             assert.ok(true, "*** REACHED searchEmployee dform");
         },
 
+        "mainMenuToEmpProfile": function (assert) {
+            var htmlbuf,
+                mainmarea,
+                sel;
+            mainareaFormFunc(assert, 'mainMenu');
+            sel = $('input[name="sel"]').val();
+            assert.strictEqual(sel, '', "Selection form field is empty");
+            sel = getMenuEntryFunc(assert, $('#mainarea').html(), 'Profile');
+            $('input[name="sel"]').val(sel);
+            $('input[name="sel"]').focus();
+            // press ENTER -> submit the form
+            $('input[name="sel"]').trigger($.Event("keydown", {keyCode: 13}));
+            logFunc(assert, '#mainarea', $('#mainarea').html());
+            // mainMenu, myProfileAction, empProfile
+            stackFunc(assert, 3, 'navigating from mainMenu to empProfile', 'dform', 'empProfile');
+            mainareaFormFunc(assert, 'empProfile');
+            containsFunc(assert, $('#mainarea').html(), "#mainarea", "Employee profile");
+            logFunc(assert, "*** REACHED empProfile dform");
+        },
+
         "mainMenuToMainAdmin": function (assert) {
             var htmlbuf,
                 mainmarea,
@@ -333,8 +354,9 @@ define ([
             $('input[name="sel"]').trigger($.Event("keydown", {keyCode: 48})); // press '0' key
             sel = $('input[name="sel"]').val();
             assert.strictEqual(sel, '', "Selection form field is empty even after simulating 0 keypress");
-            // simulating keypress doesn't work, so just set the value to "0"
-            $('input[name="sel"]').val('6');
+            // simulating keypress doesn't work, so just set the input val
+            sel = getMenuEntryFunc(assert, $('#mainarea').html(), 'Admin');
+            $('input[name="sel"]').val(sel);
             $('input[name="sel"]').focus();
             // press ENTER -> submit the form
             $('input[name="sel"]').trigger($.Event("keydown", {keyCode: 13}));
@@ -352,12 +374,8 @@ define ([
             mainareaFormFunc(assert, 'mainMenu');
             sel = $('input[name="sel"]').val();
             assert.strictEqual(sel, '', "Selection form field is empty");
-            // press '0' key in sel, but value does not change?
-            $('input[name="sel"]').trigger($.Event("keydown", {keyCode: 48})); // press '0' key
-            sel = $('input[name="sel"]').val();
-            assert.strictEqual(sel, '', "Selection form field is empty even after simulating 0 keypress");
-            // simulating keypress doesn't work, so just set the value to "0"
-            $('input[name="sel"]').val('4');
+            sel = getMenuEntryFunc(assert, $('#mainarea').html(), 'Schedules');
+            $('input[name="sel"]').val(sel);
             $('input[name="sel"]').focus();
             // press ENTER -> submit the form
             $('input[name="sel"]').trigger($.Event("keydown", {keyCode: 13}));
@@ -369,9 +387,11 @@ define ([
 
         "mainSchedToSchedLookup": function (assert) {
             var entry0,
-                entry1;
+                entry1,
+                sel;
             assert.ok(true, 'select 1 ("Look up schedule by code or ID") in mainSched as root');
-            $('input[name="sel"]').val('1');
+            sel = getMenuEntryFunc(assert, $('#mainarea').html(), 'Look up');
+            $('input[name="sel"]').val(sel);
             $('input[name="sel"]').focus();
             $('input[name="sel"]').trigger($.Event("keydown", {keyCode: 13}));
             stackFunc(assert, 3, 'navigating from mainSched to schedLookup', 'dform', 'schedLookup');
