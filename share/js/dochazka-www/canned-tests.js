@@ -210,7 +210,8 @@ define ([
         "login": function (assert, nick, priv) {
             var cu,
                 htmlbuf,
-                mainarea;
+                mainarea,
+                msg;
             console.log("TEST: post-login tests");
             cu = currentUser();
             assert.ok(cu, "current user object after login: " + QUnit.dump.parse(cu));
@@ -218,9 +219,19 @@ define ([
             assert.strictEqual(cu.priv, priv, nick + ' has ' + priv + ' privileges');
             assert.ok(true, "Starting app in fixture");
             root(); // start app in QUnit fixture
+            msg = '*** REACHED commence app start with nick ' + nick;
+            console.log(msg);
+            assert.ok(true, msg);
+        },
+
+        "mainMenu": function (assert) {
+            var msg;
             stackFunc(assert, 1, 'starting app', 'dmenu', 'mainMenu');
             mainareaFormFunc(assert, 'mainMenu');
-            assert.ok(true, '*** REACHED logged in as ' + nick);
+            msg = '*** REACHED main menu';
+            console.log(msg);
+            assert.ok(true, msg);
+            assert.ok(true, $('#mainarea').html());
         },
 
         "mainareaForm": mainareaFormFunc,

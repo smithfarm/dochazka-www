@@ -40,12 +40,14 @@ define ([
   'QUnit',
   'jquery',
   'app/canned-tests',
+  'lib',
   'login',
   'loggout',
 ], function (
   QUnit,
   $,
   ct,
+  coreLib,
   login,
   loggout,
 ) {
@@ -58,20 +60,24 @@ define ([
         test_desc = 'login, and immediately logout';
         QUnit.test(test_desc, function (assert) {
             console.log('***TEST*** ' + prefix + test_desc);
-            var done = assert.async(2),
+            var done = assert.async(3),
                 mainarea,
                 htmlbuf,
                 cu;
             login({"nam": "root", "pwd": "immutable"});
             setTimeout(function () {
                 ct.login(assert, "root", "admin");
-                loggout();
                 done();
             }, 1000);
             setTimeout(function () {
-                ct.loggout(assert);
+                ct.mainMenu(assert);
+                loggout();
                 done();
             }, 1500);
+            setTimeout(function () {
+                ct.loggout(assert);
+                done();
+            }, 2000);
         });
 
         test_desc = 'masquerade as employee "active"';
@@ -84,12 +90,14 @@ define ([
                 htmlbuf,
                 sel,
                 cu;
+            assert.expect(60);
             login({"nam": "root", "pwd": "immutable"});
             setTimeout(function () {
                 ct.login(assert, "root", "admin");
                 done();
-            }, 1500);
+            }, 1000);
             setTimeout(function () {
+                ct.mainMenu(assert);
                 assert.strictEqual($('#userbox').text(), 'Employee: root ADMIN');
                 ct.mainareaForm(assert, 'mainMenu');
                 htmlbuf = $('#mainarea').html();
@@ -99,7 +107,14 @@ define ([
                     assert.ok(match.length >= 1, "There is a match 2");
                     sel = match[1];
                 }
-                assert.ok(parseInt(sel, 10) >= 0, "Masquerade selection number is sane");
+                sel = parseInt(sel, 10);
+                assert.ok(sel > 0, "Masquerade selection number is sane");
+                if (! coreLib.isInteger(sel)) {
+                    console.log("BAILING OUT");
+                    assert.ok(false, "BAILING OUT");
+                    done();
+                }
+                console.log("Main menu contains Masquerade as selection " + sel);
                 assert.ok(true, "Main menu contains Masquerade as selection " + sel);
                 $('input[name="sel"]').val(sel);
                 $('input[name="sel"]').focus();

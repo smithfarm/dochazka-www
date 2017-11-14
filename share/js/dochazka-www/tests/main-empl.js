@@ -74,6 +74,7 @@ define ([
                 done();
             }, 1500);
             setTimeout(function () {
+                ct.mainMenu(assert);
                 // assert.ok(true, "Employee profile cache: " + QUnit.dump.parse(appCaches.profileCache));
                 assert.ok(appCaches.profileCacheLength() > 0, "Employee profile cache populated");
                 fullProfile = appCaches.getProfileByNick('demo');
@@ -110,10 +111,14 @@ define ([
         // contain only one object
         QUnit.test(test_desc, function (assert) {
             console.log('***TEST*** ' + prefix + test_desc);
-            var done = assert.async(4);
+            var done = assert.async(5);
             login({"nam": "root", "pwd": "immutable"});
             setTimeout(function () {
                 ct.login(assert, "root", "admin");
+                done();
+            }, 1500);
+            setTimeout(function () {
+                ct.mainMenu(assert);
                 ct.mainMenuToMainAdmin(assert);
                 ct.mainAdminToSearchEmployee(assert);
                 // enter search term into form
@@ -124,7 +129,7 @@ define ([
                 start.mmKeyListener($.Event("keydown", {keyCode: 13}));
                 assert.ok(true, "*** REACHED pressed 1 to initiate search for Dochazka employee inactive");
                 done();
-            }, 1000);
+            }, 2000);
             setTimeout(function () {
                 var htmlbuf = $("#mainarea").html();
                 ct.stack(
@@ -164,7 +169,7 @@ define ([
                 // start.mmKeyListener($.Event("keydown", {keyCode: 13}));
                 // assert.ok(true, "*** REACHED pressed 0 for LDAP sync");
                 done();
-            }, 2500);
+            }, 3000);
             setTimeout(function () {
                 // ct.contains(
                 //     assert,
