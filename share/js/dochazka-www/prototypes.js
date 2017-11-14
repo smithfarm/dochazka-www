@@ -43,6 +43,12 @@ define(['lib'], function (lib) {
             privhistory: {},
             schedule: null,
             schedhistory: {},
+            hasReports: function () {
+                if (lib.isInteger(this.has_reports)) {
+                    return (this.has_reports > 0);
+                }
+                return false;
+            },
             sanitize: function () {
                 // object might contain properties that don't belong -
                 // this method removes them

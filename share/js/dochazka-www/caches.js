@@ -39,6 +39,7 @@
 define ([
     'jquery',
     'app/lib',
+    'app/prototypes',
     'ajax',
     'current-user',
     'datetime',
@@ -48,6 +49,7 @@ define ([
 ], function (
     $,
     appLib,
+    appPrototypes,
     ajax,
     currentUser,
     dt,
@@ -205,31 +207,32 @@ define ([
             var ao, rest, sc, fc, populateContinue;
             console.log("Entering populateActivityCache()");
             populateContinue = populate.shift(populateArray);
-            if (activityCache.length === 0) {
-                rest = {
-                    "method": 'GET',
-                    "path": 'activity/all'
-                };
-                sc = function (st) {
-                    var i;
-                    for (i = 0; i < st.payload.length; i += 1) {
-                        ao = st.payload[i];
-                        ao.color = colorList[i];
-                        activityCache.push(ao);
-                        activityByAID[st.payload[i].aid] = ao;
-                        activityByCode[st.payload[i].code] = ao;
-                    }
-                    coreLib.displayResult(i + 1 + " activity objects loaded into cache");
-                    populateContinue();
-                };
-                fc = function (st) {
-                    coreLib.displayError(st.payload.message);
-                    populateContinue();
-                };
-                ajax(rest, sc, fc);
+            if (activityCache) {
+                console.log("populateActivityCache(): noop, cache already populated");
+                populateContinue(populateArray);
+                return null;
             }
-            console.log("populateActivityCache(): noop, cache already populated");
-            populateContinue();
+            rest = {
+                "method": 'GET',
+                "path": 'activity/all'
+            };
+            sc = function (st) {
+                var i;
+                for (i = 0; i < st.payload.length; i += 1) {
+                    ao = st.payload[i];
+                    ao.color = colorList[i];
+                    activityCache.push(ao);
+                    activityByAID[st.payload[i].aid] = ao;
+                    activityByCode[st.payload[i].code] = ao;
+                }
+                coreLib.displayResult(i + 1 + " activity objects loaded into cache");
+                populateContinue(populateArray);
+            };
+            fc = function (st) {
+                coreLib.displayError(st.payload.message);
+                populateContinue(populateArray);
+            };
+            ajax(rest, sc, fc);
         },
 
         populateAIDfromCode = function (populateArray) {
@@ -309,7 +312,7 @@ define ([
             }
             sc = function (st) {
                 if (st.code === 'DISPATCH_EMPLOYEE_PROFILE_FULL') {
-                    profileObj = $.extend({}, st.payload);
+                    profileObj = $.extend(Object.create(appPrototypes.empProfile), st.payload);
                     setProfileCache(profileObj);
                 } else {
                     m = "Unexpected status code " + st.code;

@@ -38,10 +38,12 @@
 
 define ([
     'target',
-    'app/daction-start'
+    'app/daction-start',
+    'app/emp-lib',
 ], function (
     target,
-    dactionStart
+    dactionStart,
+    empLib,
 ) {
 
     return function () {
@@ -117,7 +119,7 @@ define ([
             'name': 'actionEmplSearch',
             'type': 'daction',
             'menuText': 'Search',
-            'aclProfile': 'admin',
+            'aclProfile': 'inactive',
             'start': dactionStart('actionEmplSearch'),
             'pushable': false
         });
@@ -125,9 +127,10 @@ define ([
             'name': 'masqEmployee',
             'type': 'daction',
             'menuText': 'Masquerade',
-            'aclProfile': 'admin',
+            'aclProfile': 'inactive',
             'start': dactionStart('masqEmployee'),
-            'pushable': false
+            'pushable': false,
+            'onlyWhen': empLib.currentEmpHasReports,
         });
         target.push('empProfileSetSuperChoose', {
             'name': 'empProfileSetSuperChoose',

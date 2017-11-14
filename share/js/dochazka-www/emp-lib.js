@@ -114,6 +114,20 @@ define ([
             ajax(rest, sc, fc);
         },
 
+        currentEmpHasReports = function () {
+            var cu = currentUser('obj'),
+                cup = appCaches.getProfileByEID(cu.eid);
+            console.log("Entering currentEmpHasReports(), current employee profile", cup);
+            if (typeof cup !== 'object' || ! 'hasReports' in cup || typeof cup.hasReports !== 'function') {
+                throw "Profile of current user has not been loaded into the cache";
+            }
+            if (typeof cup.hasReports === 'function') {
+                return cup.hasReports();
+            }
+            console.log("CRITICAL ERROR: Bad current user profile object", cup);
+            throw "Bad current user profile object";
+        },
+
         empProfileEditSave = function (emp) {
                 // protoEmp = Object.create(prototypes.empProfile),
             var empObj,
@@ -283,6 +297,7 @@ define ([
 
     return {
         actionEmplSearch: actionEmplSearch,
+        currentEmpHasReports: currentEmpHasReports,
         empProfileEditSave: empProfileEditSave,
         empProfileSetSuperChoose: empProfileSetSuperChoose,
         empProfileSetSuperCommit: empProfileSetSuperCommit,
