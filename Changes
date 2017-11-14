@@ -422,3 +422,17 @@ Revision history for App-Dochazka-WWW
 - js: move status and schedule histories to profile
 - js: simplify interval menu
 
+0.165 2017-11-14 17:25 CET
+- js: int-lib: properly detect null long_desc in interval object
+- js: lib: change fillUserBox() behavior
+- js: Rearrange menus
+- js: initial Locks implementation
+- js: viewLocksAction: implement caching of year input
+- js: reinstate viewIntervalsDrowselect target
+- js: Throw up multi-day interval viewer even for empty query
+- js: drop schedHistoryDtable which is no longer used
+- js: emp-lib: display "Direct reports" as "(none)" instead of "(undefined)"
+- js: let supervisors masquerade as their reports
+- js: fix functional tests
+- build/ops: require App::MFILE::WWW 0.175 for menu prototype and new fillUserBox() behavior
+
