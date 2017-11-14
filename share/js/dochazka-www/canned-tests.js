@@ -202,9 +202,8 @@ define ([
             ajax(rest, sc, fc);
         },
 
-        "getDmenuEntry": function (assert, searchKey) {
-            var htmlbuf = $('#mainarea').html(),
-                rx = new RegExp('(\\d+)\\. ' + searchKey),
+        "getMenuEntry": function (assert, htmlbuf, searchKey) {
+            var rx = new RegExp('(\\d+)\\.&nbsp;' + searchKey),
                 match = htmlbuf.match(rx),
                 msg,
                 sel;
@@ -215,6 +214,7 @@ define ([
                 sel = match[1];
             }
             sel = parseInt(sel, 10);
+            assert.ok(parseInt(sel, 10) >= 0, "Search selection number is sane");
             return sel;
         },
 

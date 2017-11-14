@@ -90,7 +90,7 @@ define ([
                 htmlbuf,
                 sel,
                 cu;
-            assert.expect(61);
+            assert.expect(62);
             login({"nam": "root", "pwd": "immutable"});
             setTimeout(function () {
                 ct.login(assert, "root", "admin");
@@ -100,8 +100,7 @@ define ([
                 ct.mainMenu(assert);
                 assert.strictEqual($('#userbox').text(), 'Employee: root ADMIN');
                 ct.mainareaForm(assert, 'mainMenu');
-                sel = ct.getDmenuEntry(assert, 'Masquerade');
-                assert.ok(sel > 0, "Masquerade selection number is sane");
+                sel = ct.getMenuEntry(assert, $('#mainarea').html(), 'Masquerade');
                 if (! coreLib.isInteger(sel)) {
                     console.log("BAILING OUT");
                     assert.ok(false, "BAILING OUT");
@@ -125,14 +124,7 @@ define ([
                 assert.strictEqual($('input[id="sEnick"]').val(), 'act%', "Search string entered into form");
                 minimenu = $('#minimenu').html();
                 ct.contains(assert, minimenu, "searchEmployee miniMenu", ".&nbsp;Search");
-                match = minimenu.match(/(\d+)\.&nbsp;Search/);
-                assert.ok(true, QUnit.dump.parse(match));
-                assert.ok(match !== null, "There is a match 1");
-                if (match !== null) {
-                    assert.ok(match.length >= 1, "There is a match 2");
-                    sel = match[1];
-                }
-                assert.ok(parseInt(sel, 10) >= 0, "Search selection number is sane");
+                sel = ct.getMenuEntry(assert, minimenu, 'Search')
                 assert.ok(true, "searchEmployee miniMenu contains Search as selection " + sel);
                 $('input[name="sel"]').val(sel);
                 $('input[name="sel"]').focus();
@@ -147,14 +139,7 @@ define ([
                 ct.contains(assert, mainarea, "Masquerade candidates browser", 'Masquerade candidates');
                 ct.contains(assert, minimenu, "Masquerade selection in miniMenu", ".&nbsp;Masquerade");
                 assert.ok(true, "*** REACHED Masquerade selection in masqueradeCandidatesBrowser miniMenu");
-                match = minimenu.match(/(\d+)\.&nbsp;Masquerade/);
-                assert.ok(true, QUnit.dump.parse(match));
-                assert.ok(match !== null, "There is a match 1");
-                if (match !== null) {
-                    assert.ok(match.length >= 1, "There is a match 2");
-                    sel = match[1];
-                }
-                assert.ok(parseInt(sel, 10) >= 0, "Masquerade selection number is sane");
+                sel = ct.getMenuEntry(assert, minimenu, 'Masquerade');
                 assert.ok(true, "masqueradeCandidatesBrowser miniMenu contains Masquerade as selection " + sel);
                 // select Masquerade (first time - begin)
                 $('input[name="sel"]').val(sel);
@@ -169,13 +154,7 @@ define ([
             setTimeout(function () {
                 ct.mainareaForm(assert, 'mainMenu');
                 htmlbuf = $('#mainarea').html();
-                match = htmlbuf.match(/(\d+)\. Masquerade/);
-                assert.ok(match !== null, "There is a match 1");
-                if (match !== null) {
-                    assert.ok(match.length >= 1, "There is a match 2");
-                    sel = match[1];
-                }
-                assert.ok(parseInt(sel, 10) >= 0, "Masquerade selection number is sane");
+                sel = ct.getMenuEntry(assert, htmlbuf, 'Masquerade');
                 assert.ok(true, "Main menu contains Masquerade as selection " + sel);
                 // select Masqerade (second time - end)
                 $('input[name="sel"]').val(sel);

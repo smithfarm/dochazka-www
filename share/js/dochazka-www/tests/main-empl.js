@@ -220,17 +220,33 @@ define ([
             }, 5500);
         });
 
-        // test_desc = 'Masquerade as active - set inactive as supervisor';
-        // QUnit.test(test_desc, function (assert) {
-        //     console.log('***TEST*** ' + prefix + test_desc);
-        //     var done = assert.async(5);
-        //     login({"nam": "root", "pwd": "immutable"});
-        //     setTimeout(function () {
-        //         ct.login(assert, "root", "admin");
-        //         done();
-        //     }, 1500);
-        //     setTimeout(function () {
-        //         ct.mainMenu(assert);
+        test_desc = 'Masquerade as active - set inactive as supervisor';
+        QUnit.test(test_desc, function (assert) {
+            console.log('***TEST*** ' + prefix + test_desc);
+            var done = assert.async(2);
+            login({"nam": "root", "pwd": "immutable"});
+            setTimeout(function () {
+                ct.login(assert, "root", "admin");
+                done();
+            }, 1500);
+            setTimeout(function () {
+                var mainarea,
+                    sel;
+                ct.mainMenu(assert);
+                assert.strictEqual($('#userbox').text(), 'Employee: root ADMIN');
+                ct.mainareaForm(assert, 'mainMenu');
+                sel = ct.getMenuEntry(assert, $('#mainarea').html(), 'Masquerade');
+                $('input[name="sel"]').val(sel);
+                $('input[name="sel"]').focus();
+                // press ENTER -> submit the form
+                $('input[name="sel"]').trigger($.Event("keydown", {keyCode: 13}));
+                ct.stack(assert, 2, 'navigating from mainMenu to searchEmployee', 'dform', 'searchEmployee');
+                mainarea = $('#mainarea').html();
+                ct.contains(assert, mainarea, "#mainarea", "Search Dochazka employees");
+                assert.ok(true, "*** REACHED searchEmployee dform");
+                done();
+            }, 2000);
+        });
 
     };
 });
