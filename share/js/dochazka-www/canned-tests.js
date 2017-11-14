@@ -69,6 +69,14 @@ define ([
                 lookInDesc + " contains substring \"" + lookFor + "\""
             );
         },
+        logFunc = function (assert, message, thing) {
+            assert.ok(true, message);
+            if (thing !== undefined) {
+                console.log(message, thing);
+            } else {
+                console.log(message);
+            }
+        },
         mainareaFormFunc = function (assert, formId) {
             // asserts that #mainarea contains a form and that its form ID is
             // formID
@@ -193,6 +201,24 @@ define ([
                 };
             ajax(rest, sc, fc);
         },
+
+        "getDmenuEntry": function (assert, searchKey) {
+            var htmlbuf = $('#mainarea').html(),
+                rx = new RegExp('(\\d+)\\. ' + searchKey),
+                match = htmlbuf.match(rx),
+                msg,
+                sel;
+            logFunc(assert, "*** REACHED looking for " + searchKey + " in dmenu");
+            assert.ok(match !== null, "There is a match 1");
+            if (match !== null) {
+                assert.ok(match.length >= 1, "There is a match 2");
+                sel = match[1];
+            }
+            sel = parseInt(sel, 10);
+            return sel;
+        },
+
+        "log": logFunc,
 
         "loggout": function (assert) {
             var cu,

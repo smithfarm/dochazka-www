@@ -220,6 +220,18 @@ define ([
             }, 5500);
         });
 
+        // test_desc = 'Masquerade as active - set inactive as supervisor';
+        // QUnit.test(test_desc, function (assert) {
+        //     console.log('***TEST*** ' + prefix + test_desc);
+        //     var done = assert.async(5);
+        //     login({"nam": "root", "pwd": "immutable"});
+        //     setTimeout(function () {
+        //         ct.login(assert, "root", "admin");
+        //         done();
+        //     }, 1500);
+        //     setTimeout(function () {
+        //         ct.mainMenu(assert);
+
     };
 });
 

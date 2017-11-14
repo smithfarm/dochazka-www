@@ -90,7 +90,7 @@ define ([
                 htmlbuf,
                 sel,
                 cu;
-            assert.expect(60);
+            assert.expect(61);
             login({"nam": "root", "pwd": "immutable"});
             setTimeout(function () {
                 ct.login(assert, "root", "admin");
@@ -100,14 +100,7 @@ define ([
                 ct.mainMenu(assert);
                 assert.strictEqual($('#userbox').text(), 'Employee: root ADMIN');
                 ct.mainareaForm(assert, 'mainMenu');
-                htmlbuf = $('#mainarea').html();
-                match = htmlbuf.match(/(\d+)\. Masquerade/);
-                assert.ok(match !== null, "There is a match 1");
-                if (match !== null) {
-                    assert.ok(match.length >= 1, "There is a match 2");
-                    sel = match[1];
-                }
-                sel = parseInt(sel, 10);
+                sel = ct.getDmenuEntry(assert, 'Masquerade');
                 assert.ok(sel > 0, "Masquerade selection number is sane");
                 if (! coreLib.isInteger(sel)) {
                     console.log("BAILING OUT");
