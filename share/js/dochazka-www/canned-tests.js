@@ -74,7 +74,8 @@ define ([
                 match = htmlbuf.match(rx),
                 msg,
                 sel;
-            logFunc(assert, "*** REACHED looking for " + searchKey + " in dmenu");
+            logFunc(assert, htmlbuf);
+            logFunc(assert, "*** REACHED looking for " + searchKey);
             assert.ok(match !== null, "There is a match 1");
             if (match !== null) {
                 assert.ok(match.length >= 1, "There is a match 2");

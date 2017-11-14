@@ -90,7 +90,7 @@ define ([
                 htmlbuf,
                 sel,
                 cu;
-            assert.expect(62);
+            assert.expect(66);
             login({"nam": "root", "pwd": "immutable"});
             setTimeout(function () {
                 ct.login(assert, "root", "admin");

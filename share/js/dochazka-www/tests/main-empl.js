@@ -118,20 +118,22 @@ define ([
                 done();
             }, 1500);
             setTimeout(function () {
+                var sel;
                 ct.mainMenu(assert);
                 ct.mainMenuToMainAdmin(assert);
                 ct.mainAdminToSearchEmployee(assert);
                 // enter search term into form
                 $('#searchEmployee input[name="entry0"]').val('inactive');
-                // choose '0' to start search
-                $('input[name="sel"]').val('1');
+                sel = ct.getMenuEntry(assert, $('#minimenu').html(), 'Search');
+                $('input[name="sel"]').val(sel);
                 $('input[name="sel"]').focus();
                 start.mmKeyListener($.Event("keydown", {keyCode: 13}));
-                assert.ok(true, "*** REACHED pressed 1 to initiate search for Dochazka employee inactive");
+                ct.log(assert, "*** REACHED initiated search for Dochazka employee inactive");
                 done();
             }, 2000);
             setTimeout(function () {
                 var htmlbuf = $("#mainarea").html();
+                ct.log(assert, htmlbuf);
                 ct.stack(
                     assert,
                     4,
@@ -220,10 +222,10 @@ define ([
             }, 5500);
         });
 
-        test_desc = 'Masquerade as active - set inactive as supervisor';
+        test_desc = 'Masquerading as active, set inactive as supervisor';
         QUnit.test(test_desc, function (assert) {
             console.log('***TEST*** ' + prefix + test_desc);
-            var done = assert.async(6);
+            var done = assert.async(8);
             login({"nam": "root", "pwd": "immutable"});
             setTimeout(function () {
                 ct.login(assert, "root", "admin");
@@ -288,15 +290,134 @@ define ([
             setTimeout(function () {
                 var sel;
                 ct.mainMenuToEmpProfile(assert);
+                ct.contains(
+                    assert,
+                    $('#ePsuperNick').text(),
+                    "#ePsuperNick text",
+                    "(none)",
+                );
                 sel = ct.getMenuEntry(assert, $('#minimenu').html(), "Set&nbsp;supervisor");
                 assert.ok(true, "Selection is " + sel);
-                loggout();
+                $('input[name="sel"]').val(sel);
+                $('input[name="sel"]').focus();
+                // press ENTER -> submit the form
+                $('input[name="sel"]').trigger($.Event("keydown", {keyCode: 13}));
+                // mainMenu, myProfileAction, empProfile, searchEmployee
+                ct.stack(assert, 4, 'selected Set supervisor in empProfile', 'dform', 'searchEmployee');
+                // enter search term into form
+                $('#searchEmployee input[name="entry0"]').val('inactive');
+                sel = ct.getMenuEntry(assert, $('#minimenu').html(), 'Search');
+                $('input[name="sel"]').val(sel);
+                $('input[name="sel"]').focus();
+                start.mmKeyListener($.Event("keydown", {keyCode: 13}));
+                assert.ok(true, "*** REACHED initiated search for Dochazka employee inactive");
                 done();
             }, 3500);
             setTimeout(function () {
+                var htmlbuf,
+                    sel;
+                ct.stack(
+                    assert,
+                    5,
+                    'Reached simpleEmployeeBrowser dbrowser',
+                    'dbrowser',
+                    'setSupervisorBrowser'
+                );
+                htmlbuf = $("#mainarea").html(),
+                ct.contains(
+                    assert,
+                    htmlbuf,
+                    "#mainarea html",
+                    "Supervisor candidates",
+                );
+                ct.mainareaForm(assert, "setSupervisorBrowser");
+                assert.strictEqual(
+                    $('#ePfullname').text(),
+                    "inactive user",
+                    "Dochazka employee search succeeded - full name \"inactive user\" displayed",
+                );
+                assert.strictEqual(
+                    $('#ePnick').text(),
+                    "inactive",
+                    "Dochazka employee search succeeded - nick inactive displayed",
+                );
+                ct.contains(
+                    assert,
+                    $('#minimenu').html(),
+                    "#minimenu html",
+                    ".&nbsp;Set&nbsp;supervisor",
+                );
+                assert.ok(true, "*** REACHED miniMenu contains substring '.&nbsp;Set&nbsp;supervisor'");
+                sel = ct.getMenuEntry(assert, $('#minimenu').html(), 'Set&nbsp;supervisor');
+                assert.ok(true, "Selection is " + sel);
+                $('input[name="sel"]').val(sel);
+                $('input[name="sel"]').focus();
+                // press ENTER -> submit the form
+                $('input[name="sel"]').trigger($.Event("keydown", {keyCode: 13}));
+                ct.stack(
+                    assert,
+                    6,
+                    'selected Set supervisor in setSupervisorBrowser',
+                    'dform',
+                    'empProfileSetSuperConfirm'
+                );
+                htmlbuf = $("#mainarea").html(),
+                ct.contains(
+                    assert,
+                    htmlbuf,
+                    "#mainarea html",
+                    "Set employee supervisor - confirmation",
+                );
+                ct.mainareaForm(assert, "empProfileSetSuperConfirm");
+                sel = ct.getMenuEntry(assert, $('#minimenu').html(), 'Yes,&nbsp;I&nbsp;really&nbsp;do');
+                assert.ok(true, "Selection is " + sel);
+                $('input[name="sel"]').val(sel);
+                $('input[name="sel"]').focus();
+                // press ENTER -> submit the form
+                $('input[name="sel"]').trigger($.Event("keydown", {keyCode: 13}));
+                done();
+            }, 4000);
+            setTimeout(function () {
+                var sel;
+                ct.stack(
+                    assert,
+                    3,
+                    'back in empProfile after confirming selection of supervisor',
+                    'dform',
+                    'empProfile'
+                );
+                ct.log(assert, $('#mainarea').html());
+                ct.contains(
+                    assert,
+                    $('#ePsuperNick').text(),
+                    "#ePsuperNick text",
+                    "inactive",
+                );
+                $('input[name="sel"]').val('x');
+                $('input[name="sel"]').focus();
+                // press ENTER -> submit the form
+                $('input[name="sel"]').trigger($.Event("keydown", {keyCode: 13}));
+                ct.stack(
+                    assert,
+                    1,
+                    'back to mainMenu after setting supervisor',
+                    'dmenu',
+                    'mainMenu'
+                );
+                // turn off masquerade
+                sel = ct.getMenuEntry(assert, $('#mainarea').html(), 'Masquerade');
+                $('input[name="sel"]').val(sel);
+                $('input[name="sel"]').focus();
+                // press ENTER -> submit the form
+                $('input[name="sel"]').trigger($.Event("keydown", {keyCode: 13}));
+                assert.strictEqual($('#userbox').text(), 'Employee: root ADMIN');
+                loggout();
+                done();
+            }, 4500);
+            setTimeout(function () {
                 ct.loggout(assert);
                 done();
-            }, 5500);
+            }, 5000);
         });
 
     };
