@@ -116,8 +116,13 @@ define ([
 
         currentEmpHasReports = function () {
             var cu = currentUser('obj'),
-                cup = appCaches.getProfileByEID(cu.eid);
+                cup = appCaches.getProfileByEID(cu.eid),
+                priv = currentUser('priv');
             console.log("Entering currentEmpHasReports(), current employee profile", cup);
+            if (priv === 'admin') {
+                // not applicable to admins
+                return true;
+            }
             if (typeof cup !== 'object' || ! 'hasReports' in cup || typeof cup.hasReports !== 'function') {
                 throw "Profile of current user has not been loaded into the cache";
             }
