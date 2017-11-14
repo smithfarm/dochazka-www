@@ -115,7 +115,6 @@ define ([
 
         // actions triggered from Schedule menu
         "actionSchedHistory": schedHistLib.actionSchedHistory,
-        "actionSchedHistoryEdit": schedHistLib.actionSchedHistoryEdit,
         "schedHistorySaveAction": schedHistLib.schedHistorySaveAction,
         "schedHistoryDeleteAction": schedHistLib.schedHistoryDeleteAction,
         "schedHistoryAddRecordAction": schedHistLib.schedHistoryAddRecordAction,

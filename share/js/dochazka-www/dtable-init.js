@@ -59,19 +59,6 @@ define ([
             }
         });
 
-        target.push('schedHistoryDtable', {
-            'name': 'schedHistoryDtable',
-            'type': 'dtable',
-            'menuText': 'Schedule history',
-            'title': 'Schedule history',
-            'preamble': null,
-            'aclProfile': 'passerby',
-            'entriesRead': [entries.pHeffective, entries.sDid, entries.sDcode],
-            'miniMenu': {
-                entries: ['actionSchedLookup', 'actionSchedHistoryEdit']
-            }
-        });
-
     };
 
 });
