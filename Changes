@@ -436,3 +436,12 @@ Revision history for App-Dochazka-WWW
 - js: fix functional tests
 - build/ops: require App::MFILE::WWW 0.175 for menu prototype and new fillUserBox() behavior
 
+0.166 2017-11-15 12:11 CET
+- js: canned-tests: implement log() - logs messages to both console log and test
+  protocol
+- js: canned-tests: implement getMenuEntry() - avoids hard-coding of menu entry
+  numbers
+- js: tests: implement new test "Masquerading as active, set inactive as supervisor"
+- js: empProfile: call reports "Supervisees"
+- js: Always load employee profile from server
+
