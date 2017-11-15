@@ -197,6 +197,10 @@ define ([
             ajax(rest, sc, fc);
         },
 
+        empProfileSetSuperDelete = function () {
+            stack.push('empProfileSetSuperChoose', { "eid": null, "nick": null });
+        },
+
         empProfileSetSuperChoose = function (superEmp) {
             var cu = currentUser('obj'),
                 obj = {
@@ -222,12 +226,12 @@ define ([
                     }
                 },
                 sc = function (st) {
-                    if (st.code === 'DOCHAZKA_CUD_OK') {
+                    if (st.code === 'DOCHAZKA_CUD_OK' || st.code === 'DISPATCH_UPDATE_NO_CHANGE_OK' ) {
                         cu.supervisor = obj.ePsetsupertoEID;
                         empProfile = appCaches.getProfileByEID(obj.ePsetsuperofEID);
                         if (empProfile) {
                              empProfile.supervisor = obj.ePsetsupertoEID;
-                             appCaches.setProfileByEID(obj.ePsetsuperofEID, empProfile);
+                             appCaches.setProfileCache(empProfile);
                         }
                         stack.unwindToType('dmenu', {
                             "_start": false
@@ -237,6 +241,7 @@ define ([
                         });
                     } else {
                         coreLib.displayError("CRITICAL ERROR THIS IS A BUG: " + st.code);
+                        throw st.code;
                     }
                 };
             console.log("Entered empProfileSetSuperCommit() with obj", obj);
@@ -250,22 +255,12 @@ define ([
             });
         },
 
-        myProfileAction = function (obj, opts) {
+        myProfileActionNewOpts,
+        myProfileActionPopulate = function (populateArray) {
             var cu = currentUser('obj'),
-                m,
                 obj = {},
-                profileObj = appCaches.getProfileByEID(cu.eid),
-                newOpts = {
-                    'resultLine': (typeof opts === 'object') ? opts.resultLine : null,
-                    'xtarget': 'mainEmpl',
-                };
-            // if the employee profile has not been loaded into the cache, we have a problem
-            if (! profileObj) {
-                m = "CRITICAL ERROR: the employee profile has not been loaded into the cache";
-                console.log(m);
-                coreLib.displayError(m);
-                return null;
-            }
+                populateContinue = populate.shift(populateArray),
+                profileObj = appCaches.getProfileByEID(cu.eid);
             if (profileObj.privhistory) {
                 obj['priv'] = profileObj.privhistory.priv;
                 obj['privEffective'] = datetime.readableDate(
@@ -297,8 +292,21 @@ define ([
             obj['remark'] = profileObj.emp.remark;
             obj['sec_id'] = profileObj.emp.sec_id;
             obj['has_reports'] = ( profileObj.has_reports === 0 || profileObj.has_reports === undefined ) ? null : profileObj.has_reports;
-            stack.push('empProfile', obj, newOpts);
-        };
+            stack.push('empProfile', obj, myProfileActionNewOpts);
+            populateContinue(populateArray);
+        },
+        myProfileAction = function (obj, opts) {
+            myProfileActionNewOpts = {
+                'resultLine': (typeof opts === 'object') ? opts.resultLine : null,
+                'xtarget': 'mainEmpl',
+            };
+            populate.bootstrap([
+                appCaches.populateFullEmployeeProfileCache,
+                appCaches.populateScheduleBySID,
+                myProfileActionPopulate,
+            ]);
+        }
+        ;
 
     return {
         actionEmplSearch: actionEmplSearch,
@@ -306,6 +314,7 @@ define ([
         empProfileEditSave: empProfileEditSave,
         empProfileSetSuperChoose: empProfileSetSuperChoose,
         empProfileSetSuperCommit: empProfileSetSuperCommit,
+        empProfileSetSuperDelete: empProfileSetSuperDelete,
         empProfileSetSuperSearch: empProfileSetSuperSearch,
         myProfileAction: myProfileAction,
     };

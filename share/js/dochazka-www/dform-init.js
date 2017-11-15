@@ -255,6 +255,7 @@ define ([
                     'empProfileEdit',
                     'ldapSync',
                     'empProfileSetSuperSearch',
+                    'empProfileSetSuperDelete',
                 ]
             }
         }); // empProfile

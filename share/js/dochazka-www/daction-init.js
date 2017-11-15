@@ -148,6 +148,14 @@ define ([
             'start': dactionStart('empProfileSetSuperCommit'),
             'pushable': false
         });
+        target.push('empProfileSetSuperDelete', {
+            'name': 'empProfileSetSuperDelete',
+            'type': 'daction',
+            'menuText': 'Remove supervisor',
+            'aclProfile': 'admin',
+            'start': dactionStart('empProfileSetSuperDelete'),
+            'pushable': false
+        });
         target.push('empProfileSetSuperSearch', {
             'name': 'empProfileSetSuperSearch',
             'type': 'daction',
@@ -209,7 +217,7 @@ define ([
             'menuText': 'Schedule history',
             'aclProfile': 'inactive',
             'start': dactionStart('actionSchedHistory'),
-            'pushable': false
+            'pushable': true
         });
         target.push('schedHistorySaveAction', {
             'name': 'schedHistorySaveAction',

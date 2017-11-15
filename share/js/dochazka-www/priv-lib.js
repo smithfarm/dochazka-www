@@ -76,7 +76,7 @@ define ([
                                 }
                             );
                             if (tgt === 'privHistoryDtable') {
-                                stack.push(tgt, history, { "xtarget": "empProfile" });
+                                stack.push(tgt, history, { "xtarget": "myProfileAction" });
                             } else if (tgt === 'privHistoryDrowselect') {
                                 stack.push(tgt, {
                                     'pos': 0,

@@ -305,7 +305,6 @@ define ([
             mainareaFormFunc(assert, 'searchEmployee');
             stackFunc(assert, 3, 'Reached searchEmployee dform', 'dform', 'searchEmployee');
             htmlbuf = $('#mainarea').html();
-            assert.ok(htmlbuf, "#mainarea html: " + htmlbuf);
             containsFunc(
                 assert,
                 htmlbuf,
@@ -324,7 +323,7 @@ define ([
             assert.ok(true, "*** REACHED searchEmployee dform");
         },
 
-        "mainMenuToEmpProfile": function (assert) {
+        "mainMenuSelectEmpProfile": function (assert) {
             var htmlbuf,
                 mainmarea,
                 sel;
@@ -336,12 +335,7 @@ define ([
             $('input[name="sel"]').focus();
             // press ENTER -> submit the form
             $('input[name="sel"]').trigger($.Event("keydown", {keyCode: 13}));
-            logFunc(assert, '#mainarea', $('#mainarea').html());
-            // mainMenu, myProfileAction, empProfile
-            stackFunc(assert, 3, 'navigating from mainMenu to empProfile', 'dform', 'empProfile');
-            mainareaFormFunc(assert, 'empProfile');
-            containsFunc(assert, $('#mainarea').html(), "#mainarea", "Employee profile");
-            logFunc(assert, "*** REACHED empProfile dform");
+            logFunc(assert, "*** REACHED selected Profile in main menu");
         },
 
         "mainMenuToMainAdmin": function (assert) {

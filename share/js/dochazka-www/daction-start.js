@@ -99,6 +99,7 @@ define ([
         "masqEmployee": appCaches.masqEmployee,
         "empProfileSetSuperChoose": empLib.empProfileSetSuperChoose,
         "empProfileSetSuperCommit": empLib.empProfileSetSuperCommit,
+        "empProfileSetSuperDelete": empLib.empProfileSetSuperDelete,
         "empProfileSetSuperSearch": empLib.empProfileSetSuperSearch,
 
         // Employee LDAP actions

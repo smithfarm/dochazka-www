@@ -295,11 +295,6 @@ define ([
             console.log("populateArray.length is " + populateArray.length);
             populateContinue = populate.shift(populateArray);
             profileObj = getProfileByEID(parseInt(cu.eid, 10));
-            if (profileObj) {
-                // if our profile is already in the cache, nothing to do
-                populateContinue(populateArray);
-                return null;
-            }
             // load profile into cache
             rest = {
                 "method": 'GET',
@@ -698,7 +693,7 @@ define ([
                )
             {
                 console.log("CRITICAL ERROR: bad profileObj in setProfileCache()", profileObj);
-                return null;
+                throw "bad profile object";
             }
             eid = parseInt(profileObj.emp.eid, 10);
             nick = String(profileObj.emp.nick);
@@ -751,9 +746,6 @@ define ([
             return scheduleCache.length
         },
         selectActivityAction: selectActivityAction,
-        setProfileByEID: function (eid, obj) {
-            profileByEID[parseInt(eid, 10)] = obj;
-        },
         setProfileCache: setProfileCache,
     };
 

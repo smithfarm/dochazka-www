@@ -76,7 +76,7 @@ define ([
                         stack.push('schedHistoryDrowselect', {
                             'pos': 0,
                             'set': history
-                        });
+                        }, { "xtarget": "myProfileAction" });
                     }
                 },
                 fc = function (st) {
@@ -84,7 +84,7 @@ define ([
                         stack.push('schedHistoryDrowselect', {
                             'pos': 0,
                             'set': []
-                        });
+                        }, { "xtarget": "myProfileAction" });
                     }
                 };
             ajax(rest, sc, fc);

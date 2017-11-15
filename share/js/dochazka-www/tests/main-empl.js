@@ -225,7 +225,7 @@ define ([
         test_desc = 'Masquerading as active, set inactive as supervisor';
         QUnit.test(test_desc, function (assert) {
             console.log('***TEST*** ' + prefix + test_desc);
-            var done = assert.async(8);
+            var done = assert.async(10);
             login({"nam": "root", "pwd": "immutable"});
             setTimeout(function () {
                 ct.login(assert, "root", "admin");
@@ -288,14 +288,65 @@ define ([
                 done();
             }, 3000);
             setTimeout(function () {
+                ct.mainMenuSelectEmpProfile(assert);
+                done();
+            }, 3500);
+            setTimeout(function () {
+                var htmlbuf,
+                    sel;
+                // mainMenu, myProfileAction, empProfile
+                ct.stack(assert, 3, 'navigating from mainMenu to empProfile', 'dform', 'empProfile');
+                ct.mainareaForm(assert, 'empProfile');
+                ct.contains(assert, $('#mainarea').html(), "#mainarea", "Employee profile");
+                ct.log(assert, "*** REACHED empProfile dform");
+                // Whatever the supervisor is, delete it
+                sel = ct.getMenuEntry(assert, $('#minimenu').html(), "Remove&nbsp;supervisor");
+                assert.ok(true, "Selection is " + sel);
+                $('input[name="sel"]').val(sel);
+                $('input[name="sel"]').focus();
+                // press ENTER -> submit the form
+                $('input[name="sel"]').trigger($.Event("keydown", {keyCode: 13}));
+                // mainMenu, myProfileAction, empProfile, searchEmployee
+                ct.stack(
+                    assert,
+                    4,
+                    'selected Delete supervisor in empProfile',
+                    'dform',
+                    'empProfileSetSuperConfirm'
+                );
+                htmlbuf = $("#mainarea").html(),
+                ct.contains(
+                    assert,
+                    htmlbuf,
+                    "#mainarea html",
+                    "Set employee supervisor - confirmation",
+                );
+                ct.mainareaForm(assert, "empProfileSetSuperConfirm");
+                sel = ct.getMenuEntry(assert, $('#minimenu').html(), 'Yes,&nbsp;I&nbsp;really&nbsp;do');
+                assert.ok(true, "Selection is " + sel);
+                $('input[name="sel"]').val(sel);
+                $('input[name="sel"]').focus();
+                // press ENTER -> submit the form
+                $('input[name="sel"]').trigger($.Event("keydown", {keyCode: 13}));
+                done();
+            }, 4000);
+            setTimeout(function () {
                 var sel;
-                ct.mainMenuToEmpProfile(assert);
+                ct.stack(
+                    assert,
+                    3,
+                    'back in empProfile after confirming deletion of supervisor',
+                    'dform',
+                    'empProfile'
+                );
+                ct.log(assert, $('#mainarea').html());
                 ct.contains(
                     assert,
                     $('#ePsuperNick').text(),
                     "#ePsuperNick text",
                     "(none)",
                 );
+                ct.log(assert, "*** REACHED supervisor deleted; no supervisor is set");
                 sel = ct.getMenuEntry(assert, $('#minimenu').html(), "Set&nbsp;supervisor");
                 assert.ok(true, "Selection is " + sel);
                 $('input[name="sel"]').val(sel);
@@ -312,7 +363,7 @@ define ([
                 start.mmKeyListener($.Event("keydown", {keyCode: 13}));
                 assert.ok(true, "*** REACHED initiated search for Dochazka employee inactive");
                 done();
-            }, 3500);
+            }, 4500);
             setTimeout(function () {
                 var htmlbuf,
                     sel;
@@ -376,7 +427,7 @@ define ([
                 // press ENTER -> submit the form
                 $('input[name="sel"]').trigger($.Event("keydown", {keyCode: 13}));
                 done();
-            }, 4000);
+            }, 5000);
             setTimeout(function () {
                 var sel;
                 ct.stack(
@@ -393,6 +444,7 @@ define ([
                     "#ePsuperNick text",
                     "inactive",
                 );
+                ct.log(assert, "*** REACHED supervisor set to inactive");
                 $('input[name="sel"]').val('x');
                 $('input[name="sel"]').focus();
                 // press ENTER -> submit the form
@@ -413,11 +465,11 @@ define ([
                 assert.strictEqual($('#userbox').text(), 'Employee: root ADMIN');
                 loggout();
                 done();
-            }, 4500);
+            }, 5500);
             setTimeout(function () {
                 ct.loggout(assert);
                 done();
-            }, 5000);
+            }, 6000);
         });
 
     };
