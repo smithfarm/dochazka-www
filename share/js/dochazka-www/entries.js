@@ -213,7 +213,7 @@ define ([
             name: 'ePhasReports',
             aclProfileRead: 'inactive',
             aclProfileWrite: 'admin',
-            text: 'Direct reports',
+            text: 'Supervisees',
             prop: 'has_reports',
             maxlen: 8,
         },
