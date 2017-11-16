@@ -40,11 +40,13 @@ define ([
     'app/caches',
     'app/act-lib',
     'app/int-lib',
+    'app/priv-lib',
     'datetime',
 ], function (
     appCaches,
     actLib,
     intLib,
+    privLib,
     datetime,
 ) {
 
@@ -467,6 +469,7 @@ define ([
             text: 'Priv',
             prop: 'priv',
             maxlen: 10,
+            vetter: privLib.vetPrivLevel,
         },
         pHeffective: {
             name: 'pHeffective',

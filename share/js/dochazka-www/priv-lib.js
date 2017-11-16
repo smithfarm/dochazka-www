@@ -105,12 +105,15 @@ define ([
         };
     
     return {
+
         "actionPrivHistory":     genPrivHistoryAction(
                                      'privHistoryDtable'
                                  ),
+
         "actionPrivHistoryEdit": genPrivHistoryAction(
                                      'privHistoryDrowselect'
                                  ),
+
         "privHistorySaveAction": function (obj) {
             console.log("Entering privHistorySaveAction with obj", obj);
             var rest = {
@@ -134,6 +137,7 @@ define ([
             ajax(rest, sc, fc);
             // start.drowselectListen();
         },
+
         "privHistoryDeleteAction": function () {
             var phid,
                 set = coreLib.drowselectState.set,
@@ -164,13 +168,31 @@ define ([
             ajax(rest, sc, fc);
             // start.drowselectListen();
         },
+
         "privHistoryAddRecordAction": function (obj) {
             var cu = currentUser('obj');
             console.log("Entering privHistoryAddRecordAction with nick " + cu.nick);
             stack.push('privHistoryAddRecord', {
                 'nick': cu.nick
             });
-        }
+        },
+
+        "vetPrivLevel": function (pl) {
+            var plm = String(pl).trim().toLowerCase().slice(0, 2);
+            if (plm === 'ad') {
+                return 'admin';
+            } else if (plm === 'ac') {
+                return 'active';
+            }
+            plm = plm.slice(0,1);
+            if (plm === 'i') {
+                return 'inactive';
+            } else if (plm == 'p') {
+                return 'passerby';
+            }
+            return null;
+        },
+
     };
 
 });
