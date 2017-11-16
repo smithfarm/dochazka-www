@@ -355,7 +355,7 @@ define ([
             'name': 'viewIntervalsAction',
             'type': 'daction',
             'menuText': 'View',
-            'aclProfile': 'active',
+            'aclProfile': 'inactive',
             'start': dactionStart('viewIntervalsAction'),
             'pushable': true
         });
