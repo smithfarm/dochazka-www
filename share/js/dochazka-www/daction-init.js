@@ -170,7 +170,7 @@ define ([
             'name': 'actionPrivHistory',
             'type': 'daction',
             'menuText': 'Status history',
-            'aclProfile': 'passerby',
+            'aclProfile': 'inactive',
             'start': dactionStart('actionPrivHistory'),
             // this starts the privhistory dtable, and if the dataset changes
             // we might want to unwind the stack to this action to reset that
