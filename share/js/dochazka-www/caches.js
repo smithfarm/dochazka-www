@@ -207,8 +207,9 @@ define ([
             var ao, rest, sc, fc, populateContinue;
             console.log("Entering populateActivityCache()");
             populateContinue = populate.shift(populateArray);
-            if (activityCache) {
+            if (coreLib.isArray(activityCache) && activityCache.length > 0) {
                 console.log("populateActivityCache(): noop, cache already populated");
+                console.log("Activity Cache contents", activityCache);
                 populateContinue(populateArray);
                 return null;
             }
