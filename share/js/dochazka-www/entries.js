@@ -50,8 +50,6 @@ define ([
     datetime,
 ) {
 
-    console.log("appCaches", appCaches);
-
     return {
 
         acTaid: {
